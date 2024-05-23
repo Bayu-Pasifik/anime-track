@@ -31,7 +31,13 @@ const HeaderCarousel: React.FC<CarouselProps> = ({ animes }) => {
               <div className="carousel-slide h-full relative">
                 <img src={anime.images.jpg.large_image_url} alt={anime.title} className="w-full h-full object-cover rounded-xl" />
                 <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black to-transparent rounded-b-xl"></div>
-                <p className="text-2xl font-bold text-white p-2 absolute top-60 w-full text-left">{anime.title}</p>
+                <p className="text-2xl font-bold text-white p-2 absolute top-60 w-full text-left">{anime.title} ( {anime.title_japanese } )</p>
+                <p className="text-2xl font-bold text-white p-2 absolute top-72 w-full text-left"> <span>⭐</span>{anime.score}</p>
+                <p className="text-2xl font-bold text-white absolute top-1 right-1 flex items-center justify-center rounded-full bg-sky-800 h-10 w-10">
+                  {anime.rank}
+                </p>
+                <img className='absolute top-44 rounded-xl right-1 h-52 w-5h-52' src= {anime.images.jpg.image_url} alt={anime.title} />
+                
               </div>
             </Link>
           </SwiperSlide>

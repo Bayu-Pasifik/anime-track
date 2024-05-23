@@ -1,8 +1,8 @@
 export interface Anime {
     mal_id: number;
     title: string;
-    title_en: string;
-    title_jp: string;
+    title_english: string;
+    title_japanese: string;
     type: string;
     episodes: number;
     score: number;
