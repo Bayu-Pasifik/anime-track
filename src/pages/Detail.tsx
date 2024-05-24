@@ -3,18 +3,21 @@ import { Link, useParams } from "react-router-dom";
 import { AnimeDetail } from "../config/data";
 import axios from "../config/axiosConfig";
 import Navbar from "../components/Navbar";
+import ListCard from "../components/ListCard";
 
 const Detail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [animeDetail, setAnimeDetail] = useState<AnimeDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [showAllRelations, setShowAllRelations] = useState<boolean>(false);
+  const [animeCharacter,setAnimeCharacter] = useState<CharacterDetail[]>([]);
 
   useEffect(() => {
     const fetchAnimeDetail = async () => {
       try {
         const response = await axios.get(`/anime/${id}/full`);
         setAnimeDetail(response.data.data);
+
       } catch (error) {
         console.error("Error fetching anime details", error);
       } finally {
@@ -24,7 +27,17 @@ const Detail: React.FC = () => {
 
     fetchAnimeDetail();
   }, [id]);
-
+  useEffect(() => {
+    const fetchAnimeCharacter = async () => {
+      try {
+        const response = await axios.get(`/anime/${id}/characters`);
+        setAnimeCharacter(response.data.data);
+      } catch (error) {
+        console.error("Error fetching anime details", error);
+      }
+    };
+    fetchAnimeCharacter();
+  },[id])
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -124,15 +137,17 @@ const Detail: React.FC = () => {
               <div key={index} className="mb-2">
                 <p className="text-lg text-white mb-2">{relation.relation}:</p>
                 <div className="flex flex-wrap">
-                  {relation.entry.slice(0, showAllRelations ? relation.entry.length : 2).map((entry) => (
-                    <Link
-                      key={entry.mal_id}
-                      to={`/detail/${entry.mal_id}`}
-                      className="text-blue-400 hover:underline mr-4 mb-2"
-                    >
-                      {entry.name} ({entry.type})
-                    </Link>
-                  ))}
+                  {relation.entry
+                    .slice(0, showAllRelations ? relation.entry.length : 2)
+                    .map((entry) => (
+                      <Link
+                        key={entry.mal_id}
+                        to={`/detail/${entry.mal_id}`}
+                        className="text-blue-400 hover:underline mr-4 mb-2"
+                      >
+                        {entry.name} ({entry.type})
+                      </Link>
+                    ))}
                 </div>
               </div>
             ))}
@@ -154,6 +169,7 @@ const Detail: React.FC = () => {
           </div>
         </div>
       </div>
+      <ListCard listCharacter={animeCharacter}></ListCard>
     </div>
   );
 };
