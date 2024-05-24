@@ -26,7 +26,7 @@ const HeaderCarousel: React.FC<CarouselProps> = ({ animes }) => {
         className="mySwiper"
       >
         {animes.slice(0, 5).map(anime => (
-          <SwiperSlide className="container mx-auto w-full h-96 rounded-xl overflow-hidden relative" key={anime.mal_id}>
+          <SwiperSlide className="p-4 mx-auto w-full h-96 rounded-xl overflow-hidden relative" key={anime.mal_id}>
             <Link to={`/detail/${anime.mal_id}`}>
               <div className="carousel-slide h-full relative">
                 <img src={anime.images.jpg.large_image_url} alt={anime.title} className="w-full h-full object-cover rounded-xl" />

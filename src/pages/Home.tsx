@@ -4,6 +4,7 @@ import axios from '../config/axiosConfig';
 import HeaderCarousel from '../components/Carousel';
 import Card from '../components/Card';
 import { motion } from 'framer-motion';
+import Navbar from '../components/Navbar';
 
 const Home: React.FC = () => {
   const [topAiring, setTopAiring] = useState<Anime[]>([]);
@@ -78,8 +79,12 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="p-4 bg-slate-800 h-full w-full">
+    <div className="bg-slate-800 h-full w-full">
+      <Navbar></Navbar>
       <HeaderCarousel animes={topAiring} />
+      <div>
+        <h1 className="text-white text-2xl font-bold mb-4 mt-4">Currently Airing</h1>
+      </div>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
