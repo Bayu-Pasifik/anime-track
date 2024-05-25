@@ -5,8 +5,8 @@ interface SidebarProps {
 }
 const Sidebar: React.FC<SidebarProps> = ({ animeDetail }) => {
   return (
-    <div className="sidebar bg-slate-300 w-1/4 mx-4 mt-4 rounded-xl">
-      <div className="w-full h-full flex flex-col mx-11">
+    <div className="sidebar bg-slate-300 w-1/4 mx-4 mt-4 rounded-xl" key={animeDetail.mal_id}>
+      <div className="w-full h-auto flex flex-col mx-11">
         <p className="text-xl font-medium text-blue-600">Format</p>
         <p className="text-md font-medium text-gray-500">{animeDetail.type}</p>
         <p className="text-xl font-medium text-blue-600">Episodes</p>

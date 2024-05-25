@@ -7,6 +7,8 @@ import ListCard from "../components/ListCard";
 import { CharacterDetail } from "../config/characters";
 import { Recommendation } from "../config/animeRecomendation";
 import Sidebar from "../components/Sidebar";
+import Content from "../components/Content";
+import { StaffData } from "../config/staff";
 
 const Detail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +17,7 @@ const Detail: React.FC = () => {
   const [showAllRelations, setShowAllRelations] = useState<boolean>(false);
   const [animeCharacter, setAnimeCharacter] = useState<CharacterDetail[]>([]);
   const [Recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [staffAnime, setStaffAnime] = useState<StaffData[]>([]);
 
   useEffect(() => {
     const fetchAnimeDetail = async () => {
@@ -59,6 +62,19 @@ const Detail: React.FC = () => {
     fetchAnimeRecommendations();
   }, [id]);
 
+  useEffect(() => {
+    const fetchStaffAnime = async () => {
+      try {
+        const response = await axios.get(`/anime/${id}/staff`);
+        setStaffAnime(response.data.data);
+      } catch (error) {
+        console.error("Error fetching staff anime", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStaffAnime();
+  }, [id]);
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -109,8 +125,9 @@ const Detail: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className=" w-full full">
+      <div className=" w-full full flex flex-row bg-orange-500">
         <Sidebar animeDetail={animeDetail}/>
+        <Content animeCharacter={animeCharacter} animeStaff={staffAnime}/>
       </div>
     </div>
   );
