@@ -55,12 +55,18 @@ export interface Relation {
     url: string;
   }[];
 }
+export interface external{
+  name: string;
+  url: string;
+}[];
 
 
 export interface AnimeDetail extends Anime {
   synopsis: string;
   trailer: {
       url: string;
+      youtube_id: string;
+      embed_url: string;
       images: {
           image_url: string;
           small_image_url: string;
@@ -92,6 +98,7 @@ export interface AnimeDetail extends Anime {
           };
       };
   };
+  external: external[];
   studios: Studio[];
   genres: Genre[];
   demographics: Demographics[];

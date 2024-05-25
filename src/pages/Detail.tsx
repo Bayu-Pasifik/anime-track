@@ -89,7 +89,7 @@ const Detail: React.FC = () => {
   }
 
   return (
-    <div className="bg-slate-800 min-h-screen w-full h-full">
+    <div className="bg-gray-200 min-h-screen w-full h-full">
       <Navbar />
       <div className="banner w-full h-96 relative">
         <img
@@ -98,7 +98,7 @@ const Detail: React.FC = () => {
           alt={animeDetail.title}
         />
       </div>
-      <div className="relative bg-slate-300 w-full flex p-4">
+      <div className="relative bg-gray-100 w-full flex p-4">
         <img
           className="rounded-xl w-60 h-96 object-cover absolute -top-28 left-7"
           src={animeDetail.images.jpg.large_image_url}
@@ -106,34 +106,41 @@ const Detail: React.FC = () => {
         />
         <div className="ml-72 mt-4 flex flex-col w-full">
           <div>
-            <h1 className="text-3xl font-bold text-white">{animeDetail.title}</h1>
-            <p className="text-2xl font-bold text-white">{animeDetail.title_japanese}</p>
-            <p className="mt-4 text-white font-dm-mono">{animeDetail.synopsis}</p>
+            <h1 className="text-3xl font-bold text-gray-600">{animeDetail.title}</h1>
+            <p className="text-2xl font-bold text-gray-600">{animeDetail.title_japanese}</p>
+            <p className="mt-4  font-dm-mono">{animeDetail.synopsis}</p>
           </div>
-          <div className="mt-4 flex justify-center items-center w-full">
-            <div className="flex justify-between items-center w-2/4 h-12 gap-4 p-8">
-              <Link  to={`/detail/${animeDetail.mal_id}`}>
-                <p className="text-xl font-bold text-white hover:underline">Overview</p>
+          <div className="mt-4 flex justify-center items-center w-full ">
+            <div className="flex justify-between items-center w-2/4 h-12 gap-4 p-8 text-gray-600">
+              <Link to={`/detail/${animeDetail.mal_id}`}>
+                <p className="text-xl font-bold  hover:underline">
+                  Overview
+                </p>
               </Link>
               <Link to={`/detail/${animeDetail.mal_id}`}>
-                <p className="text-xl font-bold text-white hover:underline">Characters</p>
+                <p className="text-xl font-bold  hover:underline">
+                  Characters
+                </p>
               </Link>
               <Link to={`/detail/${animeDetail.mal_id}`}>
-                <p className="text-xl font-bold text-white hover:underline">Staff</p>
+                <p className="text-xl font-bold  hover:underline">
+                  Staff
+                </p>
               </Link>
             </div>
           </div>
         </div>
       </div>
-      <div className=" w-full full flex flex-row bg-orange-500">
-        <Sidebar animeDetail={animeDetail}/>
-        <Content animeCharacter={animeCharacter} animeStaff={staffAnime}/>
+      <div className=" w-full full flex flex-row ">
+        <Sidebar animeDetail={animeDetail} />
+        <Content
+          animeCharacter={animeCharacter}
+          animeStaff={staffAnime}
+          detailAnime={animeDetail}
+        />
       </div>
     </div>
   );
-  };
-  
-  export default Detail;
-  
-  
-  
+};
+
+export default Detail;

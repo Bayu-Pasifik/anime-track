@@ -20,7 +20,7 @@ const ColList: React.FC<ColListProps> = ({ type, listData }) => {
           return (
             <div
               key={character.character.mal_id}
-              className="bg-gray-900 p-4 rounded-xl text-white flex flex-row items-center"
+              className="bg-gray-100 p-4 rounded-xl text-gray-500 flex flex-row items-center shadow-xl"
             >
               <img
                 src={character.character.images.jpg.image_url}
@@ -55,7 +55,7 @@ const ColList: React.FC<ColListProps> = ({ type, listData }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {staff.map((data) => {
           return (
-            <Link to={`/staff/${data.person.mal_id}`} key={data.person.mal_id} className="bg-gray-900 p-4 rounded-xl text-white flex flex-row items-center">
+            <Link to={`/staff/${data.person.mal_id}`} key={data.person.mal_id} className="bg-gray-100 p-4 rounded-xl text-gray-500 flex flex-row items-center shadow-xl">
               <img
                 src={data.person.images.jpg.image_url}
                 alt={data.person.name}
