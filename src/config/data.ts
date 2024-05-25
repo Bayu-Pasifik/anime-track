@@ -39,6 +39,12 @@ export interface Demographics {
   name: string;
   url: string;
 }
+export interface Producer {
+  mal_id: number;
+  type: string;
+  name: string;
+  url: string;
+}
 
 export interface Relation {
   relation: string;
@@ -64,7 +70,7 @@ export interface AnimeDetail extends Anime {
       };
   };
   background: string;
-  favorite: number;
+  favorites: number;
   status: string;
   duration: string;
   rating: string;
@@ -90,4 +96,5 @@ export interface AnimeDetail extends Anime {
   genres: Genre[];
   demographics: Demographics[];
   relations: Relation[];
+  producers: Producer[];
 }

@@ -6,7 +6,6 @@ export default {
   ],
   theme: {
     extend: {
-
       fontFamily: {
         'roboto': ['Roboto', 'sans-serif'],
         'jacquard': ['"Jacquard 12"', 'sans-serif'],

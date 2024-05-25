@@ -1,4 +1,4 @@
-interface CharacterDetail {
+export interface CharacterDetail {
     character: Character;
     role: string;
     favorites: number;
