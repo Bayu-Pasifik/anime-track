@@ -47,7 +47,7 @@ const Detail: React.FC = () => {
     };
     fetchAnimeCharacter();
   }, [id]);
-
+// ! Recomendation
   useEffect(() => {
     const fetchAnimeRecommendations = async () => {
       try {
@@ -61,7 +61,7 @@ const Detail: React.FC = () => {
     };
     fetchAnimeRecommendations();
   }, [id]);
-
+// ! staff
   useEffect(() => {
     const fetchStaffAnime = async () => {
       try {
@@ -75,6 +75,8 @@ const Detail: React.FC = () => {
     };
     fetchStaffAnime();
   }, [id]);
+
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -89,7 +91,7 @@ const Detail: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-200 min-h-screen w-full h-full">
+    <div className="bg-slate-200 min-h-screen w-full h-full">
       <Navbar />
       <div className="banner w-full h-96 relative">
         <img
@@ -132,11 +134,12 @@ const Detail: React.FC = () => {
         </div>
       </div>
       <div className=" w-full full flex flex-row ">
-        <Sidebar animeDetail={animeDetail} />
+
         <Content
           animeCharacter={animeCharacter}
           animeStaff={staffAnime}
           detailAnime={animeDetail}
+          animeRecomendation={Recommendations}
         />
       </div>
     </div>
