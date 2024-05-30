@@ -21,7 +21,7 @@ const Sidebar: React.FC<SidebarProps> = ({ animeDetail, className }) => {
                     </div>
                     <div className="flex-shrink-0 w-full lg:w-auto">
                         <p className="text-xl font-medium text-blue-600">Episodes Duration</p>
-                        <p className="text-md font-medium text-gray-500">{animeDetail.duration ? `${animeDetail.duration} min per ep` : 'Undefined'}</p>
+                        <p className="text-md font-medium text-gray-500">{animeDetail.duration ? `${animeDetail.duration}` : 'Undefined'}</p>
                     </div>
                     <div className="flex-shrink-0 w-full lg:w-auto">
                         <p className="text-xl font-medium text-blue-600">Status</p>

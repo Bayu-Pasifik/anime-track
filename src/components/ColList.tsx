@@ -6,13 +6,14 @@ import { StaffData } from "../config/staff";
 interface ColListProps {
   type: "character" | "staff";
   listData: CharacterDetail[] | StaffData[];
+  category: string;
 }
 
 const ColList: React.FC<ColListProps> = ({ type, listData }) => {
   if (type === "character") {
-    const characters = listData.slice(0, 6) as CharacterDetail[]; // Hanya menampilkan 6 karakter
+    const characters = listData as CharacterDetail[]; // Menampilkan semua karakter
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {characters.map((character) => {
           const japaneseVA = character.voice_actors.find(
             (va) => va.language === "Japanese"
@@ -50,7 +51,7 @@ const ColList: React.FC<ColListProps> = ({ type, listData }) => {
       </div>
     );
   } else if (type === "staff") {
-    const staff = listData.slice(0, 3) as StaffData[];
+    const staff = listData as StaffData[]; // Menampilkan semua staf
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {staff.map((data) => {

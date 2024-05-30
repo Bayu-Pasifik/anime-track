@@ -6,9 +6,10 @@ import { Recommendation } from "../config/animeRecomendation";
 interface ListCardProps {
   type: "character" | "recommendation";
   listData: CharacterDetail[] | Recommendation[];
+  category: string;
 }
 
-const ListCard: React.FC<ListCardProps> = ({ type, listData }) => {
+const ListCard: React.FC<ListCardProps> = ({ type, listData,category }) => {
   if (type === "character") {
     const characters = listData as CharacterDetail[];
     return (
@@ -34,6 +35,10 @@ const ListCard: React.FC<ListCardProps> = ({ type, listData }) => {
         ))}
       </div>
     );
+  } else if(category=== "character"){
+    return <div>
+      
+    </div>
   }
 
   return null;
