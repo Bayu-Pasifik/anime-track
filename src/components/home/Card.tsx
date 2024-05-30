@@ -6,26 +6,32 @@ import "swiper/css";
 
 interface CardProps {
   animes: Anime[];
+  type: string;
 }
 
-const Card: React.FC<CardProps> = ({ animes }) => {
+const Card: React.FC<CardProps> = ({ animes, type }) => {
   const animelist = animes.slice(0, 25);
   return (
     <div className="p-4">
       <div className="flex flex-row justify-between mb-4">
-        <h3 className="text-2xl font-bold text-white">Currently Airing</h3>
-        <Link to="/view-more" className="text-2xl font-bold text-white cursor-pointer">
+        <h3 className="text-2xl font-bold text-white">
+          {type === "currently"
+            ? "Currently Airing"
+            : type === "upcoming"
+            ? "Upcoming Anime"
+            : "Popular Anime"}
+        </h3>
+        <Link
+          to="/view-more"
+          className="text-2xl font-bold text-white cursor-pointer"
+        >
           View More
         </Link>
       </div>
       <div className="flex flex-row w-full gap-4">
-        <Swiper
-          spaceBetween={1}
-          slidesPerView={7}
-          className="mySwiper"
-        >
+        <Swiper spaceBetween={1} slidesPerView={7} className="mySwiper">
           {animelist.map((anime) => (
-            <SwiperSlide key={anime.mal_id} style={{ width: 'auto' }}>
+            <SwiperSlide key={anime.mal_id} style={{ width: "auto" }}>
               <div className="relative w-52 h-64 group overflow-hidden">
                 <img
                   className="w-full h-full rounded-md object-cover"

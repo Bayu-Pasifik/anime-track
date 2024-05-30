@@ -2,117 +2,81 @@ import React, { useEffect, useState } from "react";
 import { Anime } from "../config/data";
 import axios from "../config/axiosConfig";
 import HeaderCarousel from "../components/carousel/Carousel";
-import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import Card from "../components/home/Card";
+import { motion } from "framer-motion";
 
 const Home: React.FC = () => {
   const [topAiring, setTopAiring] = useState<Anime[]>([]);
   const [currentlyAiring, setCurrentlyAiring] = useState<Anime[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [upComingAnime, setupComingAnime] = useState<Anime[]>([]);
+  const [popularAnime, setPopularAnime] = useState<Anime[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTopAiring = async () => {
-      try {
-        const response = await axios.get("/top/anime");
-        setTopAiring(response.data.data);
-      } catch (error) {
-        console.error("Error fetching top anime", error);
-      }
-    };
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-    fetchTopAiring();
-  }, []);
-
-  // useEffect(() => {
-  //   const fetchCurrentlyAiring = async (page: number) => {
-  //     setLoading(true);
-  //     try {
-  //       const cachedData = localStorage.getItem(`currentlyAiringPage${page}`);
-  //       if (cachedData) {
-  //         setCurrentlyAiring((prev) => [...prev, ...JSON.parse(cachedData)]);
-  //       } else {
-  //         const response = await axios.get("/anime", {
-  //           params: { status: "airing", sfw: true, page: page },
-  //         });
-  //         setCurrentlyAiring((prev) => [...prev, ...response.data.data]);
-  //         localStorage.setItem(
-  //           `currentlyAiringPage${page}`,
-  //           JSON.stringify(response.data.data)
-  //         );
-  //         setHasMore(response.data.pagination.has_next_page);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching currently airing anime", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchCurrentlyAiring(currentPage);
-  // }, [currentPage]);
-
-  useEffect(() => {
-    const fetchCurrentlyAiring = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("/anime", {
-          params: { status: "airing", sfw: true },
-        });
-        setCurrentlyAiring(response.data.data);
-        // setHasMore(response.data.pagination.has_next_page);
+        const fetchTopAiring = async () => {
+          const response = await axios.get("/top/anime");
+          setTopAiring(response.data.data);
+        };
+
+        const fetchCurrentlyAiring = async () => {
+          await delay(1000); // 1000ms delay
+          const response = await axios.get("/seasons/now");
+          setCurrentlyAiring(response.data.data);
+        };
+
+        const fetchUpcomingAnime = async () => {
+          await delay(1000); // 1000ms delay
+          const response = await axios.get("/seasons/upcoming");
+          setupComingAnime(response.data.data);
+        };
+
+        const fetchPopularAnime = async () => {
+          await delay(1000); // 1000ms delay
+          const response = await axios.get("/anime", {
+            params: { order_by: "popularity", type: "tv", sfw: true },
+          });
+          setPopularAnime(response.data.data);
+        };
+
+        await fetchTopAiring();
+        await fetchCurrentlyAiring();
+        await fetchUpcomingAnime();
+        await fetchPopularAnime();
       } catch (error) {
-        console.error("Error fetching currently airing anime", error);
+        console.error("Error fetching anime data", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchCurrentlyAiring();
-  },[currentlyAiring]);
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 500 &&
-      hasMore &&
-      !loading
-    ) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
 
-  useEffect(() => {
-    const debouncedHandleScroll = debounce(handleScroll, 200);
-    window.addEventListener("scroll", debouncedHandleScroll);
-    return () => window.removeEventListener("scroll", debouncedHandleScroll);
-  }, [hasMore, loading]);
-
-  const debounce = (func: () => void, wait: number) => {
-    let timeout: ReturnType<typeof setTimeout>;
-    return () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        func();
-      }, wait);
-    };
-  };
+    fetchData();
+  }, []);
 
   return (
     <div className="bg-bg-color h-full w-full">
-      <Navbar></Navbar>
-      <HeaderCarousel animes={topAiring} />
-      <Card animes={currentlyAiring}/>
-
-      {loading && (
-        <div className="flex justify-center mt-4">
+      <Navbar />
+      {loading ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-center items-center h-screen"
+        >
           <p className="text-white">Loading...</p>
-        </div>
-      )}
-      {!hasMore && (
-        <div className="flex justify-center mt-4">
-          <p className="text-white">No more data to load</p>
-        </div>
+        </motion.div>
+      ) : (
+        <>
+          <HeaderCarousel animes={topAiring} />
+          <Card animes={currentlyAiring} type="currently" />
+          <Card animes={upComingAnime} type="upcoming" />
+          <Card animes={popularAnime} type="popular" />
+        </>
       )}
     </div>
   );
