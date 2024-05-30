@@ -9,6 +9,7 @@ export interface Anime {
   episodes: number;
   score: number;
   source: string;
+  synopsis: string;
   rank: number;
   popularity: number;
   images: {
