@@ -11,6 +11,9 @@ export default {
         'jacquard': ['"Jacquard 12"', 'sans-serif'],
         'dm-mono': ['"DM Mono"', 'monospace'],
       },
+      colors: {
+        'bg-color': '#121212',
+      }
     },
   },
   plugins: [],

@@ -18,6 +18,7 @@ export interface Anime {
       large_image_url:string;
     };
   };
+  genres: Genre[];
 }
 
 export interface Studio {
