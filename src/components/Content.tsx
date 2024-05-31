@@ -6,7 +6,6 @@ import { Recommendation } from "../config/animeRecomendation";
 import ColList from "./ColList";
 import Trailer from "./Trailer";
 import AnimeRecomendation from "./AnimeRecomendation";
-import Sidebar from "./Sidebar";
 
 interface ContentProps {
   animeCharacter: CharacterDetail[];
@@ -14,6 +13,7 @@ interface ContentProps {
   detailAnime: AnimeDetail;
   animeRecomendation: Recommendation[];
   category: string;
+  className?: string; // Add this prop for custom className
 }
 
 const Content: React.FC<ContentProps> = ({
@@ -22,12 +22,20 @@ const Content: React.FC<ContentProps> = ({
   detailAnime,
   animeRecomendation,
   category,
+  className, // Use the className prop
 }) => {
   const renderContent = () => {
     switch (category) {
       case "characters":
         return animeCharacter.length > 0 ? (
-          <ColList type="character" listData={animeCharacter} category="characters" />
+          <div className="p-4">
+            <h1 className="text-white text-2xl font-roboto">Featuring Character</h1>
+            <ColList
+              type="character"
+              listData={animeCharacter}
+              category="characters"
+            />
+          </div>
         ) : (
           <p className="text-md font-medium text-gray-500">Undefined</p>
         );
@@ -39,7 +47,6 @@ const Content: React.FC<ContentProps> = ({
         );
       case "pictures":
         return (
-          // Render picture component
           <p className="text-md font-medium text-gray-500">Pictures Component</p>
         );
       default:
@@ -49,14 +56,22 @@ const Content: React.FC<ContentProps> = ({
               <h1 className="text-2xl">Featuring Characters</h1>
             </div>
             {animeCharacter.length > 0 ? (
-              <ColList type="character" listData={animeCharacter.slice(0, 6)} category="characters" />
+              <ColList
+                type="character"
+                listData={animeCharacter.slice(0, 6)}
+                category="characters"
+              />
             ) : (
               <p className="text-md font-medium text-gray-500">Undefined</p>
             )}
             <br />
             <br />
             {animeStaff.length > 0 ? (
-              <ColList type="staff" listData={animeStaff.slice(0, 3)} category="staff" />
+              <ColList
+                type="staff"
+                listData={animeStaff.slice(0, 3)}
+                category="staff"
+              />
             ) : (
               <p className="text-md font-medium text-gray-500">Undefined</p>
             )}
@@ -76,8 +91,7 @@ const Content: React.FC<ContentProps> = ({
   };
 
   return (
-    <div className="p-4 w-full mt-4 flex flex-col lg:flex-row">
-      <Sidebar animeDetail={detailAnime} className="lg:w-1/2 w-full order-1" />
+    <div className={`p-4 w-full mt-4 flex flex-col lg:flex-row ${className}`}>
       <div className="content flex flex-col flex-grow order-2 lg:order-1">
         {renderContent()}
       </div>

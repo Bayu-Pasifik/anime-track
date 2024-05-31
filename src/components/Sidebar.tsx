@@ -9,7 +9,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ animeDetail, className }) => {
     return (
         <div className={`flex flex-col w-full ${className}`}>
-            <div className="sidebar bg-gray-100 mx-4 mt-4 rounded-xl h-auto p-4 shadow-lg overflow-x-auto" key={animeDetail.mal_id}>
+            <div className="sidebar bg-slate-800 mx-4 mt-4 rounded-xl h-auto p-4 shadow-lg overflow-x-auto" key={animeDetail.mal_id}>
                 <div className="w-full h-auto lg:grid lg:grid-cols-1 gap-4 flex flex-row flex-wrap lg:flex-col">
                     <div className="flex-shrink-0 w-full lg:w-auto">
                         <p className="text-xl font-medium text-blue-600">Format</p>
@@ -78,7 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({ animeDetail, className }) => {
             {animeDetail.external?.length > 0 ? (
                 <div className="external-links mt-3 w-full flex flex-col items-center p-4">
                     {animeDetail.external.map((external, index) => (
-                        <div key={index} className="external-link-item bg-gray-100 w-full mx-4 my-2 p-4 rounded-xl shadow-lg">
+                        <div key={index} className="external-link-item bg-slate-800 w-full mx-4 my-2 p-4 rounded-xl shadow-lg">
                             <div className="flex flex-row items-center">
                                 <FaExternalLinkAlt className="mr-2 text-gray-500" />
                                 <a

@@ -13,7 +13,7 @@ const ListCard: React.FC<ListCardProps> = ({ type, listData,category }) => {
   if (type === "character") {
     const characters = listData as CharacterDetail[];
     return (
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 md:grid-cols-4 gap-4">
         {characters.map((character) => (
           <div key={character.character.mal_id} className="bg-gray-900 p-4 rounded-xl text-white">
             <img src={character.character.images.jpg.image_url} alt={character.character.name} className="w-full h-auto rounded-md mb-2" />

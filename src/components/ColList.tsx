@@ -13,7 +13,7 @@ const ColList: React.FC<ColListProps> = ({ type, listData }) => {
   if (type === "character") {
     const characters = listData as CharacterDetail[]; // Menampilkan semua karakter
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-8">
         {characters.map((character) => {
           const japaneseVA = character.voice_actors.find(
             (va) => va.language === "Japanese"
@@ -21,7 +21,7 @@ const ColList: React.FC<ColListProps> = ({ type, listData }) => {
           return (
             <div
               key={character.character.mal_id}
-              className="bg-gray-100 p-4 rounded-xl text-gray-500 flex flex-row items-center shadow-xl"
+              className="bg-slate-800 text-white p-4 rounded-xl flex flex-row items-center shadow-xl"
             >
               <img
                 src={character.character.images.jpg.image_url}
