@@ -6,7 +6,7 @@ import "swiper/css";
 
 interface CardProps {
   animes: Anime[];
-  type: string;
+  type?: string;
 }
 
 const Card: React.FC<CardProps> = ({ animes, type }) => {
