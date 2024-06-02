@@ -1,17 +1,18 @@
 // src/pages/Home.tsx
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../redux/store';
-import { fetchAnimeData } from '../redux/animeSlice';
-import HeaderCarousel from '../components/carousel/Carousel';
-import Navbar from '../components/Navbar';
-import Card from '../components/home/Card';
-import { motion } from 'framer-motion';
-import SkeletonCard from '../components/SkeletonCard';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../redux/store";
+import { fetchAnimeData } from "../redux/animeSlice";
+import HeaderCarousel from "../components/carousel/Carousel";
+import Navbar from "../components/Navbar";
+import { motion } from "framer-motion";
+import SkeletonCard from "../components/SkeletonCard";
+import ListHomeCard from "../components/home/ListHomeCard";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { topAiring, currentlyAiring, upcoming, popular, loading, error } = useSelector((state: RootState) => state.anime);
+  const { topAiring, currentlyAiring, upcoming, popular, loading, error } =
+    useSelector((state: RootState) => state.anime);
 
   useEffect(() => {
     dispatch(fetchAnimeData());
@@ -46,7 +47,9 @@ const Home: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="flex justify-center items-center h-40"
         >
-          <p className="text-white">Something Went Wrong, please refresh the website.</p>
+          <p className="text-white">
+            Something Went Wrong, please refresh the website.
+          </p>
         </motion.div>
       </div>
     );
@@ -56,9 +59,9 @@ const Home: React.FC = () => {
     <div className="bg-bg-color h-full w-full">
       <Navbar />
       <HeaderCarousel animes={topAiring} />
-      <Card animes={currentlyAiring} type="currently" />
-      <Card animes={upcoming} type="upcoming" />
-      <Card animes={popular} type="popular" />
+      <ListHomeCard animes={currentlyAiring} type="currently" />
+      <ListHomeCard animes={upcoming} type="upcoming" />
+      <ListHomeCard animes={popular} type="popular" />
     </div>
   );
 };

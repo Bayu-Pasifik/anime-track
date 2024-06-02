@@ -7,7 +7,7 @@ const ButtonGenre: React.FC<ButtonGenreProps> = ({ genres }) => {
   return (
     <div className="flex flex-row">
       {genres.map((genre) => (
-        <div className="p-2 m-2 bg-slate-800">
+        <div className="p-2 m-2 bg-slate-800 rounded-md" key={genre.mal_id}>
           <p className="text-white">{genre.name}</p>
         </div>
       ))}
