@@ -1,5 +1,6 @@
 export interface Anime {
   mal_id: number;
+  url: string;
   title: string;
   title_english: string;
   title_japanese: string;
@@ -12,6 +13,7 @@ export interface Anime {
   synopsis: string;
   rank: number;
   popularity: number;
+  members: number;
   images: {
     jpg: {
       image_url: string;

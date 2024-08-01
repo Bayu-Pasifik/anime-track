@@ -1,22 +1,28 @@
-// src/pages/Home.tsx
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
 import { fetchAnimeData } from "../redux/animeSlice";
+import { fetchTopManga } from "../redux/mangaSlice";
 import HeaderCarousel from "../components/carousel/Carousel";
 import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
 import SkeletonCard from "../components/SkeletonCard";
 import ListHomeCard from "../components/home/ListHomeCard";
+import TopContainer from "../components/home/TopContainer";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { topAiring, currentlyAiring, upcoming, popular, loading, error } =
+  const { topAiring, currentlyAiring, upcoming, popular, loading: animeLoading, error: animeError } =
     useSelector((state: RootState) => state.anime);
+  const { topManga, loading: mangaLoading, error: mangaError } = useSelector((state: RootState) => state.manga);
 
   useEffect(() => {
     dispatch(fetchAnimeData());
+    dispatch(fetchTopManga());
   }, [dispatch]);
+
+  const loading = animeLoading || mangaLoading;
+  const error = animeError || mangaError;
 
   if (loading) {
     return (
@@ -47,9 +53,7 @@ const Home: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="flex justify-center items-center h-40"
         >
-          <p className="text-white">
-            Something Went Wrong, please refresh the website.
-          </p>
+          <p className="text-white">Something Went Wrong, please refresh the website.</p>
         </motion.div>
       </div>
     );
@@ -62,6 +66,10 @@ const Home: React.FC = () => {
       <ListHomeCard animes={currentlyAiring} type="currently" />
       <ListHomeCard animes={upcoming} type="upcoming" />
       <ListHomeCard animes={popular} type="popular" />
+      <div className="flex flex-row w-full ">
+        <TopContainer title="Top 100 Anime" items={topAiring} />
+        <TopContainer title="Top 100 Manga" items={topManga} />
+      </div>
     </div>
   );
 };
