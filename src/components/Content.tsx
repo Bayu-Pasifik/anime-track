@@ -77,7 +77,34 @@ const Content: React.FC<ContentProps> = ({
           </div>
         );
       case "staff":
-        return <></>;
+        return (
+          <div>
+            <div className="font-roboto font-bold">
+              <h1 className="text-xl text-white">Featuring Staffs</h1>
+            </div>
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
+              {animeStaff.map((staff) => {
+               return  <ListTile
+                  key={staff.person.mal_id}
+                  leading={
+                    <img
+                      src={staff.person.images.jpg.image_url}
+                      alt={staff.person.name}
+                      className="rounded-md object-cover h-30 w-20"
+                    />
+                  }
+                  title={
+                    <div className="flex flex-col">
+                      <p className="text-white">{staff.person.name}</p>
+                      <p className="text-sm text-white">{staff.positions}</p>
+                    </div>
+                  }
+                  
+                />;
+              })}
+            </div>
+          </div>
+        );
       case "pictures":
         return <></>;
       default:
