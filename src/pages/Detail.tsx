@@ -51,7 +51,7 @@ const Detail: React.FC = () => {
 
     const fetchAnimeRecommendations = async () => {
       try {
-        delay(500);
+        delay(10000);
         const response = await axios.get(`/anime/${id}/recommendations`);
         setRecommendations(response.data.data);
         setIsRecommendationFetched(true);
@@ -62,7 +62,7 @@ const Detail: React.FC = () => {
 
     const fetchStaffAnime = async () => {
       try {
-        delay(500);
+        delay(10000);
         const response = await axios.get(`/anime/${id}/staff`);
         setStaffAnime(response.data.data);
         setIsStaffFetched(true);
@@ -75,6 +75,7 @@ const Detail: React.FC = () => {
       setLoading(true);
       await Promise.all([
         fetchAnimeDetail(),
+        delay(1000),
         fetchAnimeCharacter(),
         fetchAnimeRecommendations(),
         fetchStaffAnime(),
@@ -87,9 +88,7 @@ const Detail: React.FC = () => {
 
   const allFetched =
     isDetailFetched &&
-    isCharacterFetched &&
-    isRecommendationFetched &&
-    isStaffFetched;
+    isCharacterFetched 
   if (loading || !allFetched) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -176,7 +175,7 @@ const Detail: React.FC = () => {
       <div className="w-full flex flex-col lg:flex-row">
         <Sidebar
           animeDetail={animeDetail}
-          className="lg:w-1/3 w-full order-1 mt-24"
+          className="lg:w-1/3 w-full order-1 mt-10"
         />
         <Content
           animeCharacter={animeCharacter}

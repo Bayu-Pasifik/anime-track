@@ -11,16 +11,16 @@ interface TopContainerProps {
 
 const TopContainer: React.FC<TopContainerProps> = ({ title, items }) => {
   return (
-    <div className="w-1/2 p-4 mx-4 my-3 bg-slate-200 rounded-lg ">
+    <div className="w-1/2 p-4 mx-4 my-3 bg-slate-600 rounded-lg ">
       <div className="flex flex-row justify-between mb-4">
-        <h1 className="text-2xl text-gray-900">{title}</h1>
-        <h1 className="text-2xl text-gray-900 cursor-pointer">View All</h1>
+        <h1 className="text-2xl text-white">{title}</h1>
+        <h1 className="text-2xl text-white cursor-pointer">View All</h1>
       </div>
       <div>
         {items.map((item, index) => (
           <div
             key={index}
-            className="flex flex-row items-center mb-4 p-4 bg-white rounded-lg shadow-md"
+            className="flex flex-row items-center mb-4 p-4 bg-slate-400 rounded-lg shadow-md"
           >
             <div className="flex items-center justify-center w-8 h-8 bg-gray-300 rounded-full text-gray-800 font-bold">
               #{index + 1}

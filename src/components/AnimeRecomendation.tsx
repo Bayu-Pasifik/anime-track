@@ -16,10 +16,10 @@ const AnimeRecomendation: React.FC<AnimeRecomendationProps> = ({ animeRecomendat
 
     return (
         <div className="mt-4">
-            <div className="w-full flex justify-between items-center mb-4">
-                <h1 className="text-2xl">Recommendations</h1>
+            <div className="w-full flex justify-between items-center mb-4 font-roboto">
+                <h1 className="text-2xl text-white">Recommendations</h1>
                 <button onClick={toggleShowAll} className="text-blue-600 font-bold">
-                    {showAll ? "Show Less" : "See All"}
+                    {showAll ? "Show Less" : "See All Recomendations"}
                 </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
@@ -34,7 +34,7 @@ const AnimeRecomendation: React.FC<AnimeRecomendationProps> = ({ animeRecomendat
                             alt={recommendation.entry.title}
                             className="w-full h-52 object-cover rounded-md mb-2"
                         />
-                        <h4 className="text-lg font-bold truncate">{recommendation.entry.title}</h4>
+                        <h4 className="text-lg font-bold truncate text-white">{recommendation.entry.title}</h4>
                     </a>
                 ))}
             </div>
