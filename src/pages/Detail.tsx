@@ -7,6 +7,7 @@ import Sidebar from "../components/Sidebar";
 import Content from "../components/Content";
 import { CharacterDetail } from "../config/characters";
 import { Recommendation } from "../config/animeRecomendation";
+import { Images } from "../config/animeRecomendation";
 import { StaffData } from "../config/staff";
 
 const Detail: React.FC = () => {
@@ -23,6 +24,8 @@ const Detail: React.FC = () => {
   const [isRecommendationFetched, setIsRecommendationFetched] =
     useState<boolean>(false);
   const [isStaffFetched, setIsStaffFetched] = useState<boolean>(false);
+
+  const [animePicture, setAnimePicture] = useState<Images[]>([]);
 
   const category = location.pathname.split("/")[3] || "overview";
 
@@ -71,6 +74,16 @@ const Detail: React.FC = () => {
       }
     };
 
+    const fetchAnimePicture = async () => {
+      try {
+        delay(10000);
+        const response = await axios.get(`/anime/${id}/pictures`);
+        setAnimePicture(response.data.data);
+      } catch (error) {
+        console.error("Error fetching anime picture", error);
+      }
+    };
+
     const fetchData = async () => {
       setLoading(true);
       await Promise.all([
@@ -79,6 +92,7 @@ const Detail: React.FC = () => {
         fetchAnimeCharacter(),
         fetchAnimeRecommendations(),
         fetchStaffAnime(),
+        fetchAnimePicture(),
       ]);
       setLoading(false);
     };
@@ -178,6 +192,7 @@ const Detail: React.FC = () => {
           className="lg:w-1/3 w-full order-1 mt-10"
         />
         <Content
+          pictures={animePicture}
           animeCharacter={animeCharacter}
           animeStaff={staffAnime}
           detailAnime={animeDetail}

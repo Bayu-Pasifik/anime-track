@@ -3,15 +3,18 @@ import { CharacterDetail } from "../config/characters";
 import { AnimeDetail } from "../config/data";
 import { StaffData } from "../config/staff";
 import { Recommendation } from "../config/animeRecomendation";
+import { Images } from "../config/animeRecomendation";
 import Trailer from "./Trailer";
 import AnimeRecomendation from "./AnimeRecomendation";
 import ListTile from "./LIstTile";
+import PictureGallery from "./ZoomPictures";
 
 interface ContentProps {
   animeCharacter: CharacterDetail[];
   animeStaff: StaffData[];
   detailAnime: AnimeDetail;
   animeRecomendation: Recommendation[];
+  pictures : Images[];
   category: string;
   className?: string; // Add this prop for custom className
 }
@@ -21,6 +24,7 @@ const Content: React.FC<ContentProps> = ({
   animeStaff,
   detailAnime,
   animeRecomendation,
+  pictures,
   category,
   className, // Use the className prop
 }) => {
@@ -106,7 +110,12 @@ const Content: React.FC<ContentProps> = ({
           </div>
         );
       case "pictures":
-        return <></>;
+        return (
+          <div>
+            <PictureGallery pictures={pictures} />
+          </div>
+
+        );
       default:
         return (
           <div>
