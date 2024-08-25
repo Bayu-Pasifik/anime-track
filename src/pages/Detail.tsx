@@ -1,109 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
-import { AnimeDetail } from "../config/data";
-import axios from "../config/axiosConfig";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
-import Content from "../components/Content";
-import { CharacterDetail } from "../config/characters";
-import { Recommendation } from "../config/animeRecomendation";
-import { Images } from "../config/animeRecomendation";
-import { StaffData } from "../config/staff";
+import React, { useEffect } from 'react';
+import { Link, useParams, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchAnimeDetail, fetchAnimeCharacter, fetchAnimeRecommendations, fetchStaffAnime, fetchAnimePicture } from '../redux/detailAnimeSlice';
+import { RootState, AppDispatch } from '../redux/store';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import Content from '../components/Content';
 
 const Detail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
-  const [animeDetail, setAnimeDetail] = useState<AnimeDetail | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [animeCharacter, setAnimeCharacter] = useState<CharacterDetail[]>([]);
-  const [Recommendations, setRecommendations] = useState<Recommendation[]>([]);
-  const [staffAnime, setStaffAnime] = useState<StaffData[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const [isDetailFetched, setIsDetailFetched] = useState<boolean>(false);
-  const [isCharacterFetched, setIsCharacterFetched] = useState<boolean>(false);
-  const [isRecommendationFetched, setIsRecommendationFetched] =
-    useState<boolean>(false);
-  const [isStaffFetched, setIsStaffFetched] = useState<boolean>(false);
+  const {
+    animeDetail,
+    loading,
+    animeCharacter,
+    Recommendations,
+    staffAnime,
+    animePicture,
+  } = useSelector((state: RootState) => state.detailAnime);
 
-  const [animePicture, setAnimePicture] = useState<Images[]>([]);
-
-  const category = location.pathname.split("/")[3] || "overview";
+  const category = location.pathname.split('/')[3] || 'overview';
 
   useEffect(() => {
-    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-    const fetchAnimeDetail = async () => {
-      try {
-        const response = await axios.get(`/anime/${id}/full`);
-        setAnimeDetail(response.data.data);
-        setIsDetailFetched(true);
-      } catch (error) {
-        console.error("Error fetching anime details", error);
-      }
-    };
+    if (id) {
+      dispatch(fetchAnimeDetail(id));
+      dispatch(fetchAnimeCharacter(id));
+      dispatch(fetchAnimeRecommendations(id));
+      dispatch(fetchStaffAnime(id));
+      dispatch(fetchAnimePicture(id));
+    }
+  }, [dispatch, id]);
 
-    const fetchAnimeCharacter = async () => {
-      try {
-        delay(1000);
-        const response = await axios.get(`/anime/${id}/characters`);
-        setAnimeCharacter(response.data.data);
-        setIsCharacterFetched(true);
-      } catch (error) {
-        console.error("Error fetching anime characters", error);
-      }
-    };
-
-    const fetchAnimeRecommendations = async () => {
-      try {
-        delay(10000);
-        const response = await axios.get(`/anime/${id}/recommendations`);
-        setRecommendations(response.data.data);
-        setIsRecommendationFetched(true);
-      } catch (error) {
-        console.error("Error fetching anime recommendations", error);
-      }
-    };
-
-    const fetchStaffAnime = async () => {
-      try {
-        delay(10000);
-        const response = await axios.get(`/anime/${id}/staff`);
-        setStaffAnime(response.data.data);
-        setIsStaffFetched(true);
-      } catch (error) {
-        console.error("Error fetching staff anime", error);
-      }
-    };
-
-    const fetchAnimePicture = async () => {
-      try {
-        delay(10000);
-        const response = await axios.get(`/anime/${id}/pictures`);
-        setAnimePicture(response.data.data);
-      } catch (error) {
-        console.error("Error fetching anime picture", error);
-      }
-    };
-
-    const fetchData = async () => {
-      setLoading(true);
-      await Promise.all([
-        fetchAnimeDetail(),
-        delay(1000),
-        fetchAnimeCharacter(),
-        fetchAnimeRecommendations(),
-        fetchStaffAnime(),
-        fetchAnimePicture(),
-      ]);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, [id]);
-
-  const allFetched =
-    isDetailFetched &&
-    isCharacterFetched 
-  if (loading || !allFetched) {
+  if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="h-40 w-40 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
@@ -149,7 +79,7 @@ const Detail: React.FC = () => {
               <Link to={`/detail/${id}`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
-                    category === "overview" ? "text-blue-700" : ""
+                    category === 'overview' ? 'text-blue-700' : ''
                   }`}
                 >
                   Overview
@@ -158,7 +88,7 @@ const Detail: React.FC = () => {
               <Link to={`/detail/${id}/characters`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
-                    category === "characters" ? "text-blue-700" : ""
+                    category === 'characters' ? 'text-blue-700' : ''
                   }`}
                 >
                   Characters
@@ -167,7 +97,7 @@ const Detail: React.FC = () => {
               <Link to={`/detail/${id}/staff`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
-                    category === "staff" ? "text-blue-700" : ""
+                    category === 'staff' ? 'text-blue-700' : ''
                   }`}
                 >
                   Staff
@@ -176,7 +106,7 @@ const Detail: React.FC = () => {
               <Link to={`/detail/${id}/pictures`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
-                    category === "pictures" ? "text-blue-700" : ""
+                    category === 'pictures' ? 'text-blue-700' : ''
                   }`}
                 >
                   Pictures
