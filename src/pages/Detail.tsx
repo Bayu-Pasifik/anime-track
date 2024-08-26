@@ -35,8 +35,7 @@ const Detail: React.FC = () => {
       if (id) {
         // Fetch detail anime
         await dispatch(fetchAnimeDetail(id));
-        await delay(1000); // Delay to prevent too many requests
-
+        await delay(1000); // Delay to prevent too many request
         // Fetch other data concurrently with delays
         await Promise.all([
           dispatch(fetchAnimeCharacter(id)),
@@ -144,6 +143,7 @@ const Detail: React.FC = () => {
           className="lg:w-1/3 w-full order-1 mt-10"
         />
         <Content
+          // isLoading= {loading}
           pictures={animePicture}
           animeCharacter={animeCharacter}
           animeStaff={staffAnime}

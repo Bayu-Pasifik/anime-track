@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { CharacterDetail } from "../config/characters";
 import { AnimeDetail } from "../config/data";
 import { StaffData } from "../config/staff";
@@ -6,18 +6,19 @@ import { Recommendation } from "../config/animeRecomendation";
 import { Images } from "../config/animeRecomendation";
 import Trailer from "./Trailer";
 import AnimeRecomendation from "./AnimeRecomendation";
-import ListTile from "./LIstTile";
+import ListTile from "./ListTile";
 import PictureGallery from "./ZoomPictures";
 import CharacterName from "./details/CharacterName";
+import SkeletonListTile from "./SkeletonListTile";
 
 interface ContentProps {
   animeCharacter: CharacterDetail[];
   animeStaff: StaffData[];
   detailAnime: AnimeDetail;
   animeRecomendation: Recommendation[];
-  pictures : Images[];
+  pictures: Images[];
   category: string;
-  className?: string; // Add this prop for custom className
+  className?: string;
 }
 
 const Content: React.FC<ContentProps> = ({
@@ -27,11 +28,40 @@ const Content: React.FC<ContentProps> = ({
   animeRecomendation,
   pictures,
   category,
-  className, // Use the className prop
+  className,
 }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Set isLoading true when the component first mounts or when category changes
+    setIsLoading(true);
+
+    // Simulate data fetching
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000); // Simulating loading delay
+
+    // Cleanup function to clear timer if component unmounts
+    return () => clearTimeout(timer);
+  }, [category]);
+
   const renderContent = () => {
     const animeCharacters = animeCharacter.slice(0, 4);
     const animeStaffs = animeStaff.slice(0, 3);
+
+    if (isLoading) {
+      return (
+        <div>
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 h-72 mt-7">
+            <SkeletonListTile />
+            <SkeletonListTile />
+            <SkeletonListTile />
+            <SkeletonListTile />
+          </div>
+        </div>
+      );
+    }
+
     switch (category) {
       case "characters":
         return (
@@ -43,40 +73,45 @@ const Content: React.FC<ContentProps> = ({
               {animeCharacter.map((character) => {
                 const japaneseVA = character.voice_actors.find(
                   (va) => va.language === "Japanese"
-                )
-               return  <ListTile
-                  key={character.character.mal_id}
-                  leading={
-                    <img
-                      src={character.character.images.jpg.image_url}
-                      alt={character.character.name}
-                      className="rounded-md object-cover h-30 w-20"
-                    />
-                  }
-                  title={
-                    <div className="flex flex-col">
-                      <CharacterName name={character.character.name} to={`/anime/${character.character.mal_id}/charcters`}/>
-                      <p className="text-sm text-white">{character.role}</p>
-                    </div>
-                  }
-                  trailing={
-                    <div className="flex flex-row items-center">
-                      <div className="flex flex-col text-right mr-4">
-                        <span className="text-sm text-white">
-                          {japaneseVA?.person.name}
-                        </span>
-                        <span className="text-sm text-white">
-                          {japaneseVA?.language}
-                        </span>
-                      </div>
+                );
+                return (
+                  <ListTile
+                    key={character.character.mal_id}
+                    leading={
                       <img
-                        src={japaneseVA?.person.images.jpg.image_url}
-                        alt={japaneseVA?.person.name}
+                        src={character.character.images.jpg.image_url}
+                        alt={character.character.name}
                         className="rounded-md object-cover h-30 w-20"
                       />
-                    </div>
-                  }
-                />;
+                    }
+                    title={
+                      <div className="flex flex-col">
+                        <CharacterName
+                          name={character.character.name}
+                          to={`/anime/${character.character.mal_id}/characters`}
+                        />
+                        <p className="text-sm text-white">{character.role}</p>
+                      </div>
+                    }
+                    trailing={
+                      <div className="flex flex-row items-center">
+                        <div className="flex flex-col text-right mr-4">
+                          <span className="text-sm text-white">
+                            {japaneseVA?.person.name}
+                          </span>
+                          <span className="text-sm text-white">
+                            {japaneseVA?.language}
+                          </span>
+                        </div>
+                        <img
+                          src={japaneseVA?.person.images.jpg.image_url}
+                          alt={japaneseVA?.person.name}
+                          className="rounded-md object-cover h-30 w-20"
+                        />
+                      </div>
+                    }
+                  />
+                );
               })}
             </div>
           </div>
@@ -89,23 +124,24 @@ const Content: React.FC<ContentProps> = ({
             </div>
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
               {animeStaff.map((staff) => {
-               return  <ListTile
-                  key={staff.person.mal_id}
-                  leading={
-                    <img
-                      src={staff.person.images.jpg.image_url}
-                      alt={staff.person.name}
-                      className="rounded-md object-cover h-30 w-20"
-                    />
-                  }
-                  title={
-                    <div className="flex flex-col">
-                      <p className="text-white">{staff.person.name}</p>
-                      <p className="text-sm text-white">{staff.positions}</p>
-                    </div>
-                  }
-                  
-                />;
+                return (
+                  <ListTile
+                    key={staff.person.mal_id}
+                    leading={
+                      <img
+                        src={staff.person.images.jpg.image_url}
+                        alt={staff.person.name}
+                        className="rounded-md object-cover h-30 w-20"
+                      />
+                    }
+                    title={
+                      <div className="flex flex-col">
+                        <p className="text-white">{staff.person.name}</p>
+                        <p className="text-sm text-white">{staff.positions}</p>
+                      </div>
+                    }
+                  />
+                );
               })}
             </div>
           </div>
@@ -115,7 +151,6 @@ const Content: React.FC<ContentProps> = ({
           <div>
             <PictureGallery pictures={pictures} />
           </div>
-
         );
       default:
         return (

@@ -17,6 +17,7 @@ const DetailAnimeCharacter: React.FC = () => {
   const fetchDetailCharacter = async () => {
     try {
       const response = await axios.get(`/characters/${id}/full`);
+      console.log({ response: response.data.data });
       setAnimeCharacter(response.data.data);
     } catch (error) {
       console.error("Error fetching anime character", error);
@@ -86,12 +87,12 @@ const DetailAnimeCharacter: React.FC = () => {
             <h2 className="text-2xl font-bold text-white mb-4">Voiced By</h2>
             <Swiper
               spaceBetween={16}
-              slidesPerView={2}
+              slidesPerView={7}
               breakpoints={{
                 640: { slidesPerView: 2 },
                 768: { slidesPerView: 3 },
                 1024: { slidesPerView: 4 },
-                1280: { slidesPerView: 5 },
+                1280: { slidesPerView: 7 },
               }}
             >
               {animeCharacter.voices.map((voice, index) => (
@@ -115,7 +116,7 @@ const DetailAnimeCharacter: React.FC = () => {
             </h2>
             <Swiper
               spaceBetween={16}
-              slidesPerView={2}
+              slidesPerView={7}
               breakpoints={{
                 640: { slidesPerView: 2 },
                 768: { slidesPerView: 3 },
@@ -144,7 +145,7 @@ const DetailAnimeCharacter: React.FC = () => {
             </h2>
             <Swiper
               spaceBetween={16}
-              slidesPerView={2}
+              slidesPerView={7}
               breakpoints={{
                 640: { slidesPerView: 2 },
                 768: { slidesPerView: 3 },
