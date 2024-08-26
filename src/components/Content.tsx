@@ -66,7 +66,7 @@ const Content: React.FC<ContentProps> = ({
       case "characters":
         return (
           <div>
-            <div className="font-roboto font-bold">
+            <div className="font-roboto font-bold mt-5 mb-4">
               <h1 className="text-xl text-white">Featuring Characters</h1>
             </div>
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
@@ -96,9 +96,10 @@ const Content: React.FC<ContentProps> = ({
                     trailing={
                       <div className="flex flex-row items-center">
                         <div className="flex flex-col text-right mr-4">
-                          <span className="text-sm text-white">
-                            {japaneseVA?.person.name}
-                          </span>
+                          <CharacterName
+                            name={japaneseVA?.person.name?? "N/A"}
+                            to={`/anime/${japaneseVA?.person.mal_id}/voice-actors`}
+                          />
                           <span className="text-sm text-white">
                             {japaneseVA?.language}
                           </span>
