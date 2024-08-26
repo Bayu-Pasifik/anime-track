@@ -5,6 +5,7 @@ import { AnimeCharacter } from "../config/characters";
 import Navbar from "../components/Navbar";
 import ListCard from "../components/ListCard";
 import { Swiper, SwiperSlide } from "swiper/react";
+// import 'swiper/swiper.min.css';
 
 const DetailAnimeCharacter: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -59,19 +60,12 @@ const DetailAnimeCharacter: React.FC = () => {
           </div>
         </div>
 
-        {/* Media Anime Voices */}
+        {/* Media Anime */}
         <p className="text-2xl font-bold text-white mt-6">Voices By</p>
         <div className="w-full mt-4">
           <Swiper
             spaceBetween={10}
             slidesPerView={8} // Number of slides visible at once
-            centeredSlides={true}
-            loop={true}
-            // breakpoints={{
-            //   640: { slidesPerView: 1 }, // 1 slide on small screens
-            //   768: { slidesPerView: 2 }, // 2 slides on medium screens
-            //   1024: { slidesPerView: 3 }, // 3 slides on large screens
-            // }}
           >
             {animeCharacter.voices.map((voice, index) => (
               <SwiperSlide key={index}>
@@ -79,6 +73,40 @@ const DetailAnimeCharacter: React.FC = () => {
                   image={voice.person.images.jpg.image_url}
                   title={voice.person.name}
                   description={voice.language}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        <p className="text-2xl font-bold text-white mt-6">Appears in Anime</p>
+        <div className="w-full mt-4">
+          <Swiper
+            spaceBetween={10}
+            slidesPerView={8} // Number of slides visible at once
+          >
+            {animeCharacter.anime.map((anime, index) => (
+              <SwiperSlide key={index}>
+                <ListCard
+                  image={anime.anime.images.jpg.image_url}
+                  title={anime.anime.title}
+                  description={anime.role}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        <p className="text-2xl font-bold text-white mt-6">Appears in Manga</p>
+        <div className="w-full mt-4">
+          <Swiper
+            spaceBetween={10}
+            slidesPerView={8} // Number of slides visible at once
+          >
+            {animeCharacter.manga.map((manga, index) => (
+              <SwiperSlide key={index}>
+                <ListCard
+                  image={manga.manga.images.jpg.image_url}
+                  title={manga.manga.title}
+                  description={manga.role}
                 />
               </SwiperSlide>
             ))}
