@@ -5,6 +5,7 @@ import{CharacterDetail} from '../config/characters';
 import { Recommendation } from '../config/animeRecomendation';
 import { StaffData } from '../config/staff';
 import { Images } from '../config/animeRecomendation';
+import { delay } from '../utils/delay'; 
 
 interface DetailAnime {
   animeDetail: AnimeDetail | null;
@@ -31,6 +32,7 @@ export const fetchAnimeDetail = createAsyncThunk(
   'anime/fetchAnimeDetail',
   async (id: string, { rejectWithValue }) => {
     try {
+      await delay(400); // Add delay
       const response = await axios.get(`/anime/${id}/full`);
       return response.data.data;
     } catch (error) {
@@ -43,6 +45,7 @@ export const fetchAnimeCharacter = createAsyncThunk(
   'anime/fetchAnimeCharacter',
   async (id: string, { rejectWithValue }) => {
     try {
+      await delay(400);
       const response = await axios.get(`/anime/${id}/characters`);
       return response.data.data;
     } catch (error) {
@@ -55,6 +58,7 @@ export const fetchAnimeRecommendations = createAsyncThunk(
   'anime/fetchAnimeRecommendations',
   async (id: string, { rejectWithValue }) => {
     try {
+      await delay(400);
       const response = await axios.get(`/anime/${id}/recommendations`);
       return response.data.data;
     } catch (error) {
@@ -67,6 +71,7 @@ export const fetchStaffAnime = createAsyncThunk(
   'anime/fetchStaffAnime',
   async (id: string, { rejectWithValue }) => {
     try {
+      await delay(400);
       const response = await axios.get(`/anime/${id}/staff`);
       return response.data.data;
     } catch (error) {
@@ -79,6 +84,7 @@ export const fetchAnimePicture = createAsyncThunk(
   'anime/fetchAnimePicture',
   async (id: string, { rejectWithValue }) => {
     try {
+      await delay(400);
       const response = await axios.get(`/anime/${id}/pictures`);
       return response.data.data;
     } catch (error) {

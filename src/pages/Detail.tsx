@@ -1,11 +1,18 @@
-import React, { useEffect } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchAnimeDetail, fetchAnimeCharacter, fetchAnimeRecommendations, fetchStaffAnime, fetchAnimePicture } from '../redux/detailAnimeSlice';
-import { RootState, AppDispatch } from '../redux/store';
-import Navbar from '../components/Navbar';
-import Sidebar from '../components/Sidebar';
-import Content from '../components/Content';
+import React, { useEffect } from "react";
+import { Link, useParams, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchAnimeDetail,
+  fetchAnimeCharacter,
+  fetchAnimeRecommendations,
+  fetchStaffAnime,
+  fetchAnimePicture,
+} from "../redux/detailAnimeSlice";
+import { RootState, AppDispatch } from "../redux/store";
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+import Content from "../components/Content";
+import { delay } from '../utils/delay';
 
 const Detail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,16 +28,29 @@ const Detail: React.FC = () => {
     animePicture,
   } = useSelector((state: RootState) => state.detailAnime);
 
-  const category = location.pathname.split('/')[3] || 'overview';
+  const category = location.pathname.split("/")[3] || "overview";
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchAnimeDetail(id));
-      dispatch(fetchAnimeCharacter(id));
-      dispatch(fetchAnimeRecommendations(id));
-      dispatch(fetchStaffAnime(id));
-      dispatch(fetchAnimePicture(id));
-    }
+    const fetchData = async () => {
+      if (id) {
+        // Fetch detail anime
+        await dispatch(fetchAnimeDetail(id));
+        await delay(1000); // Delay to prevent too many requests
+
+        // Fetch other data concurrently with delays
+        await Promise.all([
+          dispatch(fetchAnimeCharacter(id)),
+          delay(400),
+          dispatch(fetchAnimeRecommendations(id)),
+          delay(400),
+          dispatch(fetchStaffAnime(id)),
+          delay(400),
+          dispatch(fetchAnimePicture(id)),
+        ]);
+      }
+    };
+
+    fetchData();
   }, [dispatch, id]);
 
   if (loading) {
@@ -56,13 +76,15 @@ const Detail: React.FC = () => {
           alt={animeDetail.title}
         />
       </div>
-      <div className="relative bg-slate-800 w-full flex p-4">
+      {/* Container bg-slate-800 yang responsif */}
+      <div className="relative bg-slate-800 lg:w-full flex flex-col lg:flex-row p-4 lg:p-8  sm:w-8/12 mx-auto">
         <img
-          className="rounded-xl w-60 h-96 object-cover absolute -top-28 left-7"
+          className="rounded-xl w-60 h-96 object-cover lg:absolute lg:-top-28 lg:left-7"
           src={animeDetail.images.jpg.large_image_url}
           alt={animeDetail.title}
         />
-        <div className="ml-72 mt-4 flex flex-col w-full">
+        {/* Title */}
+        <div className="ml-0 lg:ml-72 mt-4 lg:mt-0 flex flex-col w-full">
           <div>
             <h1 className="text-3xl font-bold text-gray-600">
               {animeDetail.title}
@@ -74,12 +96,12 @@ const Detail: React.FC = () => {
               {animeDetail.synopsis}
             </p>
           </div>
-          <div className="mt-4 flex justify-center items-center w-full">
-            <div className="flex justify-between items-center w-2/4 h-12 gap-4 p-8 text-gray-600">
+          <div className="mt-4 flex justify-start lg:justify-center items-center w-full">
+            <div className="flex flex-col lg:flex-row justify-between items-center lg:w-2/4 w-full gap-4 p-8 text-gray-600">
               <Link to={`/detail/${id}`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
-                    category === 'overview' ? 'text-blue-700' : ''
+                    category === "overview" ? "text-blue-700" : ""
                   }`}
                 >
                   Overview
@@ -88,7 +110,7 @@ const Detail: React.FC = () => {
               <Link to={`/detail/${id}/characters`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
-                    category === 'characters' ? 'text-blue-700' : ''
+                    category === "characters" ? "text-blue-700" : ""
                   }`}
                 >
                   Characters
@@ -97,7 +119,7 @@ const Detail: React.FC = () => {
               <Link to={`/detail/${id}/staff`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
-                    category === 'staff' ? 'text-blue-700' : ''
+                    category === "staff" ? "text-blue-700" : ""
                   }`}
                 >
                   Staff
@@ -106,7 +128,7 @@ const Detail: React.FC = () => {
               <Link to={`/detail/${id}/pictures`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
-                    category === 'pictures' ? 'text-blue-700' : ''
+                    category === "pictures" ? "text-blue-700" : ""
                   }`}
                 >
                   Pictures
