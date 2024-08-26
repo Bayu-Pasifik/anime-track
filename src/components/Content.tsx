@@ -8,6 +8,7 @@ import Trailer from "./Trailer";
 import AnimeRecomendation from "./AnimeRecomendation";
 import ListTile from "./LIstTile";
 import PictureGallery from "./ZoomPictures";
+import CharacterName from "./details/CharacterName";
 
 interface ContentProps {
   animeCharacter: CharacterDetail[];
@@ -54,7 +55,7 @@ const Content: React.FC<ContentProps> = ({
                   }
                   title={
                     <div className="flex flex-col">
-                      <p className="text-white">{character.character.name}</p>
+                      <CharacterName name={character.character.name} to={`/anime/${character.character.mal_id}/charcters`}/>
                       <p className="text-sm text-white">{character.role}</p>
                     </div>
                   }

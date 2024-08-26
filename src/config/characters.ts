@@ -37,3 +37,49 @@ export interface CharacterDetail {
   interface PersonImages {
     jpg: ImageUrl;
   }
+
+
+  export interface AnimeCharacter {
+    mal_id:     number;
+    url:        string;
+    images:     AnimeCharacterImages;
+    name:       string;
+    name_kanji: string;
+    nicknames:  any[];
+    favorites:  number;
+    about:      string;
+    anime:      anime[];
+    manga:      any[];
+    voices:     Voice[];
+}
+
+export interface AnimeCharacterImages {
+    jpg: Jpg;
+    webp: Webp;
+}
+
+export interface Voice {
+    person:   Person;
+    language: string;
+}
+
+export interface anime{
+  role: string;
+  anime: {
+    mal_id: number;
+    url: string;
+    images: {
+      jpg: Jpg;
+      webp: Webp;
+    };
+    title: string;
+  };
+}
+export interface Jpg {
+    image_url: string;
+}
+
+export interface Webp{
+    image_url: string;
+    small_image_url: string;
+}
