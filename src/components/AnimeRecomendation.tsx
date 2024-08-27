@@ -25,7 +25,7 @@ const AnimeRecomendation: React.FC<AnimeRecomendationProps> = ({ animeRecomendat
             <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
                 {displayedRecommendations.map((recommendation) => (
                     <a
-                        href={`/detail/${recommendation.entry.mal_id}`}
+                        href={`/anime/detail/${recommendation.entry.mal_id}`}
                         key={recommendation.entry.mal_id}
                         className="w-full h-auto rounded-md mb-2"
                     >

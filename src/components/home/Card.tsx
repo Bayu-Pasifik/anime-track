@@ -8,7 +8,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ anime }) => {
   return (
-    <Link to={`/detail/${anime.mal_id}`} key={anime.mal_id}>
+    <Link to={`/anime/detail/${anime.mal_id}`} key={anime.mal_id}>
       <div className="relative w-52 h-64 group overflow-hidden">
         <img
           className="w-full h-full rounded-md object-cover"

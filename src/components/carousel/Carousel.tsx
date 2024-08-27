@@ -29,7 +29,7 @@ const HeaderCarousel: React.FC<CarouselProps> = ({ animes }) => {
             className=" mx-auto w-full h-96 overflow-hidden relative"
             key={anime.mal_id}
           >
-            <Link to={`/detail/${anime.mal_id}`}>
+            <Link to={`/anime/detail/${anime.mal_id}`}>
               <div className="carousel-slide h-full relative">
                 <img
                   src={anime.images.jpg.large_image_url}

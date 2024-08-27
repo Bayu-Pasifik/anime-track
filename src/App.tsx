@@ -10,12 +10,14 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/detail/:id/characters" element={<Detail />} />
-        <Route path="/detail/:id/staff" element={<Detail />} />
-        <Route path="/detail/:id/pictures" element={<Detail />} />
+        <Route path="/anime/detail/:id" element={<Detail />} />
+        <Route path="/anime/detail/:id/characters" element={<Detail />} />
+        <Route path="/anime/detail/:id/staff" element={<Detail />} />
+        <Route path="/anime/detail/:id/pictures" element={<Detail />} />
         <Route path="/anime/:id/characters" element={<DetailAnimeCharacter />} />
         <Route path="/anime/:id/voice-actors" element={<DetailVoiceActors />} />
+        <Route path="/anime/:id/voice-actors/voices" element={<DetailVoiceActors />} />
+        <Route path="/anime/:id/voice-actors/position" element={<DetailVoiceActors />} />
       </Routes>
     </Router>
   );

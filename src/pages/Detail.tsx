@@ -28,8 +28,8 @@ const Detail: React.FC = () => {
     animePicture,
   } = useSelector((state: RootState) => state.detailAnime);
 
-  const category = location.pathname.split("/")[3] || "overview";
-
+  const category = location.pathname.split("/")[4] || "overview";
+  console.log(category)
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
@@ -97,7 +97,7 @@ const Detail: React.FC = () => {
           </div>
           <div className="mt-4 flex justify-start lg:justify-center items-center w-full">
             <div className="flex flex-col lg:flex-row justify-between items-center lg:w-2/4 w-full gap-4 p-8 text-gray-600">
-              <Link to={`/detail/${id}`}>
+              <Link to={`/anime/detail/${id}`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
                     category === "overview" ? "text-blue-700" : ""
@@ -106,7 +106,7 @@ const Detail: React.FC = () => {
                   Overview
                 </p>
               </Link>
-              <Link to={`/detail/${id}/characters`}>
+              <Link to={`/anime/detail/${id}/characters`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
                     category === "characters" ? "text-blue-700" : ""
@@ -115,7 +115,7 @@ const Detail: React.FC = () => {
                   Characters
                 </p>
               </Link>
-              <Link to={`/detail/${id}/staff`}>
+              <Link to={`/anime/detail/${id}/staff`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
                     category === "staff" ? "text-blue-700" : ""
@@ -124,7 +124,7 @@ const Detail: React.FC = () => {
                   Staff
                 </p>
               </Link>
-              <Link to={`/detail/${id}/pictures`}>
+              <Link to={`/anime/detail/${id}/pictures`}>
                 <p
                   className={`text-xl font-bold hover:text-blue-700 ${
                     category === "pictures" ? "text-blue-700" : ""
@@ -143,7 +143,6 @@ const Detail: React.FC = () => {
           className="lg:w-1/3 w-full order-1 mt-10"
         />
         <Content
-          // isLoading= {loading}
           pictures={animePicture}
           animeCharacter={animeCharacter}
           animeStaff={staffAnime}
