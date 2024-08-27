@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar";
 import { useParams } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/16/solid";
 import { Person } from "../config/person";
-import ListCard from "../components/ListCard";
 import ListTile from "../components/ListTile";
 import CharacterName from "../components/details/CharacterName";
 
@@ -68,7 +67,7 @@ const DetailVoiceActors: React.FC = () => {
                     <div className="flex flex-col text-right mr-4">
                       <CharacterName
                         name={voice?.anime.title ?? "N/A"}
-                        to={`/anime/detail/${voice?.character.mal_id}`}
+                        to={`/anime/detail/${voice?.anime.mal_id}`}
                       />
                     </div>
                     <img
@@ -92,7 +91,7 @@ const DetailVoiceActors: React.FC = () => {
                   <img
                     src={anime.anime.images.jpg.image_url}
                     alt={anime.anime.title}
-                    className="rounded-md object-cover h-auto w-auto"
+                    className="rounded-md object-cover h-36 w-auto"
                   />
                 }
                 title={
@@ -104,7 +103,6 @@ const DetailVoiceActors: React.FC = () => {
                     <p className="text-sm text-white">( {anime.position} )</p>
                   </div>
                 }
-                
               />
             ))}
           </div>
@@ -120,7 +118,7 @@ const DetailVoiceActors: React.FC = () => {
                 <h2 className="text-2xl font-bold text-white mb-4">
                   Voiced In
                 </h2>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
                   {voiceOverview.map((voice) => (
                     <ListTile
                       key={voice.character.mal_id}
@@ -145,7 +143,7 @@ const DetailVoiceActors: React.FC = () => {
                           <div className="flex flex-col text-right mr-4">
                             <CharacterName
                               name={voice?.anime.title ?? "N/A"}
-                              to={`/anime/detail/${voice?.character.mal_id}`}
+                              to={`/anime/detail/${voice?.anime.mal_id}`}
                             />
                           </div>
                           <img
@@ -167,7 +165,7 @@ const DetailVoiceActors: React.FC = () => {
                 <h2 className="text-2xl font-bold text-white mb-4">
                   Appears in Anime
                 </h2>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid lg:grid-cols-2 gap-4">
                   {animePosition.map((anime) => (
                     <ListTile
                       key={anime.anime.mal_id}
@@ -214,16 +212,17 @@ const DetailVoiceActors: React.FC = () => {
           {/* Character Details */}
           <div className="flex flex-col w-full">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
-              <h1 className="text-3xl font-bold text-white mb-2 sm:mb-0">
-                {person.name}
-              </h1>
-              <div className="flex items-center text-white bg-blue-400 text-lg px-4 py-2 rounded-lg">
+              <div className="flex lg:items-center order-1 sm:order-2 text-white bg-blue-400 text-lg px-4 py-2 rounded-lg">
                 <HeartIcon className="w-6 h-6 text-red-500 mr-2" />
                 <span className="text-lg font-medium">
                   {person.favorites.toLocaleString()}
                 </span>
               </div>
+              <h1 className="text-3xl font-bold text-white mb-2 sm:mb-0 order-2 sm:order-1">
+                {person.name}
+              </h1>
             </div>
+
             <div className="flex flex-wrap items-center text-gray-400 mt-2">
               <p className="mr-2">
                 {person.family_name} {person.given_name}
