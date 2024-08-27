@@ -9,23 +9,48 @@ import { delay } from '../utils/delay';
 
 interface DetailAnime {
   animeDetail: AnimeDetail | null;
-  loading: boolean;
   animeCharacter: CharacterDetail[];
   Recommendations: Recommendation[];
   staffAnime: StaffData[];
   animePicture: Images[];
-  error: string | null;
+  loading: {
+    detail: boolean;
+    character: boolean;
+    recommendations: boolean;
+    staff: boolean;
+    pictures: boolean;
+  };
+  error: {
+    detail: string | null;
+    character: string | null;
+    recommendations: string | null;
+    staff: string | null;
+    pictures: string | null;
+  };
 }
 
 const initialState: DetailAnime = {
   animeDetail: null,
-  loading: false,
   animeCharacter: [],
   Recommendations: [],
   staffAnime: [],
   animePicture: [],
-  error: null,
+  loading: {
+    detail: false,
+    character: false,
+    recommendations: false,
+    staff: false,
+    pictures: false,
+  },
+  error: {
+    detail: null,
+    character: null,
+    recommendations: null,
+    staff: null,
+    pictures: null,
+  },
 };
+
 
 // Async Thunks
 export const fetchAnimeDetail = createAsyncThunk(
@@ -99,30 +124,68 @@ const detailAnimeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Anime Detail
       .addCase(fetchAnimeDetail.pending, (state) => {
-        state.loading = true;
+        state.loading.detail = true;
       })
       .addCase(fetchAnimeDetail.fulfilled, (state, action) => {
         state.animeDetail = action.payload;
-        state.loading = false;
+        state.loading.detail = false;
       })
       .addCase(fetchAnimeDetail.rejected, (state, action) => {
-        state.error = action.payload as string;
-        state.loading = false;
+        state.error.detail = action.payload as string;
+        state.loading.detail = false;
+      })
+      // Anime Character
+      .addCase(fetchAnimeCharacter.pending, (state) => {
+        state.loading.character = true;
       })
       .addCase(fetchAnimeCharacter.fulfilled, (state, action) => {
         state.animeCharacter = action.payload;
+        state.loading.character = false;
+      })
+      .addCase(fetchAnimeCharacter.rejected, (state, action) => {
+        state.error.character = action.payload as string;
+        state.loading.character = false;
+      })
+      // Anime Recommendations
+      .addCase(fetchAnimeRecommendations.pending, (state) => {
+        state.loading.recommendations = true;
       })
       .addCase(fetchAnimeRecommendations.fulfilled, (state, action) => {
         state.Recommendations = action.payload;
+        state.loading.recommendations = false;
+      })
+      .addCase(fetchAnimeRecommendations.rejected, (state, action) => {
+        state.error.recommendations = action.payload as string;
+        state.loading.recommendations = false;
+      })
+      // Staff Anime
+      .addCase(fetchStaffAnime.pending, (state) => {
+        state.loading.staff = true;
       })
       .addCase(fetchStaffAnime.fulfilled, (state, action) => {
         state.staffAnime = action.payload;
+        state.loading.staff = false;
+      })
+      .addCase(fetchStaffAnime.rejected, (state, action) => {
+        state.error.staff = action.payload as string;
+        state.loading.staff = false;
+      })
+      // Anime Picture
+      .addCase(fetchAnimePicture.pending, (state) => {
+        state.loading.pictures = true;
       })
       .addCase(fetchAnimePicture.fulfilled, (state, action) => {
         state.animePicture = action.payload;
+        state.loading.pictures = false;
+      })
+      .addCase(fetchAnimePicture.rejected, (state, action) => {
+        state.error.pictures = action.payload as string;
+        state.loading.pictures = false;
       });
   },
 });
 
 export default detailAnimeSlice.reducer;
+

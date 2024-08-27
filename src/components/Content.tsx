@@ -33,31 +33,51 @@ const Content: React.FC<ContentProps> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Set isLoading true when the component first mounts or when category changes
     setIsLoading(true);
 
-    // Simulate data fetching
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // Simulating loading delay
+    }, 1000); // Simulate a loading delay
 
-    // Cleanup function to clear timer if component unmounts
     return () => clearTimeout(timer);
   }, [category]);
 
   const renderContent = () => {
-    const animeCharacters = animeCharacter.slice(0, 4);
-    const animeStaffs = animeStaff.slice(0, 3);
-
     if (isLoading) {
       return (
         <div>
-          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 h-72 mt-7">
-            <SkeletonListTile />
-            <SkeletonListTile />
-            <SkeletonListTile />
-            <SkeletonListTile />
-          </div>
+          {category === "characters" && (
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 h-72 mt-7">
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+            </div>
+          )}
+          {category === "staff" && (
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 h-72 mt-7">
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+            </div>
+          )}
+          {category === "pictures" && (
+            <div className="grid gap-4 h-72 mt-7">
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+            </div>
+          )}
+          {category === "overview" && (
+            <div className="flex flex-col gap-4 h-72 mt-7">
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+            </div>
+          )}
         </div>
       );
     }
@@ -97,7 +117,7 @@ const Content: React.FC<ContentProps> = ({
                       <div className="flex flex-row items-center">
                         <div className="flex flex-col text-right mr-4">
                           <CharacterName
-                            name={japaneseVA?.person.name?? "N/A"}
+                            name={japaneseVA?.person.name ?? "N/A"}
                             to={`/anime/${japaneseVA?.person.mal_id}/voice-actors`}
                           />
                           <span className="text-sm text-white">
@@ -137,7 +157,7 @@ const Content: React.FC<ContentProps> = ({
                     }
                     title={
                       <div className="flex flex-col">
-                        <p className="text-white">{staff.person.name}</p>
+                        <CharacterName name={staff.person.name} to={`/anime/${staff.person.mal_id}/staff`}/>
                         <p className="text-sm text-white">{staff.positions}</p>
                       </div>
                     }
@@ -160,7 +180,7 @@ const Content: React.FC<ContentProps> = ({
               <h1 className="text-xl text-white">Featuring Characters</h1>
             </div>
             <div className="flex flex-wrap lg:flex-row md:flex-col">
-              {animeCharacters.map((character) => {
+              {animeCharacter.slice(0, 4).map((character) => {
                 const japaneseVA = character.voice_actors.find(
                   (va) => va.language === "Japanese"
                 );
@@ -212,7 +232,7 @@ const Content: React.FC<ContentProps> = ({
               <h1 className="text-xl text-white">Featuring Staffs</h1>
             </div>
             <div className="flex flex-wrap md:flex-row">
-              {animeStaffs.map((staff) => {
+              {animeStaff.slice(0, 3).map((staff) => {
                 return (
                   <div
                     key={staff.person.mal_id}
@@ -244,7 +264,7 @@ const Content: React.FC<ContentProps> = ({
               <h1 className="text-xl text-white">Trailer</h1>
             </div>
             <Trailer data={detailAnime} />
-            {/* Recomendation */}
+            {/* Recommendation */}
             <AnimeRecomendation animeRecomendation={animeRecomendation} />
           </div>
         );

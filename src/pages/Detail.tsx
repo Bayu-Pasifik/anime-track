@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAnimeDetail,
@@ -12,58 +12,56 @@ import { RootState, AppDispatch } from "../redux/store";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Content from "../components/Content";
-import { delay } from '../utils/delay';
+import SkeletonContent from "../components/SkeletonContent"; // Make sure you have this component
 
 const Detail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const {
     animeDetail,
-    loading,
     animeCharacter,
     Recommendations,
     staffAnime,
     animePicture,
+    loading,
   } = useSelector((state: RootState) => state.detailAnime);
 
   const category = location.pathname.split("/")[4] || "overview";
-  console.log(category)
+
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
-        // Fetch detail anime
-        await dispatch(fetchAnimeDetail(id));
-        await delay(1000); // Delay to prevent too many request
-        // Fetch other data concurrently with delays
-        await Promise.all([
-          dispatch(fetchAnimeCharacter(id)),
-          delay(400),
-          dispatch(fetchAnimeRecommendations(id)),
-          delay(400),
-          dispatch(fetchStaffAnime(id)),
-          delay(400),
-          dispatch(fetchAnimePicture(id)),
-        ]);
+        dispatch(fetchAnimeDetail(id));
+        dispatch(fetchAnimeCharacter(id));
+        dispatch(fetchAnimeRecommendations(id));
+        dispatch(fetchStaffAnime(id));
+        dispatch(fetchAnimePicture(id));
       }
     };
 
     fetchData();
   }, [dispatch, id]);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <div className="h-40 w-40 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
-        <p className="text-2xl text-black">Loading</p>
-      </div>
-    );
+  if (
+    loading.detail ||
+    loading.character ||
+    loading.recommendations ||
+    loading.staff ||
+    loading.pictures
+  ) {
+    return <SkeletonContent />;
   }
 
   if (!animeDetail) {
     return <p className="text-2xl text-white">Anime details not found</p>;
   }
+
+  const handleCategoryChange = (category: string) => {
+    navigate(`/anime/detail/${id}/${category}`);
+  };
 
   return (
     <div className="bg-bg-color min-h-screen w-full h-full">
@@ -75,14 +73,12 @@ const Detail: React.FC = () => {
           alt={animeDetail.title}
         />
       </div>
-      {/* Container bg-slate-800 yang responsif */}
-      <div className="relative bg-slate-800 lg:w-full flex flex-col lg:flex-row p-4 lg:p-8  sm:w-8/12 mx-auto">
+      <div className="relative bg-slate-800 lg:w-full flex flex-col lg:flex-row p-4 lg:p-8 sm:w-8/12 mx-auto">
         <img
           className="rounded-xl w-60 h-96 object-cover lg:absolute lg:-top-28 lg:left-7"
           src={animeDetail.images.jpg.large_image_url}
           alt={animeDetail.title}
         />
-        {/* Title */}
         <div className="ml-0 lg:ml-72 mt-4 lg:mt-0 flex flex-col w-full">
           <div>
             <h1 className="text-3xl font-bold text-gray-600">
@@ -97,42 +93,38 @@ const Detail: React.FC = () => {
           </div>
           <div className="mt-4 flex justify-start lg:justify-center items-center w-full">
             <div className="flex flex-col lg:flex-row justify-between items-center lg:w-2/4 w-full gap-4 p-8 text-gray-600">
-              <Link to={`/anime/detail/${id}`}>
-                <p
-                  className={`text-xl font-bold hover:text-blue-700 ${
-                    category === "overview" ? "text-blue-700" : ""
-                  }`}
-                >
-                  Overview
-                </p>
-              </Link>
-              <Link to={`/anime/detail/${id}/characters`}>
-                <p
-                  className={`text-xl font-bold hover:text-blue-700 ${
-                    category === "characters" ? "text-blue-700" : ""
-                  }`}
-                >
-                  Characters
-                </p>
-              </Link>
-              <Link to={`/anime/detail/${id}/staff`}>
-                <p
-                  className={`text-xl font-bold hover:text-blue-700 ${
-                    category === "staff" ? "text-blue-700" : ""
-                  }`}
-                >
-                  Staff
-                </p>
-              </Link>
-              <Link to={`/anime/detail/${id}/pictures`}>
-                <p
-                  className={`text-xl font-bold hover:text-blue-700 ${
-                    category === "pictures" ? "text-blue-700" : ""
-                  }`}
-                >
-                  Pictures
-                </p>
-              </Link>
+              <button
+                onClick={() => handleCategoryChange('')}
+                className={`text-xl font-bold ${
+                  category === "overview" ? "text-blue-700" : "hover:text-blue-700"
+                }`}
+              >
+                Overview
+              </button>
+              <button
+                onClick={() => handleCategoryChange('characters')}
+                className={`text-xl font-bold ${
+                  category === "characters" ? "text-blue-700" : "hover:text-blue-700"
+                }`}
+              >
+                Characters
+              </button>
+              <button
+                onClick={() => handleCategoryChange('staff')}
+                className={`text-xl font-bold ${
+                  category === "staff" ? "text-blue-700" : "hover:text-blue-700"
+                }`}
+              >
+                Staff
+              </button>
+              <button
+                onClick={() => handleCategoryChange('pictures')}
+                className={`text-xl font-bold ${
+                  category === "pictures" ? "text-blue-700" : "hover:text-blue-700"
+                }`}
+              >
+                Pictures
+              </button>
             </div>
           </div>
         </div>
