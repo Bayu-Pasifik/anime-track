@@ -1,4 +1,3 @@
-// src/redux/animeSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../config/axiosConfig';
 import { delay } from '../utils/delay';

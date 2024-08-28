@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -12,7 +12,8 @@ import { RootState, AppDispatch } from "../redux/store";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Content from "../components/Content";
-import SkeletonContent from "../components/SkeletonContent"; // Make sure you have this component
+import { delay } from "../utils/delay";
+import LoadingAnimation from "../components/LoadingAnimations";
 
 const Detail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,30 +30,28 @@ const Detail: React.FC = () => {
     loading,
   } = useSelector((state: RootState) => state.detailAnime);
 
+  const [isDataLoading, setIsDataLoading] = useState(true); // State for handling loading display
   const category = location.pathname.split("/")[4] || "overview";
 
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
-        dispatch(fetchAnimeDetail(id));
-        dispatch(fetchAnimeCharacter(id));
-        dispatch(fetchAnimeRecommendations(id));
-        dispatch(fetchStaffAnime(id));
-        dispatch(fetchAnimePicture(id));
+        setIsDataLoading(true);
+        await dispatch(fetchAnimeDetail(id));
+        await dispatch(fetchAnimeCharacter(id));
+        await delay(1000);
+        await dispatch(fetchAnimeRecommendations(id));
+        await dispatch(fetchStaffAnime(id));
+        await dispatch(fetchAnimePicture(id));
+        setIsDataLoading(false);
       }
     };
 
     fetchData();
   }, [dispatch, id]);
 
-  if (
-    loading.detail ||
-    loading.character ||
-    loading.recommendations ||
-    loading.staff ||
-    loading.pictures
-  ) {
-    return <SkeletonContent />;
+  if (isDataLoading || loading.detail || loading.character || loading.recommendations || loading.staff || loading.pictures) {
+    return <LoadingAnimation />;
   }
 
   if (!animeDetail) {

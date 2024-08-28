@@ -1,32 +1,40 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Person } from "../config/person";
-import axios from "../config/axiosConfig";
 import ListTile from "../components/ListTile";
 import CharacterName from "../components/details/CharacterName";
 import Navbar from "../components/Navbar";
 import { HeartIcon } from "@heroicons/react/16/solid";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { fetchDetailAnimeStaff } from "../redux/detailAnimeSlice";
+import LoadingAnimation from "../components/LoadingAnimations";
 
 const DetailStaff: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [person, setPerson] = useState<Person | null>(null);
-  const [category, setCategory] = useState<string>("overview"); // Default ke "overview"
-
-  const fetchDetailStaff = async () => {
-    try {
-      const response = await axios.get(`/people/${id}/full`);
-      console.log({ response: response.data.data });
-      setPerson(response.data.data);
-    } catch (error) {
-      console.error("Error fetching anime character", error);
-    }
-  };
+  const [category, setCategory] = useState<string>("overview");
+  const dispatch = useDispatch<AppDispatch>();
+  const animeStaff = useSelector(
+    (state: RootState) => state.detailAnime.detailAnimeStaff
+  );
+  const isLoading = useSelector(
+    (state: RootState) => state.detailAnime.loading.detailAnimeStaff
+  );
 
   useEffect(() => {
-    fetchDetailStaff();
-  }, [id]);
+    const fetchStaffAnime = async () => {
+      if(id){
+        await dispatch(fetchDetailAnimeStaff(id));
+      }
+    }
 
-  if (!person) {
+    fetchStaffAnime();
+  },[id, dispatch]);
+
+  if(isLoading){
+    return <LoadingAnimation/>
+  }
+
+  if (!animeStaff) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p className="text-xl text-white">Loading...</p>
@@ -34,16 +42,16 @@ const DetailStaff: React.FC = () => {
     );
   }
 
-  const birthday = new Date(person.birthday);
+  const birthday = new Date(animeStaff.birthday);
   const age = new Date().getFullYear() - birthday.getFullYear();
-  //   const voiceOverview = person.voices.slice(0, 4);
-  const animePosition = person.anime.slice(0, 4);
+  //   const voiceOverview = animeStaff.voices.slice(0, 4);
+  const animePosition = animeStaff.anime.slice(0, 4);
   const renderContent = () => {
     switch (category) {
       //   case "voices":
       //     return (
       //       <div className="mt-8 grid grid-cols-1 gap-4">
-      //         {person.voices.map((voice, index) => (
+      //         {animeStaff.voices.map((voice, index) => (
       //           <ListTile
       //             key={index}
       //             leading={
@@ -84,7 +92,7 @@ const DetailStaff: React.FC = () => {
       case "position":
         return (
           <div className="mt-8 grid grid-cols-1 gap-4">
-            {person.anime.map((anime, index) => (
+            {animeStaff.anime.map((anime, index) => (
               <ListTile
                 key={index}
                 leading={
@@ -113,7 +121,7 @@ const DetailStaff: React.FC = () => {
           <>
             {/* Default Content (Overview) */}
             {/* Voices By Section */}
-            {/* {person.voices.length > 0 && (
+            {/* {animeStaff.voices.length > 0 && (
               <div className="mt-8">
                 <h2 className="text-2xl font-bold text-white mb-4">
                   Voiced In
@@ -160,7 +168,7 @@ const DetailStaff: React.FC = () => {
             )} */}
 
             {/* Appears in Anime Section */}
-            {person.anime.length > 0 && (
+            {animeStaff.anime.length > 0 && (
               <div className="mt-8">
                 <h2 className="text-2xl font-bold text-white mb-4">
                   Position in Anime
@@ -180,7 +188,7 @@ const DetailStaff: React.FC = () => {
                         <div className="flex flex-col">
                           <CharacterName
                             name={anime.anime.title}
-                            to={`/anime/${anime.anime.mal_id}/characters`}
+                            to={`/anime/detail/${anime.anime.mal_id}`}
                           />
                           <p className="text-sm text-white">
                             ( {anime.position} )
@@ -205,8 +213,8 @@ const DetailStaff: React.FC = () => {
         <div className="bg-gray-800 rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center">
           {/* Character Image */}
           <img
-            src={person.images.jpg.image_url}
-            alt={person.name}
+            src={animeStaff.images.jpg.image_url}
+            alt={animeStaff.name}
             className="w-auto h-auto rounded-lg object-cover mb-4 md:mb-0 md:mr-6"
           />
           {/* Character Details */}
@@ -215,17 +223,17 @@ const DetailStaff: React.FC = () => {
               <div className="flex lg:items-center order-1 sm:order-2 text-white bg-blue-400 text-lg px-4 py-2 rounded-lg">
                 <HeartIcon className="w-6 h-6 text-red-500 mr-2" />
                 <span className="text-lg font-medium">
-                  {person.favorites.toLocaleString()}
+                  {animeStaff.favorites.toLocaleString()}
                 </span>
               </div>
               <h1 className="text-3xl font-bold text-white mb-2 sm:mb-0 order-2 sm:order-1">
-                {person.name}
+                {animeStaff.name}
               </h1>
             </div>
 
             <div className="flex flex-wrap items-center text-gray-400 mt-2">
               <p className="mr-2">
-                {person.family_name} {person.given_name}
+                {animeStaff.family_name} {animeStaff.given_name}
               </p>
             </div>
             <span className="flex flex-row">
@@ -240,7 +248,7 @@ const DetailStaff: React.FC = () => {
                 ( {age} years old )
               </p>
             </span>
-            <p className="text-gray-300 mt-4 text-justify">{person.about}</p>
+            <p className="text-gray-300 mt-4 text-justify">{animeStaff.about}</p>
 
             {/* Tab Bar */}
             <div className="w-full flex flex-row mt-4 justify-evenly">

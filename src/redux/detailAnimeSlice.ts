@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../config/axiosConfig';
 import { AnimeDetail} from '../config/data';
-import{CharacterDetail} from '../config/characters';
+import { AnimeCharacter, CharacterDetail } from '../config/characters';
 import { Recommendation } from '../config/animeRecomendation';
 import { StaffData } from '../config/staff';
 import { Images } from '../config/animeRecomendation';
-import { delay } from '../utils/delay'; 
+import { delay } from '../utils/delay';
+import { Person } from '../config/person';
 
 interface DetailAnime {
   animeDetail: AnimeDetail | null;
@@ -13,12 +14,18 @@ interface DetailAnime {
   Recommendations: Recommendation[];
   staffAnime: StaffData[];
   animePicture: Images[];
+  detailVoiceActors: Person | null;
+  detailAnimeCharacter: AnimeCharacter | null;
+  detailAnimeStaff: Person | null;
   loading: {
     detail: boolean;
     character: boolean;
     recommendations: boolean;
     staff: boolean;
     pictures: boolean;
+    detailVoiceActors: boolean;
+    detailAnimeCharacter:boolean;
+    detailAnimeStaff: boolean;
   };
   error: {
     detail: string | null;
@@ -26,6 +33,9 @@ interface DetailAnime {
     recommendations: string | null;
     staff: string | null;
     pictures: string | null;
+    detailVoiceActors: string | null;
+    detailAnimeCharacter: string | null;
+    detailAnimeStaff: string | null;
   };
 }
 
@@ -35,12 +45,18 @@ const initialState: DetailAnime = {
   Recommendations: [],
   staffAnime: [],
   animePicture: [],
+  detailVoiceActors: null,
+  detailAnimeCharacter: null,
+  detailAnimeStaff: null,
   loading: {
     detail: false,
     character: false,
     recommendations: false,
     staff: false,
     pictures: false,
+    detailVoiceActors:false,
+    detailAnimeCharacter:false,
+    detailAnimeStaff: false,
   },
   error: {
     detail: null,
@@ -48,16 +64,18 @@ const initialState: DetailAnime = {
     recommendations: null,
     staff: null,
     pictures: null,
+    detailVoiceActors:null,
+    detailAnimeCharacter: null,
+    detailAnimeStaff: null,
   },
 };
-
 
 // Async Thunks
 export const fetchAnimeDetail = createAsyncThunk(
   'anime/fetchAnimeDetail',
   async (id: string, { rejectWithValue }) => {
     try {
-      await delay(400); // Add delay
+      await delay(1000); // Delay lebih besar
       const response = await axios.get(`/anime/${id}/full`);
       return response.data.data;
     } catch (error) {
@@ -70,7 +88,7 @@ export const fetchAnimeCharacter = createAsyncThunk(
   'anime/fetchAnimeCharacter',
   async (id: string, { rejectWithValue }) => {
     try {
-      await delay(400);
+      // await delay(1000);
       const response = await axios.get(`/anime/${id}/characters`);
       return response.data.data;
     } catch (error) {
@@ -83,7 +101,7 @@ export const fetchAnimeRecommendations = createAsyncThunk(
   'anime/fetchAnimeRecommendations',
   async (id: string, { rejectWithValue }) => {
     try {
-      await delay(400);
+      // await delay(1000);
       const response = await axios.get(`/anime/${id}/recommendations`);
       return response.data.data;
     } catch (error) {
@@ -96,7 +114,7 @@ export const fetchStaffAnime = createAsyncThunk(
   'anime/fetchStaffAnime',
   async (id: string, { rejectWithValue }) => {
     try {
-      await delay(400);
+      // await delay(1000);
       const response = await axios.get(`/anime/${id}/staff`);
       return response.data.data;
     } catch (error) {
@@ -109,7 +127,7 @@ export const fetchAnimePicture = createAsyncThunk(
   'anime/fetchAnimePicture',
   async (id: string, { rejectWithValue }) => {
     try {
-      await delay(400);
+      // await delay(1000);
       const response = await axios.get(`/anime/${id}/pictures`);
       return response.data.data;
     } catch (error) {
@@ -117,6 +135,46 @@ export const fetchAnimePicture = createAsyncThunk(
     }
   }
 );
+
+export const fetchDetailVoiceActors = createAsyncThunk(
+  'anime/fetchDetailVoiceActors',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      // await delay(1000);
+      const response = await axios.get(`/people/${id}/full`);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue('Error fetching detail staff');
+    }
+  }
+);
+
+export const fetchDetailAnimeCharacter = createAsyncThunk(
+  'anime/fetchDetailAnimeCharacter',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      // await delay(1000);
+      const response = await axios.get(`/characters/${id}/full`);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue('Error fetching detail staff');
+    }
+  }
+);
+
+export const fetchDetailAnimeStaff = createAsyncThunk(
+  'anime/fetchDetailAnimeStaff',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      // await delay(1000);
+      const response = await axios.get(`/people/${id}/full`);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue('Error fetching detail staff');
+    }
+  }
+);
+
 
 const detailAnimeSlice = createSlice({
   name: 'detailAnime',
@@ -136,7 +194,7 @@ const detailAnimeSlice = createSlice({
         state.error.detail = action.payload as string;
         state.loading.detail = false;
       })
-      // Anime Character
+      // Anime Characters
       .addCase(fetchAnimeCharacter.pending, (state) => {
         state.loading.character = true;
       })
@@ -148,7 +206,7 @@ const detailAnimeSlice = createSlice({
         state.error.character = action.payload as string;
         state.loading.character = false;
       })
-      // Anime Recommendations
+      // Recommendations
       .addCase(fetchAnimeRecommendations.pending, (state) => {
         state.loading.recommendations = true;
       })
@@ -172,7 +230,7 @@ const detailAnimeSlice = createSlice({
         state.error.staff = action.payload as string;
         state.loading.staff = false;
       })
-      // Anime Picture
+      // Anime Pictures
       .addCase(fetchAnimePicture.pending, (state) => {
         state.loading.pictures = true;
       })
@@ -183,9 +241,47 @@ const detailAnimeSlice = createSlice({
       .addCase(fetchAnimePicture.rejected, (state, action) => {
         state.error.pictures = action.payload as string;
         state.loading.pictures = false;
-      });
+      })
+
+    // Detail Staff
+    .addCase(fetchDetailVoiceActors.pending, (state) => {
+      state.loading.detailVoiceActors = true;
+    })
+    .addCase(fetchDetailVoiceActors.fulfilled, (state, action) => {
+      state.detailVoiceActors = action.payload;
+      state.loading.detailVoiceActors = false;
+    })
+    .addCase(fetchDetailVoiceActors.rejected, (state, action) => {
+      state.error.detailVoiceActors = action.payload as string;
+      state.loading.detailVoiceActors = false;
+    })
+
+    // Detail Character
+    .addCase(fetchDetailAnimeCharacter.pending, (state) => {
+      state.loading.detailAnimeCharacter = true;
+    })
+    .addCase(fetchDetailAnimeCharacter.fulfilled, (state, action) => {
+      state.detailAnimeCharacter = action.payload;
+      state.loading.detailAnimeCharacter = false;
+    })
+    .addCase(fetchDetailAnimeCharacter.rejected, (state, action) => {
+      state.error.detailAnimeCharacter = action.payload as string;
+      state.loading.detailAnimeCharacter = false;
+    })
+
+    // Detail Staff
+    .addCase(fetchDetailAnimeStaff.pending, (state) => {
+      state.loading.detailAnimeStaff = true;
+    })
+    .addCase(fetchDetailAnimeStaff.fulfilled, (state, action) => {
+      state.detailAnimeStaff = action.payload;
+      state.loading.detailAnimeStaff = false;
+    })
+    .addCase(fetchDetailAnimeStaff.rejected, (state, action) => {
+      state.error.detailAnimeStaff = action.payload as string;
+      state.loading.detailAnimeStaff = false;
+    });
   },
 });
 
 export default detailAnimeSlice.reducer;
-

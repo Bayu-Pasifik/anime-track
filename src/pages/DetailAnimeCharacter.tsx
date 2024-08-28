@@ -1,37 +1,44 @@
 import { useEffect, useState } from "react";
-import axios from "../config/axiosConfig";
 import Navbar from "../components/Navbar";
 import { useParams } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/16/solid";
-import { AnimeCharacter } from "../config/characters";
 import ListTile from "../components/ListTile";
 import CharacterName from "../components/details/CharacterName";
+import { fetchDetailAnimeCharacter } from "../redux/detailAnimeSlice";
+import { AppDispatch, RootState } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import LoadingAnimation from "../components/LoadingAnimations";
 
 const DetailCharacter: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [animeCharacter, setAnimeCharacter] = useState<AnimeCharacter | null>(
-    null
+  const dispatch = useDispatch<AppDispatch>();
+  const animeCharacter = useSelector(
+    (state: RootState) => state.detailAnime.detailAnimeCharacter
+  );
+  const isLoading = useSelector(
+    (state: RootState) => state.detailAnime.loading.detailAnimeCharacter
   );
   const [category, setCategory] = useState<string>("Overview");
 
-  const fetchDetailCharacter = async () => {
-    try {
-      const response = await axios.get(`/characters/${id}/full`);
-      console.log({ response: response.data.data });
-      setAnimeCharacter(response.data.data);
-    } catch (error) {
-      console.error("Error fetching anime character", error);
-    }
-  };
-
   useEffect(() => {
-    fetchDetailCharacter();
-  }, [id]);
+    const fetchData = async () => {
+      if (id) {
+        // Dispatch the action to fetch character details
+        dispatch(fetchDetailAnimeCharacter(id));
+      }
+    };
+
+    fetchData();
+  }, [id, dispatch]);
+
+  if (isLoading) {
+    return <LoadingAnimation />;
+  }
 
   if (!animeCharacter) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-xl text-white">Loading...</p>
+        <p className="text-xl text-white">Failed to load data.</p>
       </div>
     );
   }
@@ -45,7 +52,6 @@ const DetailCharacter: React.FC = () => {
         return (
           <div className="mt-8">
             <p className="text-xl font-bold text-white mt-4">Voices by</p>
-            {/* Overview anime */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               {animeCharacter.voices.map((voice, index) => (
                 <ListTile
@@ -135,7 +141,6 @@ const DetailCharacter: React.FC = () => {
         return (
           <div>
             <p className="text-xl font-bold text-white mt-4">Voices by</p>
-            {/* Overview anime */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               {OverviewVoice.map((voice, index) => (
                 <ListTile
@@ -256,7 +261,7 @@ const DetailCharacter: React.FC = () => {
             </p>
 
             {/* Tab Bar */}
-            <div className="w-full flex flex-row mt-4 justify-evenly">
+            <div className="w-full flex flex-row mt-4 justify-evenly border-t border-gray-600 pt-4">
               <button
                 onClick={() => setCategory("Overview")}
                 className={`text-xl font-bold text-white hover:text-blue-400 ${
