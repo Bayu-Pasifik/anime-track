@@ -17,12 +17,12 @@ const AnimeRecomendation: React.FC<AnimeRecomendationProps> = ({ animeRecomendat
     return (
         <div className="mt-4">
             <div className="w-full flex justify-between items-center mb-4 font-roboto">
-                <h1 className="text-2xl text-white">Recommendations</h1>
+                <h1 className="lg:text-2xl text-white">Recommendations</h1>
                 <button onClick={toggleShowAll} className="text-blue-600 font-bold">
                     {showAll ? "Show Less" : "See All Recomendations"}
                 </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
                 {displayedRecommendations.map((recommendation) => (
                     <a
                         href={`/anime/detail/${recommendation.entry.mal_id}`}

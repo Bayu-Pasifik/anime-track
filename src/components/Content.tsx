@@ -183,7 +183,7 @@ const Content: React.FC<ContentProps> = ({
         return (
           <div>
             <div className="font-roboto font-bold">
-              <h1 className="text-xl text-white">Featuring Characters</h1>
+              <h1 className="text-xl text-white my-4">Featuring Characters</h1>
             </div>
             <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
               {animeCharacter.slice(0, 4).map((character) => {

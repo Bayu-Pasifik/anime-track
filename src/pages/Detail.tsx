@@ -50,7 +50,14 @@ const Detail: React.FC = () => {
     fetchData();
   }, [dispatch, id]);
 
-  if (isDataLoading || loading.detail || loading.character || loading.recommendations || loading.staff || loading.pictures) {
+  if (
+    isDataLoading ||
+    loading.detail ||
+    loading.character ||
+    loading.recommendations ||
+    loading.staff ||
+    loading.pictures
+  ) {
     return <LoadingAnimation />;
   }
 
@@ -72,44 +79,50 @@ const Detail: React.FC = () => {
           alt={animeDetail.title}
         />
       </div>
-      <div className="relative bg-slate-800 lg:w-full flex flex-col lg:flex-row p-4 lg:p-8 sm:w-8/12 mx-auto">
+      <div className="relative bg-slate-800 lg:w-full flex flex-col lg:flex-row p-4 lg:p-8 mx-auto">
         <img
-          className="rounded-xl w-60 h-96 object-cover lg:absolute lg:-top-28 lg:left-7"
+          className="rounded-xl w-60 h-96 object-cover lg:absolute lg:-top-28 lg:left-7 lg:mx-0 mx-auto"
           src={animeDetail.images.jpg.large_image_url}
           alt={animeDetail.title}
         />
         <div className="ml-0 lg:ml-72 mt-4 lg:mt-0 flex flex-col w-full">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-600">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-600 order-2 lg:order-none sm:order-3 w-full lg:w-auto mt-4 lg:mt-0">
               {animeDetail.title}
             </h1>
-            <p className="text-2xl font-bold text-gray-600">
-              {animeDetail.title_japanese}
-            </p>
-            <p className="mt-4 font-dm-mono text-white">
-              {animeDetail.synopsis}
-            </p>
+            <div className="bg-blue-400 p-2 rounded-xl flex sm:w-full flex-col items-center text-white order-1 lg:order-none mt-4 lg:mt-0 lg:ml-4 w-full lg:w-auto">
+              <p className="text-2xl font-bold">{animeDetail.score}</p>
+              <p>{animeDetail.scored_by.toLocaleString()} Users</p>
+            </div>
           </div>
+          <p className="text-2xl font-bold text-gray-600 mt-4 lg:mt-0">
+            {animeDetail.title_japanese}
+          </p>
+          <p className="mt-4 font-dm-mono text-white">{animeDetail.synopsis}</p>
           <div className="mt-4 flex justify-start lg:justify-center items-center w-full">
             <div className="flex flex-row justify-between items-center lg:w-full w-full gap-4 p-8 text-gray-600 border-t border-gray-600 pt-4">
               <button
-                onClick={() => handleCategoryChange('')}
+                onClick={() => handleCategoryChange("")}
                 className={`text-xl font-bold ${
-                  category === "overview" ? "text-blue-700" : "hover:text-blue-700"
+                  category === "overview"
+                    ? "text-blue-700"
+                    : "hover:text-blue-700"
                 }`}
               >
                 Overview
               </button>
               <button
-                onClick={() => handleCategoryChange('characters')}
+                onClick={() => handleCategoryChange("characters")}
                 className={`text-xl font-bold ${
-                  category === "characters" ? "text-blue-700" : "hover:text-blue-700"
+                  category === "characters"
+                    ? "text-blue-700"
+                    : "hover:text-blue-700"
                 }`}
               >
                 Characters
               </button>
               <button
-                onClick={() => handleCategoryChange('staff')}
+                onClick={() => handleCategoryChange("staff")}
                 className={`text-xl font-bold ${
                   category === "staff" ? "text-blue-700" : "hover:text-blue-700"
                 }`}
@@ -117,9 +130,11 @@ const Detail: React.FC = () => {
                 Staff
               </button>
               <button
-                onClick={() => handleCategoryChange('pictures')}
+                onClick={() => handleCategoryChange("pictures")}
                 className={`text-xl font-bold ${
-                  category === "pictures" ? "text-blue-700" : "hover:text-blue-700"
+                  category === "pictures"
+                    ? "text-blue-700"
+                    : "hover:text-blue-700"
                 }`}
               >
                 Pictures
@@ -128,6 +143,7 @@ const Detail: React.FC = () => {
           </div>
         </div>
       </div>
+
       <div className="w-full flex flex-col lg:flex-row">
         <Sidebar
           animeDetail={animeDetail}
