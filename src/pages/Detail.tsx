@@ -91,7 +91,7 @@ const Detail: React.FC = () => {
             </p>
           </div>
           <div className="mt-4 flex justify-start lg:justify-center items-center w-full">
-            <div className="flex flex-col lg:flex-row justify-between items-center lg:w-2/4 w-full gap-4 p-8 text-gray-600">
+            <div className="flex flex-row justify-between items-center lg:w-full w-full gap-4 p-8 text-gray-600 border-t border-gray-600 pt-4">
               <button
                 onClick={() => handleCategoryChange('')}
                 className={`text-xl font-bold ${

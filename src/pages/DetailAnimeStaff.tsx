@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { fetchDetailAnimeStaff } from "../redux/detailAnimeSlice";
 import LoadingAnimation from "../components/LoadingAnimations";
+import ImageClick from "../components/details/ImageClick";
 
 const DetailStaff: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,47 +49,6 @@ const DetailStaff: React.FC = () => {
   const animePosition = animeStaff.anime.slice(0, 4);
   const renderContent = () => {
     switch (category) {
-      //   case "voices":
-      //     return (
-      //       <div className="mt-8 grid grid-cols-1 gap-4">
-      //         {animeStaff.voices.map((voice, index) => (
-      //           <ListTile
-      //             key={index}
-      //             leading={
-      //               <img
-      //                 src={voice.character.images.jpg.image_url}
-      //                 alt={voice.character.name}
-      //                 className="rounded-md object-cover h-auto w-auto"
-      //               />
-      //             }
-      //             title={
-      //               <div className="flex flex-col">
-      //                 <CharacterName
-      //                   name={voice.character.name}
-      //                   to={`/anime/${voice.character.mal_id}/characters`}
-      //                 />
-      //                 <p className="text-sm text-white">( {voice.role} )</p>
-      //               </div>
-      //             }
-      //             trailing={
-      //               <div className="flex flex-row items-center">
-      //                 <div className="flex flex-col text-right mr-4">
-      //                   <CharacterName
-      //                     name={voice?.anime.title ?? "N/A"}
-      //                     to={`/anime/detail/${voice?.anime.mal_id}`}
-      //                   />
-      //                 </div>
-      //                 <img
-      //                   src={voice?.anime.images.jpg.image_url}
-      //                   alt={voice?.anime.title}
-      //                   className="rounded-md object-cover h-30 w-20"
-      //                 />
-      //               </div>
-      //             }
-      //           />
-      //         ))}
-      //       </div>
-      //     );
       case "position":
         return (
           <div className="mt-8 grid grid-cols-1 gap-4">
@@ -96,11 +56,13 @@ const DetailStaff: React.FC = () => {
               <ListTile
                 key={index}
                 leading={
-                  <img
-                    src={anime.anime.images.jpg.image_url}
-                    alt={anime.anime.title}
-                    className="rounded-md object-cover h-36 w-auto"
-                  />
+                 <ImageClick
+                    source={anime.anime.images.jpg.image_url}
+                    aliases={anime.anime.title}
+                    id={anime.anime.mal_id.toString()}
+                    type="anime"
+                    // className="rounded-md object-cover h-auto w-auto"
+                    />
                 }
                 title={
                   <div className="flex flex-col">
@@ -121,51 +83,6 @@ const DetailStaff: React.FC = () => {
           <>
             {/* Default Content (Overview) */}
             {/* Voices By Section */}
-            {/* {animeStaff.voices.length > 0 && (
-              <div className="mt-8">
-                <h2 className="text-2xl font-bold text-white mb-4">
-                  Voiced In
-                </h2>
-                <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
-                  {voiceOverview.map((voice) => (
-                    <ListTile
-                      key={voice.character.mal_id}
-                      leading={
-                        <img
-                          src={voice.character.images.jpg.image_url}
-                          alt={voice.character.name}
-                          className="rounded-md object-cover h-auto w-auto"
-                        />
-                      }
-                      title={
-                        <div className="flex flex-col">
-                          <CharacterName
-                            name={voice.character.name}
-                            to={`/anime/${voice.character.mal_id}/characters`}
-                          />
-                          <p className="text-sm text-white">( {voice.role} )</p>
-                        </div>
-                      }
-                      trailing={
-                        <div className="flex flex-row items-center">
-                          <div className="flex flex-col text-right mr-4">
-                            <CharacterName
-                              name={voice?.anime.title ?? "N/A"}
-                              to={`/anime/detail/${voice?.anime.mal_id}`}
-                            />
-                          </div>
-                          <img
-                            src={voice?.anime.images.jpg.image_url}
-                            alt={voice?.anime.title}
-                            className="rounded-md object-cover h-30 w-20"
-                          />
-                        </div>
-                      }
-                    />
-                  ))}
-                </div>
-              </div>
-            )} */}
 
             {/* Appears in Anime Section */}
             {animeStaff.anime.length > 0 && (
@@ -178,11 +95,12 @@ const DetailStaff: React.FC = () => {
                     <ListTile
                       key={anime.anime.mal_id}
                       leading={
-                        <img
-                          src={anime.anime.images.jpg.image_url}
-                          alt={anime.anime.title}
-                          className="rounded-md object-cover h-36 w-auto"
-                        />
+                        <ImageClick
+                          source={anime.anime.images.jpg.image_url}
+                          aliases={anime.anime.title}
+                          id={anime.anime.mal_id.toString()}
+                          type="anime"
+                          />
                       }
                       title={
                         <div className="flex flex-col">
@@ -251,7 +169,7 @@ const DetailStaff: React.FC = () => {
             <p className="text-gray-300 mt-4 text-justify">{animeStaff.about}</p>
 
             {/* Tab Bar */}
-            <div className="w-full flex flex-row mt-4 justify-evenly">
+            <div className="w-full flex flex-row mt-4 justify-evenly border-t border-gray-600 pt-4">
               <button
                 onClick={() => setCategory("overview")}
                 className={`text-xl font-bold text-white hover:text-blue-400 ${

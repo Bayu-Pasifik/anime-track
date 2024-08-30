@@ -8,6 +8,7 @@ import { fetchDetailAnimeCharacter } from "../redux/detailAnimeSlice";
 import { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingAnimation from "../components/LoadingAnimations";
+import ImageClick from "../components/details/ImageClick";
 
 const DetailCharacter: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -57,10 +58,11 @@ const DetailCharacter: React.FC = () => {
                 <ListTile
                   key={index}
                   leading={
-                    <img
-                      className="w-auto h-40 object-cover"
-                      src={voice.person.images.jpg.image_url}
-                      alt={voice.person.name}
+                    <ImageClick 
+                    source={voice.person.images.jpg.image_url} 
+                    aliases={voice.person.name}
+                    id={voice.person.mal_id.toString()}
+                    type="voiceActors"
                     />
                   }
                   title={
@@ -86,10 +88,11 @@ const DetailCharacter: React.FC = () => {
                 <ListTile
                   key={index}
                   leading={
-                    <img
-                      className="w-auto h-40 object-cover"
-                      src={anime.anime.images.jpg.image_url}
-                      alt={anime.anime.title}
+                    <ImageClick
+                      source={anime.anime.images.jpg.image_url}
+                      aliases={anime.anime.title}
+                      id={anime.anime.mal_id.toString()}
+                      type="anime"
                     />
                   }
                   title={
@@ -117,10 +120,11 @@ const DetailCharacter: React.FC = () => {
                 <ListTile
                   key={index}
                   leading={
-                    <img
-                      className="w-auto h-40 object-cover"
-                      src={manga.manga.images.jpg.image_url}
-                      alt={manga.manga.title}
+                   <ImageClick
+                      source={manga.manga.images.jpg.image_url}
+                      aliases={manga.manga.title}
+                      id={manga.manga.mal_id.toString()}
+                      type="manga"
                     />
                   }
                   title={
@@ -146,10 +150,12 @@ const DetailCharacter: React.FC = () => {
                 <ListTile
                   key={index}
                   leading={
-                    <img
-                      className="w-auto h-40 object-cover"
-                      src={voice.person.images.jpg.image_url}
-                      alt={voice.person.name}
+                    <ImageClick
+                      source={voice.person.images.jpg.image_url}
+                      aliases={voice.person.name}
+                      id={voice.person.mal_id.toString()}
+                      type="voiceActors"
+                      
                     />
                   }
                   title={
@@ -170,11 +176,13 @@ const DetailCharacter: React.FC = () => {
                 <ListTile
                   key={index}
                   leading={
-                    <img
-                      className="w-auto h-40 object-cover"
-                      src={anime.anime.images.jpg.image_url}
-                      alt={anime.anime.title}
-                    />
+                   <ImageClick
+                      source={anime.anime.images.jpg.image_url}
+                      aliases={anime.anime.title}
+                      id={anime.anime.mal_id.toString()}
+                      type="anime"
+                      
+                    />  
                   }
                   title={
                     <div className="flex flex-col">
@@ -196,10 +204,12 @@ const DetailCharacter: React.FC = () => {
                 <ListTile
                   key={index}
                   leading={
-                    <img
-                      className="w-auto h-40 object-cover"
-                      src={manga.manga.images.jpg.image_url}
-                      alt={manga.manga.title}
+                    <ImageClick
+                      source={manga.manga.images.jpg.image_url}
+                      aliases={manga.manga.title}
+                      id={manga.manga.mal_id.toString()}
+                      type="manga"
+                      
                     />
                   }
                   title={

@@ -10,6 +10,7 @@ import ListTile from "./ListTile";
 import PictureGallery from "./ZoomPictures";
 import CharacterName from "./details/CharacterName";
 import SkeletonListTile from "./SkeletonListTile";
+import ImageClick from "./details/ImageClick";
 
 interface ContentProps {
   animeCharacter: CharacterDetail[];
@@ -31,7 +32,6 @@ const Content: React.FC<ContentProps> = ({
   className,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     setIsLoading(true);
 
@@ -98,10 +98,11 @@ const Content: React.FC<ContentProps> = ({
                   <ListTile
                     key={character.character.mal_id}
                     leading={
-                      <img
-                        src={character.character.images.jpg.image_url}
-                        alt={character.character.name}
-                        className="rounded-md object-cover h-30 w-20"
+                      <ImageClick
+                        source={character.character.images.jpg.image_url}
+                        aliases={character.character.name}
+                        id={character.character.mal_id.toString()}
+                        type="animeCharacter"
                       />
                     }
                     title={
@@ -120,14 +121,15 @@ const Content: React.FC<ContentProps> = ({
                             name={japaneseVA?.person.name ?? "N/A"}
                             to={`/anime/${japaneseVA?.person.mal_id}/voice-actors`}
                           />
-                          <span className="text-sm text-white">
+                          <p className="text-sm text-white">
                             {japaneseVA?.language}
-                          </span>
+                          </p>
                         </div>
-                        <img
-                          src={japaneseVA?.person.images.jpg.image_url}
-                          alt={japaneseVA?.person.name}
-                          className="rounded-md object-cover h-30 w-20"
+                        <ImageClick
+                          source={japaneseVA?.person.images.jpg.image_url}
+                          aliases={japaneseVA?.person.name}
+                          id={japaneseVA?.person.mal_id.toString()}
+                          type="voiceActor"
                         />
                       </div>
                     }
@@ -149,15 +151,19 @@ const Content: React.FC<ContentProps> = ({
                   <ListTile
                     key={staff.person.mal_id}
                     leading={
-                      <img
-                        src={staff.person.images.jpg.image_url}
-                        alt={staff.person.name}
-                        className="rounded-md object-cover h-30 w-20"
+                      <ImageClick
+                        source={staff.person.images.jpg.image_url}
+                        aliases={staff.person.name}
+                        id={staff.person.mal_id.toString()}
+                        type="animeStaff"
                       />
                     }
                     title={
                       <div className="flex flex-col">
-                        <CharacterName name={staff.person.name} to={`/anime/${staff.person.mal_id}/staff`}/>
+                        <CharacterName
+                          name={staff.person.name}
+                          to={`/anime/${staff.person.mal_id}/staff`}
+                        />
                         <p className="text-sm text-white">{staff.positions}</p>
                       </div>
                     }
@@ -179,46 +185,47 @@ const Content: React.FC<ContentProps> = ({
             <div className="font-roboto font-bold">
               <h1 className="text-xl text-white">Featuring Characters</h1>
             </div>
-            <div className="flex flex-wrap lg:flex-row md:flex-col">
+            <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
               {animeCharacter.slice(0, 4).map((character) => {
                 const japaneseVA = character.voice_actors.find(
                   (va) => va.language === "Japanese"
                 );
                 return (
-                  <div
-                    key={character.character.mal_id}
-                    className="lg:w-1/2 md:w-full p-2 mt-4"
-                  >
+                  <div key={character.character.mal_id} className="">
                     <ListTile
                       leading={
-                        <img
-                          src={character.character.images.jpg.image_url}
-                          alt={character.character.name}
-                          className="rounded-md object-cover h-30 w-20"
+                        <ImageClick
+                          source={character.character.images.jpg.image_url}
+                          aliases={character.character.name}
+                          id={character.character.mal_id.toString()}
+                          type="animeCharacter"
                         />
                       }
                       title={
                         <div className="flex flex-col">
-                          <p className="text-white">
-                            {character.character.name}
-                          </p>
+                          <CharacterName
+                            name={character.character.name}
+                            to={`/anime/${character.character.mal_id}/characters`}
+                          />
                           <p className="text-sm text-white">{character.role}</p>
                         </div>
                       }
                       trailing={
                         <div className="flex flex-row items-center">
                           <div className="flex flex-col text-right mr-4">
-                            <span className="text-sm text-white">
-                              {japaneseVA?.person.name}
-                            </span>
-                            <span className="text-sm text-white">
+                            <CharacterName
+                              name={japaneseVA!.person.name}
+                              to={`/anime/${japaneseVA?.person.mal_id}/voice-actors`}
+                            />
+                            <p className="text-sm text-white">
                               {japaneseVA?.language}
-                            </span>
+                            </p>
                           </div>
-                          <img
-                            src={japaneseVA?.person.images.jpg.image_url}
-                            alt={japaneseVA?.person.name}
-                            className="rounded-md object-cover h-30 w-20"
+                          <ImageClick
+                            id={japaneseVA!.person.mal_id.toString()}
+                            source={japaneseVA?.person.images.jpg.image_url}
+                            aliases={japaneseVA?.person.name}
+                            type="voiceActors"
                           />
                         </div>
                       }
@@ -231,24 +238,25 @@ const Content: React.FC<ContentProps> = ({
             <div className="font-roboto font-bold mt-5">
               <h1 className="text-xl text-white">Featuring Staffs</h1>
             </div>
-            <div className="flex flex-wrap md:flex-row">
+            <div className="grid lg:grid-cols-2 sm:grid-cols-1 gap-4">
               {animeStaff.slice(0, 3).map((staff) => {
                 return (
-                  <div
-                    key={staff.person.mal_id}
-                    className="md:w-full lg:w-1/2 p-2 mt-4"
-                  >
+                  <div key={staff.person.mal_id}>
                     <ListTile
                       leading={
-                        <img
-                          src={staff.person.images.jpg.image_url}
-                          alt={staff.person.name}
-                          className="rounded-md object-cover h-30 w-20"
+                        <ImageClick
+                          id={staff.person.mal_id.toString()}
+                          source={staff.person.images.jpg.image_url}
+                          aliases={staff.person.name}
+                          type="animeStaff"
                         />
                       }
                       title={
                         <div className="flex flex-col ">
-                          <p className="text-white">{staff.person.name}</p>
+                          <CharacterName
+                            name={staff.person.name}
+                            to={`/anime/${staff.person.mal_id}/staff`}
+                          />
                           <p className="text-sm text-white">
                             {staff.positions}
                           </p>

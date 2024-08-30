@@ -8,6 +8,7 @@ import CharacterName from "../components/details/CharacterName";
 import LoadingAnimation from "../components/LoadingAnimations";
 import { fetchDetailVoiceActors } from "../redux/detailAnimeSlice";
 import { AppDispatch, RootState } from "../redux/store";
+import ImageClick from "../components/details/ImageClick";
 
 const DetailVoiceActors: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -50,11 +51,12 @@ const DetailVoiceActors: React.FC = () => {
               <ListTile
                 key={index}
                 leading={
-                  <img
-                    src={voice.character.images.jpg.image_url}
-                    alt={voice.character.name}
-                    className="rounded-md object-cover h-auto w-auto"
-                  />
+                 <ImageClick
+                    source={voice.character.images.jpg.image_url}
+                    aliases={voice.character.name}
+                    id={voice.character.mal_id.toString()}
+                    type="animeCharacter"
+                    />
                 }
                 title={
                   <div className="flex flex-col">
@@ -73,11 +75,12 @@ const DetailVoiceActors: React.FC = () => {
                         to={`/anime/detail/${voice?.anime.mal_id}`}
                       />
                     </div>
-                    <img
-                      src={voice?.anime.images.jpg.image_url}
-                      alt={voice?.anime.title}
-                      className="rounded-md object-cover h-30 w-20"
-                    />
+                    <ImageClick
+                      source={voice.anime.images.jpg.image_url}
+                      aliases={voice.anime.title}
+                      id={voice.anime.mal_id.toString()}
+                      type="anime"
+                      />
                   </div>
                 }
               />
@@ -91,11 +94,12 @@ const DetailVoiceActors: React.FC = () => {
               <ListTile
                 key={index}
                 leading={
-                  <img
-                    src={anime.anime.images.jpg.image_url}
-                    alt={anime.anime.title}
-                    className="rounded-md object-cover h-36 w-auto"
-                  />
+                  <ImageClick
+                    source={anime.anime.images.jpg.image_url}
+                    aliases={anime.anime.title}
+                    id={anime.anime.mal_id.toString()}
+                    type="anime"
+                    />
                 }
                 title={
                   <div className="flex flex-col">
@@ -124,11 +128,12 @@ const DetailVoiceActors: React.FC = () => {
                     <ListTile
                       key={voice.character.mal_id}
                       leading={
-                        <img
-                          src={voice.character.images.jpg.image_url}
-                          alt={voice.character.name}
-                          className="rounded-md object-cover h-auto w-auto"
-                        />
+                        <ImageClick
+                          source={voice.character.images.jpg.image_url}
+                          aliases={voice.character.name}
+                          id={voice.character.mal_id.toString()}
+                          type="animeCharacter"
+                          />
                       }
                       title={
                         <div className="flex flex-col">
@@ -147,11 +152,12 @@ const DetailVoiceActors: React.FC = () => {
                               to={`/anime/detail/${voice?.anime.mal_id}`}
                             />
                           </div>
-                          <img
-                            src={voice?.anime.images.jpg.image_url}
-                            alt={voice?.anime.title}
-                            className="rounded-md object-cover h-30 w-20"
-                          />
+                          <ImageClick
+                            source={voice.anime.images.jpg.image_url}
+                            aliases={voice.anime.title}
+                            id={voice.anime.mal_id.toString()}
+                            type="anime"
+                            />
                         </div>
                       }
                     />
@@ -170,17 +176,18 @@ const DetailVoiceActors: React.FC = () => {
                     <ListTile
                       key={anime.anime.mal_id}
                       leading={
-                        <img
-                          src={anime.anime.images.jpg.image_url}
-                          alt={anime.anime.title}
-                          className="rounded-md object-cover h-36 w-auto"
-                        />
+                        <ImageClick
+                          source={anime.anime.images.jpg.image_url}
+                          aliases={anime.anime.title}
+                          id={anime.anime.mal_id.toString()}
+                          type="anime"
+                          />
                       }
                       title={
                         <div className="flex flex-col">
                           <CharacterName
                             name={anime.anime.title}
-                            to={`/anime/detail/${anime.anime.mal_id}/characters`}
+                            to={`/anime/detail/${anime.anime.mal_id}`}
                           />
                           <p className="text-sm text-white">
                             ( {anime.position} )
