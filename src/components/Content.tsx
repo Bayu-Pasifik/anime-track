@@ -183,6 +183,55 @@ const Content: React.FC<ContentProps> = ({
         return (
           <div>
             <div className="font-roboto font-bold">
+              <h1 className="text-xl text-white">Related Series</h1>
+            </div>
+            <div className="text-white">
+              <table className="table-auto w-full border-collapse border border-gray-800">
+                <thead>
+                  <tr>
+                    <th className="border border-gray-600 px-4 py-2">
+                      Relation
+                    </th>
+                    <th className="border border-gray-600 px-4 py-2">Type</th>
+                    <th className="border border-gray-600 px-4 py-2">Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailAnime.relations.map((relation, relationIndex) => (
+                    <React.Fragment key={relationIndex}>
+                      {relation.entry.map((entry, entryIndex) => (
+                        <tr key={entry.mal_id}>
+                          {/* Menampilkan Relation hanya sekali untuk setiap kategori Relation */}
+                          {entryIndex === 0 && (
+                            <td
+                              rowSpan={relation.entry.length}
+                              className="border border-gray-600 px-4 py-2 align-top"
+                            >
+                              {relation.relation}
+                            </td>
+                          )}
+                          <td className="border border-gray-600 px-4 py-2">
+                            {entry.type}
+                          </td>
+                          <td className="border border-gray-600 px-4 py-2">
+                            <a
+                              href={entry.url}
+                              className="text-blue-400 hover:underline"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {entry.name}
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="font-roboto font-bold">
               <h1 className="text-xl text-white my-4">Featuring Characters</h1>
             </div>
             <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
