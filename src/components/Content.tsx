@@ -499,7 +499,7 @@ const Content: React.FC<ContentProps> = ({
               })}
             </div>
             {/* Recommendation */}
-            <AnimeRecomendation animeRecomendation={animeRecomendation!} />
+            <AnimeRecomendation animeRecomendation={animeRecomendation!} type="manga" />
           </div>
         );
     }
