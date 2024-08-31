@@ -215,10 +215,12 @@ const Content: React.FC<ContentProps> = ({
                           </td>
                           <td className="border border-gray-600 px-4 py-2">
                             <a
-                              href={entry.url}
+                              href={
+                                entry.type === "manga"
+                                  ? `/manga/detail/${entry.mal_id}`
+                                  : `/anime/detail/${entry.mal_id}`
+                              }
                               className="text-blue-400 hover:underline"
-                              target="_blank"
-                              rel="noopener noreferrer"
                             >
                               {entry.name}
                             </a>
