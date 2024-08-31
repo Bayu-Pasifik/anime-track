@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CharacterDetail } from "../config/characters";
+import { CharacterDetail, MangaCharacter } from "../config/characters";
 import { AnimeDetail } from "../config/data";
 import { StaffData } from "../config/staff";
 import { Recommendation } from "../config/animeRecomendation";
@@ -11,15 +11,20 @@ import PictureGallery from "./ZoomPictures";
 import CharacterName from "./details/CharacterName";
 import SkeletonListTile from "./SkeletonListTile";
 import ImageClick from "./details/ImageClick";
+import { Manga } from "../config/manga";
 
 interface ContentProps {
-  animeCharacter: CharacterDetail[];
-  animeStaff: StaffData[];
-  detailAnime: AnimeDetail;
-  animeRecomendation: Recommendation[];
+  type : string;
+  animeCharacter?: CharacterDetail[];
+  animeStaff?: StaffData[];
+  detailAnime?: AnimeDetail;
+  animeRecomendation?: Recommendation[];
   pictures: Images[];
   category: string;
   className?: string;
+  detailManga?: Manga;
+  mangaRecomendation?: Recommendation[];
+  mangaCharacter?: MangaCharacter[];
 }
 
 const Content: React.FC<ContentProps> = ({
@@ -30,8 +35,12 @@ const Content: React.FC<ContentProps> = ({
   pictures,
   category,
   className,
+  type,
+  detailManga,
+  mangaCharacter,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     setIsLoading(true);
 
@@ -42,7 +51,8 @@ const Content: React.FC<ContentProps> = ({
     return () => clearTimeout(timer);
   }, [category]);
 
-  const renderContent = () => {
+
+  const renderContentAnime = () => {
     if (isLoading) {
       return (
         <div>
@@ -90,8 +100,8 @@ const Content: React.FC<ContentProps> = ({
               <h1 className="text-xl text-white">Featuring Characters</h1>
             </div>
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
-              {animeCharacter.map((character) => {
-                const japaneseVA = character.voice_actors.find(
+              {animeCharacter!.map((character) => {
+                const japaneseVA = character.voice_actors!.find(
                   (va) => va.language === "Japanese"
                 );
                 return (
@@ -146,7 +156,7 @@ const Content: React.FC<ContentProps> = ({
               <h1 className="text-xl text-white">Featuring Staffs</h1>
             </div>
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
-              {animeStaff.map((staff) => {
+              {animeStaff!.map((staff) => {
                 return (
                   <ListTile
                     key={staff.person.mal_id}
@@ -197,7 +207,7 @@ const Content: React.FC<ContentProps> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {detailAnime.relations.map((relation, relationIndex) => (
+                  {detailManga!.relations.map((relation, relationIndex) => (
                     <React.Fragment key={relationIndex}>
                       {relation.entry.map((entry, entryIndex) => (
                         <tr key={entry.mal_id}>
@@ -237,8 +247,8 @@ const Content: React.FC<ContentProps> = ({
               <h1 className="text-xl text-white my-4">Featuring Characters</h1>
             </div>
             <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {animeCharacter.slice(0, 4).map((character) => {
-                const japaneseVA = character.voice_actors.find(
+              {animeCharacter!.slice(0, 4).map((character) => {
+                const japaneseVA = character.voice_actors!.find(
                   (va) => va.language === "Japanese"
                 );
                 return (
@@ -290,7 +300,7 @@ const Content: React.FC<ContentProps> = ({
               <h1 className="text-xl text-white">Featuring Staffs</h1>
             </div>
             <div className="grid lg:grid-cols-2 sm:grid-cols-1 gap-4">
-              {animeStaff.slice(0, 3).map((staff) => {
+              {animeStaff!.slice(0, 3).map((staff) => {
                 return (
                   <div key={staff.person.mal_id}>
                     <ListTile
@@ -322,9 +332,174 @@ const Content: React.FC<ContentProps> = ({
             <div className="font-roboto font-bold mt-5">
               <h1 className="text-xl text-white">Trailer</h1>
             </div>
-            <Trailer data={detailAnime} />
+            <Trailer data={detailAnime!} />
             {/* Recommendation */}
-            <AnimeRecomendation animeRecomendation={animeRecomendation} />
+            <AnimeRecomendation animeRecomendation={animeRecomendation!} />
+          </div>
+        );
+    }
+  };
+  const renderContentManga = () => {
+    if (isLoading) {
+      return (
+        <div>
+          {category === "characters" && (
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 h-72 mt-7">
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+            </div>
+          )}
+          {category === "pictures" && (
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 h-72 mt-7">
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+            </div>
+          )}
+          {category === "overview" && (
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 h-72 mt-7">
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+              <SkeletonListTile />
+            </div>
+          )}
+        </div>
+      );
+    }
+    // ! Render manga content
+    switch (category) {
+      case "characters":
+        return (
+          <div>
+            <div className="font-roboto font-bold mt-5 mb-4">
+              <h1 className="text-xl text-white">Featuring Characters</h1>
+            </div>
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
+              {mangaCharacter!.map((character) => {
+                return (
+                  <ListTile
+                    key={character.character.mal_id}
+                    leading={
+                      <ImageClick
+                        source={character.character.images.jpg.image_url}
+                        aliases={character.character.name}
+                        id={character.character.mal_id.toString()}
+                        type="animeCharacter"
+                      />
+                    }
+                    title={
+                      <div className="flex flex-col">
+                        <CharacterName
+                          name={character.character.name}
+                          to={`/anime/${character.character.mal_id}/characters`}
+                        />
+                        <p className="text-sm text-white">{character.role}</p>
+                      </div>
+                    }
+                    
+                  />
+                );
+              })}
+            </div>
+          </div>
+        );
+      case "pictures":
+        return (
+          <div>
+            <PictureGallery pictures={pictures} />
+          </div>
+        );
+      default:
+        return (
+          <div>
+            <div className="font-roboto font-bold">
+              <h1 className="text-xl text-white mt-5 mb-4">Related Series</h1>
+            </div>
+            <div className="text-white">
+              <table className="table-auto w-full border-collapse border border-gray-800">
+                <thead>
+                  <tr>
+                    <th className="border border-gray-600 px-4 py-2">
+                      Relation
+                    </th>
+                    <th className="border border-gray-600 px-4 py-2">Type</th>
+                    <th className="border border-gray-600 px-4 py-2">Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailManga!.relations.map((relation, relationIndex) => (
+                    <React.Fragment key={relationIndex}>
+                      {relation.entry.map((entry, entryIndex) => (
+                        <tr key={entry.mal_id}>
+                          {/* Menampilkan Relation hanya sekali untuk setiap kategori Relation */}
+                          {entryIndex === 0 && (
+                            <td
+                              rowSpan={relation.entry.length}
+                              className="border border-gray-600 px-4 py-2 align-top"
+                            >
+                              {relation.relation}
+                            </td>
+                          )}
+                          <td className="border border-gray-600 px-4 py-2">
+                            {entry.type}
+                          </td>
+                          <td className="border border-gray-600 px-4 py-2">
+                            <a
+                              href={
+                                entry.type === "manga"
+                                  ? `/manga/detail/${entry.mal_id}`
+                                  : `/anime/detail/${entry.mal_id}`
+                              }
+                              className="text-blue-400 hover:underline"
+                            >
+                              {entry.name}
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="font-roboto font-bold">
+              <h1 className="text-xl text-white my-4">Featuring Characters</h1>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+              {mangaCharacter!.slice(0, 4).map((character) => { 
+                return (
+                  <div key={character.character.mal_id} className="">
+                    <ListTile
+                      leading={
+                        <ImageClick
+                          source={character.character.images.jpg.image_url}
+                          aliases={character.character.name}
+                          id={character.character.mal_id.toString()}
+                          type="mangaCharacter"
+                        />
+                      }
+                      title={
+                        <div className="flex flex-col">
+                          <CharacterName
+                            name={character.character.name}
+                            to={`/manga/${character.character.mal_id}/characters`}
+                          />
+                          <p className="text-sm text-white">{character.role}</p>
+                        </div>
+                      }
+                      
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            {/* Recommendation */}
+            <AnimeRecomendation animeRecomendation={animeRecomendation!} />
           </div>
         );
     }
@@ -333,7 +508,7 @@ const Content: React.FC<ContentProps> = ({
   return (
     <div className={`p-4 w-full mt-4 flex flex-col lg:flex-row ${className}`}>
       <div className="content flex flex-col flex-grow order-2 lg:order-1">
-        {renderContent()}
+        {type === "anime" ? renderContentAnime() : renderContentManga()}
       </div>
     </div>
   );

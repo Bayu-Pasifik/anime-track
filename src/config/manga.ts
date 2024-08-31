@@ -32,6 +32,8 @@ export interface Manga {
     popularity: number;
     synopsis: string;
     background: string;
+    member: number;
+    favorites: number;
     images: {
       jpg: {
         image_url: string;
@@ -43,6 +45,8 @@ export interface Manga {
     genres: Genre[];
     serializations: Serialization[];
     demographics: Demographics[];
+    relations: Relation[];
+    external: external[];
   }
   
   export interface Author {

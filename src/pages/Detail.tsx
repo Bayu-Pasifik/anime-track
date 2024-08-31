@@ -150,6 +150,7 @@ const Detail: React.FC = () => {
           className="lg:w-1/3 w-full order-1 mt-10"
         />
         <Content
+          type= "anime"
           pictures={animePicture}
           animeCharacter={animeCharacter}
           animeStaff={staffAnime}

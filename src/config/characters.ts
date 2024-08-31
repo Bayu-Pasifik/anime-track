@@ -2,7 +2,7 @@ export interface CharacterDetail {
     character: Character;
     role: string;
     favorites: number;
-    voice_actors: VoiceActor[];
+    voice_actors?: VoiceActor[];
   }
   
   interface Character {
@@ -82,4 +82,9 @@ export interface Jpg {
 export interface Webp{
     image_url: string;
     small_image_url: string;
+}
+
+export interface MangaCharacter {
+  character: Character;
+  role : string;
 }
