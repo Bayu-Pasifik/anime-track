@@ -148,6 +148,7 @@ const Detail: React.FC = () => {
         <Sidebar
           animeDetail={animeDetail}
           className="lg:w-1/3 w-full order-1 mt-10"
+          type="anime"
         />
         <Content
           type= "anime"

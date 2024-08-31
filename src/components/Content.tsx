@@ -207,7 +207,7 @@ const Content: React.FC<ContentProps> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {detailManga!.relations.map((relation, relationIndex) => (
+                  {detailManga?.relations.map((relation, relationIndex) => (
                     <React.Fragment key={relationIndex}>
                       {relation.entry.map((entry, entryIndex) => (
                         <tr key={entry.mal_id}>
@@ -275,7 +275,7 @@ const Content: React.FC<ContentProps> = ({
                         <div className="flex flex-row items-center">
                           <div className="flex flex-col text-right mr-4">
                             <CharacterName
-                              name={japaneseVA!.person.name}
+                              name={japaneseVA?.person.name}
                               to={`/anime/${japaneseVA?.person.mal_id}/voice-actors`}
                             />
                             <p className="text-sm text-white">
@@ -283,7 +283,7 @@ const Content: React.FC<ContentProps> = ({
                             </p>
                           </div>
                           <ImageClick
-                            id={japaneseVA!.person.mal_id.toString()}
+                            id={japaneseVA?.person.mal_id.toString()}
                             source={japaneseVA?.person.images.jpg.image_url}
                             aliases={japaneseVA?.person.name}
                             type="voiceActors"
@@ -395,7 +395,7 @@ const Content: React.FC<ContentProps> = ({
                       <div className="flex flex-col">
                         <CharacterName
                           name={character.character.name}
-                          to={`/anime/${character.character.mal_id}/characters`}
+                          to={`/manga/${character.character.mal_id}/characters`}
                         />
                         <p className="text-sm text-white">{character.role}</p>
                       </div>

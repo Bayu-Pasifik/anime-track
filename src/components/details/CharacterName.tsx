@@ -1,4 +1,4 @@
-const CharacterName: React.FC<{ name: string; to: string }> = ({ name, to }) => {
+const CharacterName: React.FC<{ name?: string; to: string }> = ({ name, to }) => {
   if(name ==="N/A") {
     return   (
       <div className="w-full max-w-xs">

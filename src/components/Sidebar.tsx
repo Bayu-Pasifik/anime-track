@@ -10,7 +10,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ animeDetail, className,type,mangaDetail }) => {
-  if (animeDetail && type === "anime") {
+  if (type === "anime") {
     return (
       <div className={`flex flex-col w-full ${className}`}>
         <div
