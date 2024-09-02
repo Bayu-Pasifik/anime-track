@@ -28,6 +28,7 @@ const Detail: React.FC = () => {
     staffAnime,
     animePicture,
     loading,
+    error,
   } = useSelector((state: RootState) => state.detailAnime);
 
   const [isDataLoading, setIsDataLoading] = useState(true); // State for handling loading display
@@ -159,6 +160,7 @@ const Detail: React.FC = () => {
           animeRecomendation={Recommendations}
           category={category}
           className="lg:w-2/3 w-full order-2"
+          error={error}
         />
       </div>
     </div>

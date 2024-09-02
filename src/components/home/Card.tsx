@@ -9,9 +9,9 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ anime }) => {
   return (
     <Link to={`/anime/detail/${anime.mal_id}`} key={anime.mal_id}>
-      <div className="relative w-52 h-64 group overflow-hidden">
+      <div className="relative w-full h-auto group overflow-hidden">
         <img
-          className="w-full h-full rounded-md object-cover"
+          className="w-72 h-72 rounded-md object-cover"
           src={anime.images.jpg.large_image_url}
           alt={anime.title}
         />

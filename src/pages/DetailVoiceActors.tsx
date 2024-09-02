@@ -63,8 +63,9 @@ const DetailVoiceActors: React.FC = () => {
                     <CharacterName
                       name={voice.character.name}
                       to={`/anime/${voice.character.mal_id}/characters`}
+
                     />
-                    <p className="text-sm text-white">( {voice.role} )</p>
+                    <p className="text-sm text-white line-clamp-2 underline">{voice.role}</p>
                   </div>
                 }
                 trailing={

@@ -14,7 +14,7 @@ import ImageClick from "./details/ImageClick";
 import { Manga } from "../config/manga";
 
 interface ContentProps {
-  type : string;
+  type: string;
   animeCharacter?: CharacterDetail[];
   animeStaff?: StaffData[];
   detailAnime?: AnimeDetail;
@@ -25,6 +25,7 @@ interface ContentProps {
   detailManga?: Manga;
   mangaRecomendation?: Recommendation[];
   mangaCharacter?: MangaCharacter[];
+  error ?: {}
 }
 
 const Content: React.FC<ContentProps> = ({
@@ -40,7 +41,7 @@ const Content: React.FC<ContentProps> = ({
   mangaCharacter,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     setIsLoading(true);
 
@@ -50,7 +51,6 @@ const Content: React.FC<ContentProps> = ({
 
     return () => clearTimeout(timer);
   }, [category]);
-
 
   const renderContentAnime = () => {
     if (isLoading) {
@@ -99,6 +99,9 @@ const Content: React.FC<ContentProps> = ({
             <div className="font-roboto font-bold mt-5 mb-4">
               <h1 className="text-xl text-white">Featuring Characters</h1>
             </div>
+            {animeCharacter?.length === 0 && (
+              <p className="text-white">No character found</p>
+            )}
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
               {animeCharacter!.map((character) => {
                 const japaneseVA = character.voice_actors!.find(
@@ -139,8 +142,9 @@ const Content: React.FC<ContentProps> = ({
                           source={japaneseVA?.person.images.jpg.image_url}
                           aliases={japaneseVA?.person.name}
                           id={japaneseVA?.person.mal_id.toString()}
-                          type="voiceActor"
+                          type="voiceActors"
                         />
+                        {/* <img src={} alt="" /> */}
                       </div>
                     }
                   />
@@ -400,7 +404,6 @@ const Content: React.FC<ContentProps> = ({
                         <p className="text-sm text-white">{character.role}</p>
                       </div>
                     }
-                    
                   />
                 );
               })}
@@ -470,8 +473,11 @@ const Content: React.FC<ContentProps> = ({
             <div className="font-roboto font-bold">
               <h1 className="text-xl text-white my-4">Featuring Characters</h1>
             </div>
+            {mangaCharacter?.length === 0 && (
+              <p className="text-white">No character found</p>
+            )}
             <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {mangaCharacter!.slice(0, 4).map((character) => { 
+              {mangaCharacter!.slice(0, 4).map((character) => {
                 return (
                   <div key={character.character.mal_id} className="">
                     <ListTile
@@ -492,14 +498,16 @@ const Content: React.FC<ContentProps> = ({
                           <p className="text-sm text-white">{character.role}</p>
                         </div>
                       }
-                      
                     />
                   </div>
                 );
               })}
             </div>
             {/* Recommendation */}
-            <AnimeRecomendation animeRecomendation={animeRecomendation!} type="manga" />
+            <AnimeRecomendation
+              animeRecomendation={animeRecomendation!}
+              type="manga"
+            />
           </div>
         );
     }

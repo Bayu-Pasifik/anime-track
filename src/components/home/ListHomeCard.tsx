@@ -12,6 +12,7 @@ interface ListHomeCardProps {
 
 const ListHomeCard: React.FC<ListHomeCardProps> = ({ animes, type }) => {
   const animelist = animes.slice(0, 25);
+
   return (
     <div className="p-4">
       <div className="flex flex-row justify-between mb-4">
@@ -29,10 +30,36 @@ const ListHomeCard: React.FC<ListHomeCardProps> = ({ animes, type }) => {
           View More
         </Link>
       </div>
-      <div className="flex flex-row w-full gap-4">
-        <Swiper spaceBetween={20} slidesPerView={7} className="mySwiper">
+      <div>
+        <Swiper
+          spaceBetween={10}  // Mengurangi space antara slide
+          breakpoints={{
+            180: {
+              slidesPerView: 1,
+            },
+            320: {
+              slidesPerView: 2,
+            },
+            640: {
+              slidesPerView: 3,
+            },
+            768: {
+              slidesPerView: 4,
+            },
+            1024: {
+              slidesPerView: 5,
+            },
+            1280: {
+              slidesPerView: 6,
+            },
+            1536: {
+              slidesPerView: 7,
+            },
+          }}
+          className="mySwiper"
+        >
           {animelist.map((anime) => (
-            <SwiperSlide key={anime.mal_id} style={{ width: "auto" }}>
+            <SwiperSlide key={anime.mal_id} className="flex-shrink-0">
               <Card anime={anime} />
             </SwiperSlide>
           ))}

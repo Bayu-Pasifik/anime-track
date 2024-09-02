@@ -1,17 +1,26 @@
-const CharacterName: React.FC<{ name?: string; to: string }> = ({ name, to }) => {
-  if(name ==="N/A") {
-    return   (
-      <div className="w-full max-w-xs">
-          <p className="hover:text-blue-700 text-white truncate text-sm cursor-pointer">
-            {name}
-          </p>
+const CharacterName: React.FC<{
+  name?: string;
+  to: string;
+  fontSize?: string;
+}> = ({ name, to, fontSize = "text-sm" }) => {
+  const baseClasses = `hover:text-blue-700 text-white cursor-pointer ${fontSize}`;
+  const largeScreenClasses = "text-wrap";
+  const smallScreenClasses = "max-w-20 line-clamp-2";
+
+  if (name === "N/A") {
+    return (
+      <div className="w-full lg:max-w-xs sm:max-w-4 md:max-w-4">
+        <p className={`${baseClasses} ${largeScreenClasses}`}>{name}</p>
       </div>
     );
   }
+
   return (
-    <div className="w-full max-w-xs">
-      <a href={to} className="cursor-pointer">
-        <p className="hover:text-blue-700 text-white truncate text-sm">
+    <div className="">
+      <a href={to} className={baseClasses}>
+        <p
+          className={`${baseClasses} ${smallScreenClasses} `}
+        >
           {name}
         </p>
       </a>

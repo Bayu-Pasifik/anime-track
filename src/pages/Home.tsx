@@ -12,9 +12,19 @@ import TopContainer from "../components/home/TopContainer";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { topAiring, currentlyAiring, upcoming, popular, loading: animeLoading, error: animeError } =
-    useSelector((state: RootState) => state.anime);
-  const { topManga, loading: mangaLoading, error: mangaError } = useSelector((state: RootState) => state.manga);
+  const {
+    topAiring,
+    currentlyAiring,
+    upcoming,
+    popular,
+    loading: animeLoading,
+    error: animeError,
+  } = useSelector((state: RootState) => state.anime);
+  const {
+    topManga,
+    loading: mangaLoading,
+    error: mangaError,
+  } = useSelector((state: RootState) => state.manga);
 
   useEffect(() => {
     dispatch(fetchAnimeData());
@@ -53,7 +63,9 @@ const Home: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="flex justify-center items-center h-40"
         >
-          <p className="text-white">Something Went Wrong, please refresh the website.</p>
+          <p className="text-white">
+            Something Went Wrong, please refresh the website.
+          </p>
         </motion.div>
       </div>
     );
@@ -66,9 +78,13 @@ const Home: React.FC = () => {
       <ListHomeCard animes={currentlyAiring} type="currently" />
       <ListHomeCard animes={upcoming} type="upcoming" />
       <ListHomeCard animes={popular} type="popular" />
-      <div className="flex flex-row w-full ">
-        <TopContainer title="Top 100 Anime" items={topAiring} />
-        <TopContainer title="Top 100 Manga" items={topManga} />
+      <div className="flex flex-wrap lg:flex-row sm:flex-col w-full">
+        <div className="lg:w-1/2 sm:w-full p-4">
+          <TopContainer title="Top 100 Anime" items={topAiring} type="anime" />
+        </div>
+        <div className="lg:w-1/2 sm:w-full p-4">
+          <TopContainer title="Top 100 Manga" items={topManga}  type="manga"/>
+        </div>
       </div>
     </div>
   );
