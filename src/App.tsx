@@ -7,6 +7,7 @@ import DetailVoiceActors from "./pages/DetailVoiceActors";
 import DetailManga from "./pages/DetailManga";
 import DetailStaff from "./pages/DetailAnimeStaff";
 import DetailMangaCharacter from "./pages/DetailMangaCharacter";
+import ViewMore from "./pages/ViewMore";
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,9 @@ const App: React.FC = () => {
         <Route path="/anime/:id/staff" element={<DetailStaff />} />
         <Route path="/manga/detail/:id" element={<DetailManga />} />
         <Route path="/manga/:id/characters" element={<DetailMangaCharacter />} />
+        <Route path="/currentlyAiring" element={<ViewMore />} />
+        <Route path="/popular" element={<ViewMore />} />
+        <Route path="/upcoming" element={<ViewMore />} />
       </Routes>
     </Router>
   );

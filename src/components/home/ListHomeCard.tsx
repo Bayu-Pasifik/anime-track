@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Anime } from "../../config/data";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -8,9 +7,14 @@ import Card from "./Card";
 interface ListHomeCardProps {
   animes: Anime[];
   type?: string;
+  destination: string;
 }
 
-const ListHomeCard: React.FC<ListHomeCardProps> = ({ animes, type }) => {
+const ListHomeCard: React.FC<ListHomeCardProps> = ({
+  animes,
+  type,
+  destination,
+}) => {
   const animelist = animes.slice(0, 25);
 
   return (
@@ -23,16 +27,23 @@ const ListHomeCard: React.FC<ListHomeCardProps> = ({ animes, type }) => {
             ? "Upcoming Anime"
             : "Popular Anime"}
         </h3>
-        <Link
-          to="/view-more"
-          className="text-2xl font-bold text-white cursor-pointer"
-        >
-          View More
-        </Link>
+        {type === "currently" ? (
+          <a href={destination} className="text-2xl font-bold text-white cursor-pointer">
+            View More
+          </a>
+        ) : type === "upcoming" ? (
+          <a href={destination} className="text-2xl font-bold text-white cursor-pointer">
+            View More
+          </a>
+        ) : (
+          <a href={destination} className="text-2xl font-bold text-white cursor-pointer">
+            View More
+          </a>
+        )}
       </div>
       <div>
         <Swiper
-          spaceBetween={10}  // Mengurangi space antara slide
+          spaceBetween={10} // Mengurangi space antara slide
           breakpoints={{
             180: {
               slidesPerView: 1,

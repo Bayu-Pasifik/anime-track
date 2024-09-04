@@ -27,7 +27,9 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-slate-900 text-white w-full">
       <div className="container mx-auto flex items-center justify-between p-4">
-        <div className="text-2xl font-bold">AniManga Track</div>
+        <div className="text-2xl font-bold">
+          <a href="/">AniManga Track</a>
+        </div>
         <div className="hidden md:flex space-x-6 w-3/4 justify-around">
           {/* Anime Dropdown */}
           <div
@@ -40,17 +42,24 @@ const Navbar: React.FC = () => {
             >
               Anime
             </button>
-            {(openDropdown === "anime") && (
-              <div
-                className="absolute left-0 mt-2 w-48 bg-slate-800 rounded shadow-lg z-10"
-              >
-                <Link to="/anime/top" className="block px-4 py-2 hover:bg-slate-700">
+            {openDropdown === "anime" && (
+              <div className="absolute left-0 mt-2 w-48 bg-slate-800 rounded shadow-lg z-10">
+                <Link
+                  to="/anime/top"
+                  className="block px-4 py-2 hover:bg-slate-700"
+                >
                   Top Anime
                 </Link>
-                <Link to="/anime/search" className="block px-4 py-2 hover:bg-slate-700">
+                <Link
+                  to="/anime/search"
+                  className="block px-4 py-2 hover:bg-slate-700"
+                >
                   Search Anime
                 </Link>
-                <Link to="/anime/seasonal" className="block px-4 py-2 hover:bg-slate-700">
+                <Link
+                  to="/anime/seasonal"
+                  className="block px-4 py-2 hover:bg-slate-700"
+                >
                   Seasonal Anime
                 </Link>
               </div>
@@ -68,14 +77,18 @@ const Navbar: React.FC = () => {
             >
               Manga
             </button>
-            {(openDropdown === "manga") && (
-              <div
-                className="absolute left-0 mt-2 w-48 bg-slate-800 rounded shadow-lg z-10"
-              >
-                <Link to="/manga/top" className="block px-4 py-2 hover:bg-slate-700">
+            {openDropdown === "manga" && (
+              <div className="absolute left-0 mt-2 w-48 bg-slate-800 rounded shadow-lg z-10">
+                <Link
+                  to="/manga/top"
+                  className="block px-4 py-2 hover:bg-slate-700"
+                >
                   Top Manga
                 </Link>
-                <Link to="/manga/search" className="block px-4 py-2 hover:bg-slate-700">
+                <Link
+                  to="/manga/search"
+                  className="block px-4 py-2 hover:bg-slate-700"
+                >
                   Search Manga
                 </Link>
               </div>
@@ -93,21 +106,27 @@ const Navbar: React.FC = () => {
             >
               Genres
             </button>
-            {(openDropdown === "genre") && (
-              <div
-                className="absolute left-0 mt-2 w-48 bg-slate-800 rounded shadow-lg z-10"
-              >
-                <Link to="/genre/anime" className="block px-4 py-2 hover:bg-slate-700">
+            {openDropdown === "genre" && (
+              <div className="absolute left-0 mt-2 w-48 bg-slate-800 rounded shadow-lg z-10">
+                <Link
+                  to="/genre/anime"
+                  className="block px-4 py-2 hover:bg-slate-700"
+                >
                   Anime Genres
                 </Link>
-                <Link to="/genre/manga" className="block px-4 py-2 hover:bg-slate-700">
+                <Link
+                  to="/genre/manga"
+                  className="block px-4 py-2 hover:bg-slate-700"
+                >
                   Manga Genres
                 </Link>
               </div>
             )}
           </div>
 
-          <Link to="/about" className="hover:text-blue-400">About</Link>
+          <Link to="/about" className="hover:text-blue-400">
+            About
+          </Link>
         </div>
 
         {/* Hamburger Menu Icon */}
@@ -121,15 +140,48 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-slate-800">
-          <Link to="/" className="block px-4 py-2 hover:bg-slate-700">Home</Link>
-          <Link to="/anime/top" className="block px-4 py-2 hover:bg-slate-700">Top Anime</Link>
-          <Link to="/anime/search" className="block px-4 py-2 hover:bg-slate-700">Search Anime</Link>
-          <Link to="/anime/seasonal" className="block px-4 py-2 hover:bg-slate-700">Seasonal Anime</Link>
-          <Link to="/manga/top" className="block px-4 py-2 hover:bg-slate-700">Top Manga</Link>
-          <Link to="/manga/search" className="block px-4 py-2 hover:bg-slate-700">Search Manga</Link>
-          <Link to="/genre/anime" className="block px-4 py-2 hover:bg-slate-700">Anime Genres</Link>
-          <Link to="/genre/manga" className="block px-4 py-2 hover:bg-slate-700">Manga Genres</Link>
-          <Link to="/about" className="block px-4 py-2 hover:bg-slate-700">About</Link>
+          <Link to="/" className="block px-4 py-2 hover:bg-slate-700">
+            Home
+          </Link>
+          <Link to="/anime/top" className="block px-4 py-2 hover:bg-slate-700">
+            Top Anime
+          </Link>
+          <Link
+            to="/anime/search"
+            className="block px-4 py-2 hover:bg-slate-700"
+          >
+            Search Anime
+          </Link>
+          <Link
+            to="/anime/seasonal"
+            className="block px-4 py-2 hover:bg-slate-700"
+          >
+            Seasonal Anime
+          </Link>
+          <Link to="/manga/top" className="block px-4 py-2 hover:bg-slate-700">
+            Top Manga
+          </Link>
+          <Link
+            to="/manga/search"
+            className="block px-4 py-2 hover:bg-slate-700"
+          >
+            Search Manga
+          </Link>
+          <Link
+            to="/genre/anime"
+            className="block px-4 py-2 hover:bg-slate-700"
+          >
+            Anime Genres
+          </Link>
+          <Link
+            to="/genre/manga"
+            className="block px-4 py-2 hover:bg-slate-700"
+          >
+            Manga Genres
+          </Link>
+          <Link to="/about" className="block px-4 py-2 hover:bg-slate-700">
+            About
+          </Link>
         </div>
       )}
     </nav>

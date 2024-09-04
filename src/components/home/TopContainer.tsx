@@ -41,7 +41,7 @@ const TopContainer: React.FC<TopContainerProps> = ({ title, items, type }) => {
               />
             }
             trailing={
-              <div className="flex flex-col items-end text-sm space-y-1">
+              <div className="flex flex-col items-end text-sm space-y-1 mr-2">
                 <div className="flex items-center">
                   <span className="text-white text-lg mr-1">😊</span>
                   <span className="text-white text-lg">{item.score}%</span>

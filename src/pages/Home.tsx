@@ -55,7 +55,7 @@ const Home: React.FC = () => {
 
   if (error) {
     return (
-      <div className="bg-bg-color h-full w-full">
+      <div className="bg-bg-color h-screen w-full">
         <Navbar />
         <motion.div
           initial={{ opacity: 0 }}
@@ -64,7 +64,7 @@ const Home: React.FC = () => {
           className="flex justify-center items-center h-40"
         >
           <p className="text-white">
-            Something Went Wrong, please refresh the website.
+            Something went wrong. Please try again later.
           </p>
         </motion.div>
       </div>
@@ -75,14 +75,14 @@ const Home: React.FC = () => {
     <div className="bg-bg-color h-full w-full">
       <Navbar />
       <HeaderCarousel animes={topAiring} />
-      <ListHomeCard animes={currentlyAiring} type="currently" />
-      <ListHomeCard animes={upcoming} type="upcoming" />
-      <ListHomeCard animes={popular} type="popular" />
+      <ListHomeCard animes={currentlyAiring} type="currently" destination="/currentlyAiring"/>
+      <ListHomeCard animes={upcoming} type="upcoming" destination="/upcoming"/>
+      <ListHomeCard animes={popular} type="popular" destination="/popular"/>
       <div className="flex flex-wrap lg:flex-row sm:flex-col w-full">
-        <div className="lg:w-1/2 sm:w-full p-4">
+        <div className="w-full lg:w-1/2 sm:w-full p-2">
           <TopContainer title="Top 100 Anime" items={topAiring} type="anime" />
         </div>
-        <div className="lg:w-1/2 sm:w-full p-4">
+        <div className="w-full lg:w-1/2 sm:w-full p-2">
           <TopContainer title="Top 100 Manga" items={topManga}  type="manga"/>
         </div>
       </div>

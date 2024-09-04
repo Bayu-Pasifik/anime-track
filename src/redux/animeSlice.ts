@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../config/axiosConfig';
-import { Anime } from '../config/data';
+import { Anime, Pagination } from '../config/data';
 import { delay } from '../utils/delay';  // Import delay function
 
 interface AnimeState {
@@ -10,6 +10,7 @@ interface AnimeState {
   popular: Anime[];
   loading: boolean;
   error: boolean;
+  pagination: Pagination;
 }
 
 const initialState: AnimeState = {
@@ -19,6 +20,16 @@ const initialState: AnimeState = {
   popular: [],
   loading: false,
   error: false,
+  pagination: {
+    current_page: 1,
+    last_visible_page: 1,
+    has_next_page: false,
+    items: {
+      count: 0,
+      total: 0,
+      per_page: 0,
+    },
+  },
 };
 
 export const fetchAnimeData = createAsyncThunk(
@@ -26,7 +37,7 @@ export const fetchAnimeData = createAsyncThunk(
   async (_, { dispatch }) => {
     await dispatch(fetchTopAiring());
     await delay(400); // Add delay between requests
-    await dispatch(fetchCurrentlyAiring());
+    await dispatch(fetchCurrentlyAiring(1));
     await delay(400); // Add delay between requests
     await dispatch(fetchUpcomingAnime());
     await delay(400); // Add delay between requests
@@ -34,27 +45,61 @@ export const fetchAnimeData = createAsyncThunk(
   }
 );
 
-export const fetchTopAiring = createAsyncThunk('anime/fetchTopAiring', async () => {
-  const response = await axios.get('/top/anime');
-  return response.data.data;
-});
+export const fetchTopAiring = createAsyncThunk(
+  'anime/fetchTopAiring',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('/top/anime');
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching top airing:', error);
+      return rejectWithValue('Error fetching top airing anime');
+    }
+  }
+);
 
-export const fetchCurrentlyAiring = createAsyncThunk('anime/fetchCurrentlyAiring', async () => {
-  const response = await axios.get('/seasons/now');
-  return response.data.data;
-});
+export const fetchCurrentlyAiring = createAsyncThunk(
+  'anime/fetchCurrentlyAiring',
+  async (page: number = 1, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('/seasons/now', {
+        params: { page },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching currently airing:', error);
+      return rejectWithValue('Error fetching currently airing anime');
+    }
+  }
+);
 
-export const fetchUpcomingAnime = createAsyncThunk('anime/fetchUpcomingAnime', async () => {
-  const response = await axios.get('/seasons/upcoming');
-  return response.data.data;
-});
+export const fetchUpcomingAnime = createAsyncThunk(
+  'anime/fetchUpcomingAnime',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('/seasons/upcoming');
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching upcoming anime:', error);
+      return rejectWithValue('Error fetching upcoming anime');
+    }
+  }
+);
 
-export const fetchPopularAnime = createAsyncThunk('anime/fetchPopularAnime', async () => {
-  const response = await axios.get('/anime', {
-    params: { order_by: 'popularity', type: 'tv', sfw: true },
-  });
-  return response.data.data;
-});
+export const fetchPopularAnime = createAsyncThunk(
+  'anime/fetchPopularAnime',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('/anime', {
+        params: { order_by: 'popularity', type: 'tv', sfw: true },
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching popular anime:', error);
+      return rejectWithValue('Error fetching popular anime');
+    }
+  }
+);
 
 const animeSlice = createSlice({
   name: 'anime',
@@ -77,7 +122,9 @@ const animeSlice = createSlice({
         state.topAiring = action.payload;
       })
       .addCase(fetchCurrentlyAiring.fulfilled, (state, action) => {
-        state.currentlyAiring = action.payload;
+        state.loading = false;
+        state.currentlyAiring = [...state.currentlyAiring, ...action.payload.data];
+        state.pagination = action.payload.pagination;
       })
       .addCase(fetchUpcomingAnime.fulfilled, (state, action) => {
         state.upcoming = action.payload;
