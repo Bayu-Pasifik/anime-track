@@ -9,7 +9,7 @@ interface AnimeState {
   upcoming: Anime[];
   popular: Anime[];
   loading: boolean;
-  error: boolean;
+  error: string | null;  // Change error type to string | null
   pagination: Pagination;
 }
 
@@ -19,7 +19,7 @@ const initialState: AnimeState = {
   upcoming: [],
   popular: [],
   loading: false,
-  error: false,
+  error: null,  // Initialize error as null
   pagination: {
     current_page: 1,
     last_visible_page: 1,
@@ -39,9 +39,9 @@ export const fetchAnimeData = createAsyncThunk(
     await delay(400); // Add delay between requests
     await dispatch(fetchCurrentlyAiring(1));
     await delay(400); // Add delay between requests
-    await dispatch(fetchUpcomingAnime());
+    await dispatch(fetchUpcomingAnime(1));
     await delay(400); // Add delay between requests
-    await dispatch(fetchPopularAnime());
+    await dispatch(fetchPopularAnime(1));
   }
 );
 
@@ -50,10 +50,11 @@ export const fetchTopAiring = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get('/top/anime');
-      return response.data.data;
-    } catch (error) {
+      return response.data.data;  // Ensure this is an array
+    } catch (error: any) {
       console.error('Error fetching top airing:', error);
-      return rejectWithValue('Error fetching top airing anime');
+      // Return error message from server
+      return rejectWithValue(error.response?.data?.message || 'Error fetching top airing anime');
     }
   }
 );
@@ -63,40 +64,45 @@ export const fetchCurrentlyAiring = createAsyncThunk(
   async (page: number = 1, { rejectWithValue }) => {
     try {
       const response = await axios.get('/seasons/now', {
-        params: { page },
+        params: { page, sfw: true },
       });
-      return response.data;
-    } catch (error) {
+      return response.data;  // Ensure this has the expected structure
+    } catch (error: any) {
       console.error('Error fetching currently airing:', error);
-      return rejectWithValue('Error fetching currently airing anime');
+      // Return error message from server
+      return rejectWithValue(error.response?.data?.message || 'Error fetching currently airing anime');
     }
   }
 );
 
 export const fetchUpcomingAnime = createAsyncThunk(
   'anime/fetchUpcomingAnime',
-  async (_, { rejectWithValue }) => {
+  async (page: number = 1, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/seasons/upcoming');
-      return response.data.data;
-    } catch (error) {
+      const response = await axios.get('/seasons/upcoming', {
+        params: { page, sfw: true },
+      });
+      return response.data;  // Ensure this has the expected structure
+    } catch (error: any) {
       console.error('Error fetching upcoming anime:', error);
-      return rejectWithValue('Error fetching upcoming anime');
+      // Return error message from server
+      return rejectWithValue(error.response?.data?.message || 'Error fetching upcoming anime');
     }
   }
 );
 
 export const fetchPopularAnime = createAsyncThunk(
   'anime/fetchPopularAnime',
-  async (_, { rejectWithValue }) => {
+  async (page: number = 1, { rejectWithValue }) => {
     try {
       const response = await axios.get('/anime', {
-        params: { order_by: 'popularity', type: 'tv', sfw: true },
+        params: { order_by: 'popularity', type: 'tv', sfw: true, page },
       });
-      return response.data.data;
-    } catch (error) {
+      return response.data;  // Ensure this has the expected structure
+    } catch (error: any) {
       console.error('Error fetching popular anime:', error);
-      return rejectWithValue('Error fetching popular anime');
+      // Return error message from server
+      return rejectWithValue(error.response?.data?.message || 'Error fetching popular anime');
     }
   }
 );
@@ -109,40 +115,41 @@ const animeSlice = createSlice({
     builder
       .addCase(fetchAnimeData.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null; // Reset error on new request
       })
       .addCase(fetchAnimeData.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(fetchAnimeData.rejected, (state) => {
+      .addCase(fetchAnimeData.rejected, (state, action) => {
         state.loading = false;
-        state.error = true;
+        state.error = action.payload as string; // Set error message from payload
       })
       .addCase(fetchTopAiring.fulfilled, (state, action) => {
-        state.topAiring = action.payload;
+        state.topAiring = action.payload;  // Ensure action.payload is an array
       })
       .addCase(fetchCurrentlyAiring.fulfilled, (state, action) => {
-        state.loading = false;
-        state.currentlyAiring = [...state.currentlyAiring, ...action.payload.data];
-        state.pagination = action.payload.pagination;
+        state.currentlyAiring = [...state.currentlyAiring, ...action.payload.data];  // Ensure action.payload.data is an array
+        state.pagination = action.payload.pagination;  // Ensure action.payload has pagination
       })
       .addCase(fetchUpcomingAnime.fulfilled, (state, action) => {
-        state.upcoming = action.payload;
+        state.upcoming = [...state.upcoming, ...action.payload.data];  // Ensure action.payload.data is an array
+        state.pagination = action.payload.pagination;  // Ensure action.payload has pagination
       })
       .addCase(fetchPopularAnime.fulfilled, (state, action) => {
-        state.popular = action.payload;
+        state.popular = [...state.popular, ...action.payload.data];  // Ensure action.payload.data is an array
+        state.pagination = action.payload.pagination;  // Ensure action.payload has pagination
       })
-      .addCase(fetchTopAiring.rejected, (state) => {
-        state.error = true;
+      .addCase(fetchTopAiring.rejected, (state, action) => {
+        state.error = action.payload as string;
       })
-      .addCase(fetchCurrentlyAiring.rejected, (state) => {
-        state.error = true;
+      .addCase(fetchCurrentlyAiring.rejected, (state, action) => {
+        state.error = action.payload as string;
       })
-      .addCase(fetchUpcomingAnime.rejected, (state) => {
-        state.error = true;
+      .addCase(fetchUpcomingAnime.rejected, (state, action) => {
+        state.error = action.payload as string;
       })
-      .addCase(fetchPopularAnime.rejected, (state) => {
-        state.error = true;
+      .addCase(fetchPopularAnime.rejected, (state, action) => {
+        state.error = action.payload as string;
       });
   },
 });

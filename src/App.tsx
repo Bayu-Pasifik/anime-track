@@ -26,9 +26,9 @@ const App: React.FC = () => {
         <Route path="/anime/:id/staff" element={<DetailStaff />} />
         <Route path="/manga/detail/:id" element={<DetailManga />} />
         <Route path="/manga/:id/characters" element={<DetailMangaCharacter />} />
-        <Route path="/currentlyAiring" element={<ViewMore />} />
-        <Route path="/popular" element={<ViewMore />} />
-        <Route path="/upcoming" element={<ViewMore />} />
+        <Route path="/currentlyAiring" element={<ViewMore type="currentlyAiring" />} />
+        <Route path="/popular" element={<ViewMore  type="popular"/>} />
+        <Route path="/upcoming" element={<ViewMore  type="upcoming"/>} />
       </Routes>
     </Router>
   );
