@@ -64,6 +64,13 @@ export interface external{
   url: string;
 }[];
 
+export interface Licensor {
+  mal_id: number;
+  type: string;
+  name: string;
+  url: string;
+}
+
 
 export interface AnimeDetail extends Anime {
   synopsis: string;
@@ -108,6 +115,7 @@ export interface AnimeDetail extends Anime {
   demographics: Demographics[];
   relations: Relation[];
   producers: Producer[];
+  licensors: Licensor[];
 }
 
 export interface Pagination {
