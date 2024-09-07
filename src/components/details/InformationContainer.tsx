@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { AnimeDetail } from "../../config/data";
 import { Manga } from "../../config/manga";
 import InformationText from "./InformationText";
@@ -10,46 +10,13 @@ interface InformationProps {
 }
 
 const Information: React.FC<InformationProps> = ({ animeDetail, mangaDetail, type }) => {
-  const [activeTab, setActiveTab] = useState("Overview"); // State untuk mengelola tab aktif
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case "Overview":
-        return (
-          <div className="overview">
-            <p className="text-md text-white text-justify my-3 font-roboto">{animeDetail?.synopsis}</p>
-          </div>
-        );
-      case "Character":
-        return (
-          <div className="character">
-            <p className="text-md text-white text-justify my-3 font-roboto">Character content goes here...</p>
-          </div>
-        );
-      case "Staff":
-        return (
-          <div className="staff">
-            <p className="text-md text-white text-justify my-3 font-roboto">Staff content goes here...</p>
-          </div>
-        );
-      case "Pictures":
-        return (
-          <div className="pictures">
-            <p className="text-md text-white text-justify my-3 font-roboto">Pictures content goes here...</p>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="w-full">
       {type === "anime" && animeDetail && (
         <div className="anime-details p-4">
           <h1 className="text-3xl text-white">{animeDetail.title}</h1>
           <h2 className="text-xl text-white my-2">{animeDetail.title_japanese}</h2>
-          <div className="grid grid-cols-3 gap-4 mt-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
             <InformationText title="Type" content={animeDetail.type || "Undefined"} />
             <InformationText title="Source" content={animeDetail.source || "Undefined"} />
             <InformationText title="Episodes" content={animeDetail.episodes.toString() || "Undefined"} />

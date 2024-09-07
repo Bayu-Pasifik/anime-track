@@ -336,7 +336,7 @@ const Content: React.FC<ContentProps> = ({
             <div className="font-roboto font-bold mt-5">
               <h1 className="text-xl text-white">Trailer</h1>
             </div>
-            <Trailer data={detailAnime!} />
+            {/* <Trailer data={detailAnime!} /> */}
             {/* Recommendation */}
             <AnimeRecomendation animeRecomendation={animeRecomendation!} />
           </div>

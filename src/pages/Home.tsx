@@ -38,9 +38,9 @@ const Home: React.FC = () => {
       await dispatch(fetchTopAiring());
       await delay(1000); // Add delay between requests
       await dispatch(fetchCurrentlyAiring(1));
-      await delay(1000); // Add delay between requests
+      await delay(2000); // Add delay between requests
       await dispatch(fetchUpcomingAnime(1));
-      await delay(1000); // Add delay between requests
+      await delay(2000); // Add delay between requests
       await dispatch(fetchPopularAnime(1));
       await delay(3000); // Add delay between requests
       await dispatch(fetchTopManga());
