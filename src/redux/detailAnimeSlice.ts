@@ -1,3 +1,4 @@
+// ! detailAnimeSlice
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../config/axiosConfig';
 import { AnimeDetail} from '../config/data';

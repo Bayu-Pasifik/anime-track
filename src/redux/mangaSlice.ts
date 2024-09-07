@@ -29,6 +29,19 @@ export const fetchTopManga = createAsyncThunk('anime/fetchTopManga', async () =>
   return response.data.data;
 });
 
+export const fetchMangaSearchResults = createAsyncThunk(
+  "anime/fetchSearchResults",
+  async (params: any) => {
+    try {
+      const response = await axios.get("/manga", { params });
+      return response.data; // Pastikan ini memiliki struktur yang diharapkan
+    } catch (error: any) {
+      console.error("Error fetching search results:", error);
+      throw error.response?.data?.message || "Error fetching search results";
+    }
+  }
+);
+
 const mangaSlice = createSlice({
   name: 'manga',
   initialState,
@@ -48,6 +61,15 @@ const mangaSlice = createSlice({
       })
       .addCase(fetchTopManga.fulfilled, (state, action) => {
         state.topManga = action.payload;
+      })
+      .addCase(fetchMangaSearchResults.fulfilled, (state, action) => {
+        state.topManga = action.payload;
+      })
+      .addCase(fetchMangaSearchResults.rejected, (state) => {
+        state.error = true;
+      })
+      .addCase(fetchMangaSearchResults.pending, (state) => {
+        state.loading = true;
       })
       
   },

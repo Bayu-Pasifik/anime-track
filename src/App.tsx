@@ -8,6 +8,7 @@ import DetailManga from "./pages/DetailManga";
 import DetailStaff from "./pages/DetailAnimeStaff";
 import DetailMangaCharacter from "./pages/DetailMangaCharacter";
 import ViewMore from "./pages/ViewMore";
+import SearchPage from "./pages/SearchPage";
 
 const App: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ const App: React.FC = () => {
         <Route path="/currentlyAiring" element={<ViewMore type="currentlyAiring" />} />
         <Route path="/popular" element={<ViewMore  type="popular"/>} />
         <Route path="/upcoming" element={<ViewMore  type="upcoming"/>} />
+        <Route path="/animeSearch" element={<SearchPage />} />
       </Routes>
     </Router>
   );

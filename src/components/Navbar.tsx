@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
                   Top Anime
                 </Link>
                 <Link
-                  to="/anime/search"
+                  to="/animeSearch"
                   className="block px-4 py-2 hover:bg-slate-700"
                 >
                   Search Anime

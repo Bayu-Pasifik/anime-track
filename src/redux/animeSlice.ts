@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../config/axiosConfig';
 import { Anime, Pagination } from '../config/data';
 import { delay } from '../utils/delay';  // Import delay function
+import { Genre } from '../config/genre';
 
 interface AnimeState {
   topAiring: Anime[];
@@ -11,6 +12,10 @@ interface AnimeState {
   loading: boolean;
   error: string | null;  // Change error type to string | null
   pagination: Pagination;
+  searchResults: Anime[];
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  genres: Genre[];
+  hasMore: boolean, // Start with assuming there is more data
 }
 
 const initialState: AnimeState = {
@@ -30,6 +35,11 @@ const initialState: AnimeState = {
       per_page: 0,
     },
   },
+  hasMore: true, // Start with assuming there is more data
+  searchResults: [],
+    status: 'idle',
+    genres: [],
+    
 };
 
 export const fetchAnimeData = createAsyncThunk(
@@ -107,10 +117,61 @@ export const fetchPopularAnime = createAsyncThunk(
   }
 );
 
+export const fetchGenre = createAsyncThunk("anime/fetchGenre", async () => {
+  try {
+    const response = await axios.get("/genres/anime");
+    return response.data.data;
+  } catch (error: any) {
+    console.error("Error fetching genre:", error);
+    throw error.response?.data?.message || "Error fetching genre";
+  }
+});
+
+export const fetchSearchResults = createAsyncThunk(
+  "anime/fetchSearchResults",
+  async (
+    {
+      query,
+      selectedGenres,
+      type,
+      statusFilter,
+      page,
+    }: {
+      query: string;
+      selectedGenres: number[];
+      type: string;
+      statusFilter: string;
+      page: number;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const genreParam = selectedGenres.length
+        ? selectedGenres.join(",")
+        : undefined;
+      const response = await axios.get("/anime", {
+        params: {
+          q: query || undefined, // Jika query kosong, jangan sertakan
+          genres: genreParam || undefined, // Genre filter
+          type: type || undefined, // Type filter
+          status: statusFilter || undefined, // Status filter
+          order_by: "popularity", // Mengurutkan berdasarkan popularitas
+          page: page || 1, // Pagination
+        },
+      });
+      return { data: response.data.data, page }; // Kirim data dan halaman saat ini
+    } catch (error: any) {
+      console.error("Error fetching search results:", error);
+      return rejectWithValue(error.response?.data?.message || "Error fetching search results");
+    }
+  }
+);
+
+
 const animeSlice = createSlice({
   name: 'anime',
   initialState,
-  reducers: {},
+  reducers:  {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchAnimeData.pending, (state) => {
@@ -150,8 +211,30 @@ const animeSlice = createSlice({
       })
       .addCase(fetchPopularAnime.rejected, (state, action) => {
         state.error = action.payload as string;
+      })
+      .addCase(fetchGenre.fulfilled, (state, action) => {
+        state.genres = action.payload;
+      })
+      .addCase(fetchSearchResults.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchSearchResults.fulfilled, (state, action) => {
+        const { data, page } = action.payload;
+        if (page === 1) {
+          // Jika halaman pertama, ganti seluruh data
+          state.searchResults = data;
+        } else {
+          // Jika halaman selanjutnya, tambahkan hasil baru
+          state.searchResults = [...state.searchResults, ...data];
+        }
+        state.status = 'succeeded';
+        // Update hasMore jika masih ada data baru
+        state.hasMore = data.length > 0;
+      })
+      .addCase(fetchSearchResults.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
       });
   },
 });
-
 export default animeSlice.reducer;

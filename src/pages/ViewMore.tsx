@@ -96,7 +96,7 @@ const debounce = (func: Function, delay: number) => {
     ) {
       setPage((prevPage) => prevPage + 1);
     }
-  }, 300);
+  }, 1000);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);

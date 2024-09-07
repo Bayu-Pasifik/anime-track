@@ -71,7 +71,7 @@ const ListHomeCard: React.FC<ListHomeCardProps> = ({
         >
           {animelist.map((anime) => (
             <SwiperSlide key={anime.mal_id} className="flex-shrink-0">
-              <Card anime={anime} />
+              <Card anime={anime} type="anime"/>
             </SwiperSlide>
           ))}
         </Swiper>

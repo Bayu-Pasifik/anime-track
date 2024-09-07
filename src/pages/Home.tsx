@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
 import {
-  fetchAnimeData,
   fetchCurrentlyAiring,
   fetchPopularAnime,
   fetchTopAiring,
@@ -25,25 +24,25 @@ const Home: React.FC = () => {
     currentlyAiring,
     upcoming,
     popular,
-    loading: animeLoading,
+    // loading: animeLoading,
     error: animeError,
   } = useSelector((state: RootState) => state.anime);
   const {
     topManga,
-    loading: mangaLoading,
+    // loading: mangaLoading,
     error: mangaError,
   } = useSelector((state: RootState) => state.manga);
 
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(fetchTopAiring());
-      await delay(400); // Add delay between requests
+      await delay(1000); // Add delay between requests
       await dispatch(fetchCurrentlyAiring(1));
-      await delay(400); // Add delay between requests
+      await delay(1000); // Add delay between requests
       await dispatch(fetchUpcomingAnime(1));
-      await delay(400); // Add delay between requests
+      await delay(1000); // Add delay between requests
       await dispatch(fetchPopularAnime(1));
-      await delay(2000); // Add delay between requests
+      await delay(3000); // Add delay between requests
       await dispatch(fetchTopManga());
       setIsLoading(false); // Set loading to false when data is loaded
     };
@@ -51,7 +50,7 @@ const Home: React.FC = () => {
     fetchData();
   }, [dispatch]);
 
-  const loading = animeLoading || mangaLoading;
+  // const loading = animeLoading || mangaLoading;
   const error = animeError || mangaError;
 
   if (isLoading) {
