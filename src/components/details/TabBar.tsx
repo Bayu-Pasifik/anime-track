@@ -51,7 +51,7 @@ const Tabbar: React.FC = () => {
 
       {/* Tab Content */}
       <div className="tab-content mt-4">
-        <TabbarContent activeTab={activeTab} />
+        <TabbarContent activeTab={activeTab} contentType="anime"/>
       </div>
     </div>
   );

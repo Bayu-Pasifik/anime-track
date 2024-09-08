@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAnimeCharacter,
   fetchAnimeDetail,
+  fetchAnimePicture,
   fetchAnimeRecommendations,
   fetchStaffAnime,
 } from "../redux/detailAnimeSlice";
@@ -36,6 +37,8 @@ const Detail: React.FC = () => {
         await dispatch(fetchStaffAnime(id));
         await delay(1000);
         await dispatch(fetchAnimeRecommendations(id));
+        await delay(1000);
+        await dispatch(fetchAnimePicture(id));
         setIsDataLoading(false);
       }
     };
