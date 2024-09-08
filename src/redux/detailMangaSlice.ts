@@ -12,7 +12,7 @@ import { Manga } from '../config/manga';
 interface DetailManga {
   mangaDetail: Manga | null;
   mangaCharacter: MangaCharacter[];
-  Recommendations: Recommendation[];
+  mangaRecommendations: Recommendation[];
   staffManga: StaffData[];
   mangaPictures: Images[];
   detailMangaCharacter: AnimeCharacter | null;
@@ -20,7 +20,7 @@ interface DetailManga {
   loading: {
     detail: boolean;
     character: boolean;
-    recommendations: boolean;
+    mangaRecommendations: boolean;
     staff: boolean;
     pictures: boolean;
     detailMangaCharacter:boolean;
@@ -29,7 +29,7 @@ interface DetailManga {
   error: {
     detail: string | null;
     character: string | null;
-    recommendations: string | null;
+    mangaRecommendations: string | null;
     staff: string | null;
     pictures: string | null;
     detailMangaCharacter: string | null;
@@ -40,7 +40,7 @@ interface DetailManga {
 const initialState: DetailManga = {
   mangaDetail: null,
   mangaCharacter: [],
-  Recommendations: [],
+  mangaRecommendations: [],
   staffManga: [],
   mangaPictures: [],
   detailMangaCharacter: null,
@@ -48,7 +48,7 @@ const initialState: DetailManga = {
   loading: {
     detail: false,
     character: false,
-    recommendations: false,
+    mangaRecommendations: false,
     staff: false,
     pictures: false,
     detailMangaCharacter:false,
@@ -57,7 +57,7 @@ const initialState: DetailManga = {
   error: {
     detail: null,
     character: null,
-    recommendations: null,
+    mangaRecommendations: null,
     staff: null,
     pictures: null,
     detailMangaCharacter: null,
@@ -105,18 +105,6 @@ export const fetchMangaRecomendation = createAsyncThunk(
   }
 );
 
-// export const fetchMangaStaff = createAsyncThunk(
-//   'manga/fetchMangaStaff',
-//   async (id: string, { rejectWithValue }) => {
-//     try {
-//       // await delay(1000);
-//       const response = await axios.get(`/manga/${id}/staff`);
-//       return response.data.data;
-//     } catch (error) {
-//       return rejectWithValue('Error fetching staff manga');
-//     }
-//   }
-// );
 
 export const fetchMangaPictures = createAsyncThunk(
   'manga/fetchMangaPictures',
@@ -144,19 +132,6 @@ export const fetchDetailMangaCharacter = createAsyncThunk(
     }
   }
 );
-
-// export const fetchDetailMangaStaff = createAsyncThunk(
-//   'manga/fetchDetailMangaStaff',
-//   async (id: string, { rejectWithValue }) => {
-//     try {
-//       // await delay(1000);
-//       const response = await axios.get(`/people/${id}/full`);
-//       return response.data.data;
-//     } catch (error) {
-//       return rejectWithValue('Error fetching detail staff');
-//     }
-//   }
-// );
 
 
 const detailManga = createSlice({
@@ -191,15 +166,15 @@ const detailManga = createSlice({
       })
       // Recommendations
       .addCase(fetchMangaRecomendation.pending, (state) => {
-        state.loading.recommendations = true;
+        state.loading.mangaRecommendations = true;
       })
       .addCase(fetchMangaRecomendation.fulfilled, (state, action) => {
-        state.Recommendations = action.payload;
-        state.loading.recommendations = false;
+        state.mangaRecommendations = action.payload;
+        state.loading.mangaRecommendations = false;
       })
       .addCase(fetchMangaRecomendation.rejected, (state, action) => {
-        state.error.recommendations = action.payload as string;
-        state.loading.recommendations = false;
+        state.error.mangaRecommendations = action.payload as string;
+        state.loading.mangaRecommendations = false;
       })
       // Anime Pictures
       .addCase(fetchMangaPictures.pending, (state) => {

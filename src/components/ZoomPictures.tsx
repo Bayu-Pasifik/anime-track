@@ -22,7 +22,7 @@ const PictureGallery: React.FC<PictureGalleryProps> = ({ pictures }) => {
       <div className="font-roboto font-bold">
         <h1 className="text-xl text-white my-3">Pictures</h1>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
         {pictures.map((picture, index) => (
           <motion.div
             key={index}

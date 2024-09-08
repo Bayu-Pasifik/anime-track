@@ -9,8 +9,6 @@ import {
 } from "../redux/detailMangaSlice";
 import { RootState, AppDispatch } from "../redux/store";
 import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
-import Content from "../components/Content";
 import { delay } from "../utils/delay";
 import LoadingAnimation from "../components/LoadingAnimations";
 import Information from "../components/details/InformationContainer";
@@ -22,14 +20,10 @@ const DetailManga: React.FC = () => {
 
   const {
     mangaDetail,
-    mangaCharacter,
-    Recommendations,
-    mangaPictures,
     loading,
   } = useSelector((state: RootState) => state.detailManga);
 
   const [isDataLoading, setIsDataLoading] = useState(true); // State for handling loading display
-  const [category, setCategory] = useState<string>("overview");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +34,7 @@ const DetailManga: React.FC = () => {
         await dispatch(fetchMangaCharacter(id));
         await delay(1000);
         await dispatch(fetchMangaRecomendation(id));
+        await delay(1000);
         await dispatch(fetchMangaPictures(id));
         setIsDataLoading(false);
       }
@@ -52,8 +47,7 @@ const DetailManga: React.FC = () => {
     isDataLoading ||
     loading.detail ||
     loading.character ||
-    loading.recommendations ||
-    loading.staff ||
+    loading.mangaRecommendations ||
     loading.pictures
   ) {
     return <LoadingAnimation />;
@@ -79,7 +73,7 @@ const DetailManga: React.FC = () => {
           {/* Details Section */}
           <Information mangaDetail={mangaDetail} type="manga" />
         </div>
-        <Tabbar />
+        <Tabbar type="manga"/>
       </div>
     </div>
   );

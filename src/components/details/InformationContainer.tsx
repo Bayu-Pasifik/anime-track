@@ -113,7 +113,9 @@ const Information: React.FC<InformationProps> = ({
       {type === "manga" && mangaDetail && (
         <div className="manga-details p-2">
           <h1 className="text-3xl text-white">{mangaDetail.title}</h1>
-          <p className="text-xl text-white my-2">{mangaDetail.title_japanese}</p>
+          <p className="text-xl text-white my-2">
+            {mangaDetail.title_japanese}
+          </p>
           <p className="text-xl text-white text-justify my-3">
             {mangaDetail.synopsis}
           </p>
@@ -121,13 +123,13 @@ const Information: React.FC<InformationProps> = ({
             <InformationText
               title="Authors"
               content={
-                mangaDetail.authors.map((author) => author.name).join(", ") ||
+                mangaDetail.authors?.map((author) => author.name).join(", ") ||
                 "Undefined"
               }
             />
             <InformationText
               title="Rank"
-              content={mangaDetail.rank.toString() || "Undefined"}
+              content={mangaDetail.rank?.toString() ?? "Undefined"}
             />
             <InformationText
               title="Type"
@@ -135,11 +137,11 @@ const Information: React.FC<InformationProps> = ({
             />
             <InformationText
               title="Chapters"
-              content={mangaDetail.chapters.toString() || "Undefined"}
+              content={mangaDetail.chapters?.toString() ?? "Undefined"}
             />
             <InformationText
               title="Volumes"
-              content={mangaDetail.volumes.toString() || "Undefined"}
+              content={mangaDetail.volumes?.toString() ?? "Undefined"}
             />
             <InformationText
               title="Status"
@@ -147,38 +149,38 @@ const Information: React.FC<InformationProps> = ({
             />
             <InformationText
               title="Rating"
-              content={mangaDetail.score.toString() || "Undefined"}
+              content={mangaDetail.score?.toString() ?? "Undefined"}
             />
             <InformationText
               title="Rated By"
-              content={mangaDetail.scored_by.toString() || "Undefined"}
+              content={mangaDetail.scored_by?.toString() ?? "Undefined"}
             />
             <InformationText
               title="Start Date"
               content={
-                mangaDetail.published.from?.replace("T00:00:00+00:00", "") ||
+                mangaDetail.published?.from?.replace("T00:00:00+00:00", "") ||
                 "Undefined"
               }
             />
             <InformationText
               title="End Date"
               content={
-                mangaDetail.published.to.replace("T00:00:00+00:00", "") ||
+                mangaDetail.published?.to?.replace("T00:00:00+00:00", "") ||
                 "Undefined"
               }
             />
             <InformationText
               title="Members"
-              content={mangaDetail.members.toString() || "Undefined"}
+              content={mangaDetail.members?.toString() ?? "Undefined"}
             />
             <InformationText
               title="Favorites"
-              content={mangaDetail.favorites.toString() || "Undefined"}
+              content={mangaDetail.favorites?.toString() ?? "Undefined"}
             />
             <InformationText
               title="Genres"
               content={
-                mangaDetail.genres.map((genre) => genre.name).join(", ") ||
+                mangaDetail.genres?.map((genre) => genre.name).join(", ") ||
                 "Undefined"
               }
             />
@@ -186,7 +188,7 @@ const Information: React.FC<InformationProps> = ({
               title="Serialization"
               content={
                 mangaDetail.serializations
-                  .map((serialization) => serialization.name)
+                  ?.map((serialization) => serialization.name)
                   .join(", ") || "Undefined"
               }
             />

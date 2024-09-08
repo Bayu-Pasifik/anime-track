@@ -78,7 +78,7 @@ const Detail: React.FC = () => {
           {/* Details Section */}
           <Information animeDetail={animeDetail} type="anime" />
         </div>
-        <Tabbar />
+        <Tabbar type="anime"/>
       </div>
     </div>
   );

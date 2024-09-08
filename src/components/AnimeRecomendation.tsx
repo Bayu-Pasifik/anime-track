@@ -28,7 +28,10 @@ const AnimeRecomendation: React.FC<AnimeRecomendationProps> = ({
           {showAll ? "Show Less" : "See All Recomendations"}
         </button>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
+      {animeRecomendation.length === 0 ? (
+        <p className="text-white text-center text-xl font-bold">No recommendations found.</p>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
         {displayedRecommendations.map((recommendation) =>
           type === "anime" ? (
             <a
@@ -63,6 +66,7 @@ const AnimeRecomendation: React.FC<AnimeRecomendationProps> = ({
           )
         )}
       </div>
+      )}
     </div>
   );
 };

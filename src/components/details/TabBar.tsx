@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TabbarContent from "./TabbarContent";
 
-const Tabbar: React.FC = () => {
+const Tabbar: React.FC<{type: string}> = ({type}) => {
   const [activeTab, setActiveTab] = useState("Overview"); // State untuk mengelola tab aktif
 
   return (
@@ -27,6 +27,7 @@ const Tabbar: React.FC = () => {
         >
           Character
         </button>
+      {type === "anime" && (
         <button
           className={`px-4 py-2 focus:outline-none ${
             activeTab === "Staff"
@@ -37,6 +38,7 @@ const Tabbar: React.FC = () => {
         >
           Staff
         </button>
+      )}
         <button
           className={`px-4 py-2 focus:outline-none ${
             activeTab === "Pictures"
@@ -51,7 +53,11 @@ const Tabbar: React.FC = () => {
 
       {/* Tab Content */}
       <div className="tab-content mt-4">
-        <TabbarContent activeTab={activeTab} contentType="anime"/>
+        {type === "anime" ? (
+          <TabbarContent activeTab={activeTab} contentType="anime"/>
+        ) : (
+          <TabbarContent activeTab={activeTab} contentType="manga"/>
+        )}
       </div>
     </div>
   );
