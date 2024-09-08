@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TabbarContent from "./TabbarContent";
 
-const Tabbar: React.FC<{type: string}> = ({type}) => {
+const Tabbar: React.FC<{ type: string }> = ({ type }) => {
   const [activeTab, setActiveTab] = useState("Overview"); // State untuk mengelola tab aktif
 
   return (
@@ -27,18 +27,18 @@ const Tabbar: React.FC<{type: string}> = ({type}) => {
         >
           Character
         </button>
-      {type === "anime" && (
-        <button
-          className={`px-4 py-2 focus:outline-none ${
-            activeTab === "Staff"
-              ? "text-blue-500 border-b-2 border-blue-500"
-              : "text-white"
-          }`}
-          onClick={() => setActiveTab("Staff")}
-        >
-          Staff
-        </button>
-      )}
+        {type === "anime" && (
+          <button
+            className={`px-4 py-2 focus:outline-none ${
+              activeTab === "Staff"
+                ? "text-blue-500 border-b-2 border-blue-500"
+                : "text-white"
+            }`}
+            onClick={() => setActiveTab("Staff")}
+          >
+            Staff
+          </button>
+        )}
         <button
           className={`px-4 py-2 focus:outline-none ${
             activeTab === "Pictures"
@@ -49,14 +49,24 @@ const Tabbar: React.FC<{type: string}> = ({type}) => {
         >
           Pictures
         </button>
+        <button
+          className={`px-4 py-2 focus:outline-none ${
+            activeTab === "Externals"
+              ? "text-blue-500 border-b-2 border-blue-500"
+              : "text-white"
+          }`}
+          onClick={() => setActiveTab("Externals")}
+        >
+          Externals
+        </button>
       </div>
 
       {/* Tab Content */}
       <div className="tab-content mt-4">
         {type === "anime" ? (
-          <TabbarContent activeTab={activeTab} contentType="anime"/>
+          <TabbarContent activeTab={activeTab} contentType="anime" />
         ) : (
-          <TabbarContent activeTab={activeTab} contentType="manga"/>
+          <TabbarContent activeTab={activeTab} contentType="manga" />
         )}
       </div>
     </div>

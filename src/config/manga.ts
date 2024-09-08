@@ -41,6 +41,7 @@ export interface Manga {
         large_image_url:string;
       };
     };
+    title_synonyms: string[];
     authors: Author[];
     genres: Genre[];
     serializations: Serialization[];

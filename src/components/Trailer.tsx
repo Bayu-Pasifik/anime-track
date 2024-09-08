@@ -8,7 +8,7 @@ const Trailer: React.FC<TrailerProps> = ({ url }) => {
   return (
     <div className="youtube-video">
       <iframe
-      className="w-full lg:w-1/2 lg:h-72 sm:w-auto sm:h-auto"
+        className="w-full h-72 md:w-1/3 md:h-72"
         src={`https://www.youtube.com/embed/${url}?autoplay=0`}
         title="YouTube video player"
         frameBorder="0"

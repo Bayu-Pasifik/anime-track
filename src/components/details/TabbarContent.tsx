@@ -7,6 +7,7 @@ import Trailer from "../Trailer";
 import AnimeRecomendation from "../AnimeRecomendation";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import ExternalLinks from "./ExternalLinks"; // Import komponen ExternalLinks
 
 interface TabbarContentProps {
   activeTab: string;
@@ -24,9 +25,8 @@ const TabbarContent: React.FC<TabbarContentProps> = ({
     Recommendations,
     animePicture,
   } = useSelector((state: RootState) => state.detailAnime);
-  const { mangaDetail, mangaCharacter, mangaPictures,mangaRecommendations } = useSelector(
-    (state: RootState) => state.detailManga
-  );
+  const { mangaDetail, mangaCharacter, mangaPictures, mangaRecommendations } =
+    useSelector((state: RootState) => state.detailManga);
 
   switch (activeTab) {
     case "Overview":
@@ -122,6 +122,18 @@ const TabbarContent: React.FC<TabbarContentProps> = ({
             <PictureGallery pictures={animePicture ?? []} />
           ) : (
             <PictureGallery pictures={mangaPictures ?? []} />
+          )}
+        </div>
+      );
+
+    case "Externals":
+      return (
+        <div>
+          <h1 className="text-xl text-white font-bold my-4">External Links</h1>
+          {contentType === "anime" ? (
+            <ExternalLinks externals={animeDetail?.external ?? []} />
+          ) : (
+            <ExternalLinks externals={mangaDetail?.external ?? []} />
           )}
         </div>
       );

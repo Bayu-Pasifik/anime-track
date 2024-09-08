@@ -16,11 +16,18 @@ const Information: React.FC<InformationProps> = ({
   return (
     <div className="w-full">
       {type === "anime" && animeDetail && (
-        <div className="anime-details p-4">
-          <h1 className="text-3xl text-white">{animeDetail.title}</h1>
-          <h2 className="text-xl text-white my-2">
-            {animeDetail.title_japanese}
-          </h2>
+        <div className="anime-details p-2">
+          <h1 className="text-3xl font-bold text-white">{animeDetail.title}</h1>
+          <div>
+            <p className="text-xl text-white">
+              {animeDetail.title_japanese}{" "}
+              {animeDetail.title_synonyms.length > 0 && (
+                <span className="ml-2 italic underline">
+                  / {animeDetail.title_synonyms.join(", ")}
+                </span>
+              )}
+            </p>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
             <InformationText
               title="Type"
@@ -113,9 +120,17 @@ const Information: React.FC<InformationProps> = ({
       {type === "manga" && mangaDetail && (
         <div className="manga-details p-2">
           <h1 className="text-3xl text-white">{mangaDetail.title}</h1>
-          <p className="text-xl text-white my-2">
-            {mangaDetail.title_japanese}
-          </p>
+          <div>
+            <p className="text-xl text-white">
+              {mangaDetail.title_japanese}{" "}
+              {mangaDetail.title_synonyms.length > 0 && (
+                <span className="ml-2 italic underline">
+                  / {mangaDetail.title_synonyms.join(", ")}
+                </span>
+              )}
+            </p>
+          </div>
+
           <p className="text-xl text-white text-justify my-3">
             {mangaDetail.synopsis}
           </p>

@@ -74,6 +74,7 @@ export interface Licensor {
 
 export interface AnimeDetail extends Anime {
   synopsis: string;
+  title_synonyms: string[];
   trailer: {
       url: string;
       youtube_id: string;
