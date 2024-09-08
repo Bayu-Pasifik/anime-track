@@ -5,7 +5,7 @@ export interface Manga {
     title_english: string;
     title_japanese: string;
     type: string;
-    chapter: number;
+    chapters: number;
     volumes: number;
     status: string;
     members: number;
