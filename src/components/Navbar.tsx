@@ -95,30 +95,36 @@ const Navbar: React.FC = () => {
             )}
           </div>
 
-          {/* Genre Dropdown */}
+          {/* others Dropdown */}
           <div
             className="relative"
-            onMouseEnter={() => handleMouseEnter("genre")}
+            onMouseEnter={() => handleMouseEnter("others")}
           >
             <button
               className="hover:text-blue-400"
-              onClick={() => handleParentClick("genre")}
+              onClick={() => handleParentClick("others")}
             >
-              Genres
+              Others
             </button>
-            {openDropdown === "genre" && (
+            {openDropdown === "others" && (
               <div className="absolute left-0 mt-2 w-48 bg-slate-800 rounded shadow-lg z-10">
                 <Link
                   to="/genre/anime"
                   className="block px-4 py-2 hover:bg-slate-700"
                 >
-                  Anime Genres
+                  Studios
                 </Link>
                 <Link
                   to="/genre/manga"
                   className="block px-4 py-2 hover:bg-slate-700"
                 >
-                  Manga Genres
+                  Persons
+                </Link>
+                <Link
+                  to="/genre/manga"
+                  className="block px-4 py-2 hover:bg-slate-700"
+                >
+                  Magazines
                 </Link>
               </div>
             )}

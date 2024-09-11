@@ -13,9 +13,7 @@ interface AnimeState {
   error: string | null;  // Change error type to string | null
   pagination: Pagination;
   searchResults: Anime[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
   genres: Genre[];
-  hasMore: boolean, // Start with assuming there is more data
 }
 
 const initialState: AnimeState = {
@@ -35,9 +33,7 @@ const initialState: AnimeState = {
       per_page: 0,
     },
   },
-  hasMore: true, // Start with assuming there is more data
   searchResults: [],
-    status: 'idle',
     genres: [],
     
 };
@@ -127,6 +123,7 @@ export const fetchGenre = createAsyncThunk("anime/fetchGenre", async () => {
   }
 });
 
+// Redux slice bagian fetchSearchResults
 export const fetchSearchResults = createAsyncThunk(
   "anime/fetchSearchResults",
   async (
@@ -146,26 +143,41 @@ export const fetchSearchResults = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
+      // Delay kecil untuk mengurangi frekuensi request jika dibutuhkan
+      await delay(500);
+
       const genreParam = selectedGenres.length
         ? selectedGenres.join(",")
         : undefined;
+
+      // Hit API hanya untuk 1 halaman, sesuai dengan parameter `page`
       const response = await axios.get("/anime", {
         params: {
-          q: query || undefined, // Jika query kosong, jangan sertakan
-          genres: genreParam || undefined, // Genre filter
-          type: type || undefined, // Type filter
-          status: statusFilter || undefined, // Status filter
-          order_by: "popularity", // Mengurutkan berdasarkan popularitas
-          page: page || 1, // Pagination
+          q: query || undefined,
+          genres: genreParam || undefined,
+          type: type || undefined,
+          status: statusFilter || undefined,
+          order_by: "popularity",
+          page: page || 1,  // Pastikan hanya request untuk 1 halaman
         },
       });
-      return { data: response.data.data, page }; // Kirim data dan halaman saat ini
+      let data = response.data.data;
+      console.log({data});
+      return {
+        data: response.data.data, 
+        pagination: response.data.pagination,  // Mengirim paginasi dari API
+        page,
+      };
     } catch (error: any) {
       console.error("Error fetching search results:", error);
-      return rejectWithValue(error.response?.data?.message || "Error fetching search results");
+      return rejectWithValue(
+        error.response?.data?.message || "Error fetching search results"
+      );
     }
   }
 );
+
+
 
 
 const animeSlice = createSlice({
@@ -216,23 +228,21 @@ const animeSlice = createSlice({
         state.genres = action.payload;
       })
       .addCase(fetchSearchResults.pending, (state) => {
-        state.status = 'loading';
+        state.loading = true;
+        state.error = null;
       })
       .addCase(fetchSearchResults.fulfilled, (state, action) => {
-        const { data, page } = action.payload;
+        const { data, page, pagination } = action.payload;
         if (page === 1) {
-          // Jika halaman pertama, ganti seluruh data
-          state.searchResults = data;
+          state.searchResults = data; // Overwrite if it's the first page
         } else {
-          // Jika halaman selanjutnya, tambahkan hasil baru
-          state.searchResults = [...state.searchResults, ...data];
+          state.searchResults = [...state.searchResults, ...data]; // Append results for pagination
         }
-        state.status = 'succeeded';
-        // Update hasMore jika masih ada data baru
-        state.hasMore = data.length > 0;
+        state.loading = false;
+        state.pagination = pagination;
       })
       .addCase(fetchSearchResults.rejected, (state, action) => {
-        state.status = 'failed';
+        state.loading = false;
         state.error = action.payload as string;
       });
   },

@@ -1,130 +1,146 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { fetchGenre, fetchSearchResults } from "../../redux/animeSlice";
-import SearchInput from "./SearchInput";
-import GenreChips from "./GenreChips";
-import DropdownFilter from "./DropDownFilter";
-import SearchButton from "./SearchButton";
-import SearchResults from "./SearchResult";
-import NewDataLoading from "../NewDataLoading";
+import { fetchSearchResults } from "../../redux/animeSlice";
+import Card from "../../components/home/Card";
+import LoadingAnimation from "../../components/LoadingAnimations";
+import NewDataLoading from "../../components/NewDataLoading";
+import { delay } from "../../utils/delay";
 
-interface SearchContainerProps {
-  contentType: "anime" | "manga";
-}
-
-const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
+const SearchContainer: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const genres = useSelector((state: RootState) => state.anime.genres);
-  const searchResults = useSelector(
-    (state: RootState) => state.anime.searchResults
+  const { searchResults, loading, error } = useSelector(
+    (state: RootState) => state.anime
   );
-  const status = useSelector((state: RootState) => state.anime.status);
-  const hasMore = useSelector((state: RootState) => state.anime.hasMore);
 
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState("");
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
-  const [query, setQuery] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("");
-  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState(true); // Local state for hasMore
+  const [initialLoading, setInitialLoading] = useState(false); // Control for initial loading state
 
+  // Handle search button
+  const handleSearch = async () => {
+    if (initialLoading) return; // Prevent multiple clicks while loading
+    setPage(1); // Reset pagination
+    setHasMore(true); // Reset hasMore on new search
+    setInitialLoading(true); // Start initial loading
+    try {
+      await dispatch(
+        fetchSearchResults({ query, selectedGenres, type, statusFilter, page: 1 })
+      );
+    } finally {
+      setInitialLoading(false); // Set to false when fetching is complete
+    }
+  };
+
+  // Handle infinite scroll and fetching more data
   useEffect(() => {
-    dispatch(fetchGenre());
-  }, [dispatch]);
+    const fetchMoreResults = async () => {
+      if (loading || !hasMore || page === 1) return; // Don't fetch if loading or no more data
+      await delay(500); // Optional delay
+      const resultAction = await dispatch(
+        fetchSearchResults({ query, selectedGenres, type, statusFilter, page })
+      ).unwrap();
 
-  useEffect(() => {
-    if (page === 1) {
-      dispatch(fetchSearchResults({ query, selectedGenres, type, statusFilter, page: 1 }));
-    }
-  }, [dispatch, query, selectedGenres, type, statusFilter, page]);
+      if (resultAction.pagination.has_next_page === false) {
+        setHasMore(false); // If no more data, set hasMore to false
+      } else {
+        setHasMore(true); // If more data, set hasMore to true
+      }
+    };
 
-  const handleGenreToggle = (genreId: number) => {
-    setSelectedGenres((prevSelectedGenres) =>
-      prevSelectedGenres.includes(genreId)
-        ? prevSelectedGenres.filter((id) => id !== genreId)
-        : [...prevSelectedGenres, genreId]
-    );
+    fetchMoreResults();
+  }, [
+    dispatch,
+    page,
+    query,
+    selectedGenres,
+    type,
+    statusFilter,
+    hasMore,
+    loading,
+  ]);
+
+  const debounce = (func: Function, delay: number) => {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: any) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
   };
 
-  const handleSearch = () => {
-    setPage(1);
-    dispatch(fetchSearchResults({ query, selectedGenres, type, statusFilter, page: 1 }));
-  };
-
-  const loadMore = () => {
-    if (hasMore && status !== "loading") {
-      const nextPage = page + 1;
-      setPage(nextPage);
-      dispatch(fetchSearchResults({ query, selectedGenres, type, statusFilter, page: nextPage }));
+  // Handle scroll event for infinite scroll
+  const handleScroll = debounce(() => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
+      !loading &&
+      hasMore
+    ) {
+      setPage((prevPage) => prevPage + 1);
     }
-  };
-
-  const handleScroll = useCallback(() => {
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
-      loadMore();
-    }
-  }, [hasMore, loadMore]);
+  }, 1000);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
+  }, [loading, hasMore, handleScroll]);
 
   return (
-    <div className="max-w-full mx-auto p-6 bg-bg-color h-full">
-      <h1 className="text-3xl font-semibold mb-6 text-center text-white">
-        Search {contentType === "anime" ? "Anime" : "Manga"}
-      </h1>
-
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <SearchInput query={query} setQuery={setQuery} />
-        <DropdownFilter
-          label="All Types"
-          options={[
-            { value: "tv", label: "TV" },
-            { value: "movie", label: "Movie" },
-            ...(contentType === "manga"
-              ? [{ value: "manga", label: "Manga" }]
-              : []),
-          ]}
-          selectedValue={type}
-          setSelectedValue={setType}
-        />
-        <DropdownFilter
-          label="All Statuses"
-          options={[
-            { value: "airing", label: "Airing" },
-            { value: "complete", label: "Complete" },
-            { value: "upcoming", label: "Upcoming" },
-          ]}
-          selectedValue={statusFilter}
-          setSelectedValue={setStatusFilter}
-        />
+    <div className="min-h-screen w-full">
+      <div className="font-roboto font-bold text-2xl text-white p-3 my-4">
+        Search Results
       </div>
 
-      <GenreChips
-        genres={genres}
-        selectedGenres={selectedGenres}
-        handleGenreToggle={handleGenreToggle}
-      />
-      <SearchButton onClick={handleSearch} />
+      {/* Search Input Section */}
+      <div className="p-3">
+        <input
+          type="text"
+          placeholder="Search Anime"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="p-2 rounded w-full"
+        />
+        {/* Additional filters for genres, type, and status can go here */}
+        <button
+          onClick={handleSearch}
+          className="mt-2 p-2 bg-blue-500 text-white rounded"
+          disabled={initialLoading} // Disable button while initial loading
+        >
+          {initialLoading ? "Searching..." : "Search"}
+        </button>
+      </div>
 
-      {status === "loading" && page === 1 && (
-        <NewDataLoading />
-      )}
-      {status === "succeeded" && (
-        <>
-          <SearchResults
-            searchResults={searchResults}
-            contentType={contentType}
-          />
-        </>
-      )}
-      {status === "failed" && (
-        <div className="mt-6 text-center text-red-500">
-          Failed to fetch results.
+      {/* Display Loading Animation During Initial Search */}
+      {initialLoading && (
+        <div className="flex justify-center items-center h-screen">
+          <LoadingAnimation />
         </div>
+      )}
+
+      {/* Display Search Results */}
+      {!initialLoading && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-3">
+          {searchResults.length > 0 &&
+            searchResults.map((anime, index) => (
+              <Card key={index} anime={anime} type="anime" />
+            ))}
+        </div>
+      )}
+
+      {/* Loading, Error, and No More Data */}
+      {loading && <NewDataLoading />}
+      {error && (
+        <div className="text-red-500 text-center">
+          Error fetching results: {error}
+        </div>
+      )}
+      {!loading && hasMore === false && (
+        <div className="text-white text-center">No more data to load</div>
       )}
     </div>
   );
