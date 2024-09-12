@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 
 const Navbar: React.FC = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null); // Ref to hold timeout ID
 
+  // Function to open dropdown on mouse enter
   const handleMouseEnter = (menu: string) => {
-    if (openDropdown !== menu) {
-      setOpenDropdown(menu);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current); // Clear timeout if hovering again
     }
+    setOpenDropdown(menu);
+  };
+
+  // Function to close dropdown after a delay on mouse leave
+  const handleMouseLeave = () => {
+    timerRef.current = setTimeout(() => {
+      setOpenDropdown(null); // Close dropdown after 3 seconds
+    }, 3000); // Set delay to 3 seconds (3000ms)
   };
 
   const handleParentClick = (menu: string) => {
@@ -35,6 +45,7 @@ const Navbar: React.FC = () => {
           <div
             className="relative"
             onMouseEnter={() => handleMouseEnter("anime")}
+            onMouseLeave={handleMouseLeave} // Trigger closing logic
           >
             <button
               className="hover:text-blue-400"
@@ -70,6 +81,7 @@ const Navbar: React.FC = () => {
           <div
             className="relative"
             onMouseEnter={() => handleMouseEnter("manga")}
+            onMouseLeave={handleMouseLeave} // Trigger closing logic
           >
             <button
               className="hover:text-blue-400"
@@ -95,10 +107,11 @@ const Navbar: React.FC = () => {
             )}
           </div>
 
-          {/* others Dropdown */}
+          {/* Others Dropdown */}
           <div
             className="relative"
             onMouseEnter={() => handleMouseEnter("others")}
+            onMouseLeave={handleMouseLeave} // Trigger closing logic
           >
             <button
               className="hover:text-blue-400"
