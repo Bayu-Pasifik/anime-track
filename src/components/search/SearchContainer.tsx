@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
@@ -102,7 +102,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
   };
 
   // Fetch more results only when page changes due to scrolling
-  const fetchMoreResults = useCallback(async () => {
+  const fetchMoreResults = async () => {
     if (loading || !hasMore || page === 1) return;
 
     try {
@@ -132,18 +132,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
       console.error("Error fetching more results:", error);
     }
     setHasMore(pagination.has_next_page);
-  }, [
-    dispatch,
-    contentType,
-    query,
-    selectedGenres,
-    type,
-    statusFilter,
-    page,
-    loading,
-    hasMore,
-    pagination,
-  ]);
+  };
 
   const handleScroll = debounce(() => {
     if (
@@ -163,7 +152,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
   // Fetch more results when page changes
   useEffect(() => {
     fetchMoreResults();
-  }, [page, fetchMoreResults]);
+  }, [page]);
 
   return (
     <div className="min-h-screen w-full p-3">
@@ -173,7 +162,9 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
         <div className="flex flex-col gap-4  md:flex-row md:items-center md:space-x-4">
           <SearchInput query={query} setQuery={setQuery} />
 
-          <DropdownFilter
+          {/* Dropdowns */}
+          {type === "anime" ? (
+            <DropdownFilter
             label="Type"
             options={[
               { value: "", label: "All Types" },
@@ -190,8 +181,25 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
             selectedValue={type}
             setSelectedValue={setType}
           />
+          ) : <DropdownFilter
+          label="Type"
+          options={[
+            { value: "", label: "All Types" },
+            { value: "manga", label: "Manga" },
+            { value: "novel", label: "Novel" },
+            { value: "lightnovel", label: "Light Novel" },
+            { value: "oneshot", label: "Oneshot" },
+            { value: "doujin", label: "Doujin" },
+            { value: "manhwa", label: "Manhwa" },
+            { value: "manhua", label: "Manhua" },
 
-          <DropdownFilter
+          ]}
+          selectedValue={type}
+          setSelectedValue={setType}
+        />}
+
+          {type === "anime" ? (
+            <DropdownFilter
             label="Status"
             options={[
               { value: "", label: "All Statuses" },
@@ -202,6 +210,18 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
             selectedValue={statusFilter}
             setSelectedValue={setStatusFilter}
           />
+          ) :<DropdownFilter
+          label="Status"
+          options={[
+            { value: "", label: "All Statuses" },
+            { value: "publishing", label: "Publishing" },
+            { value: "complete", label: "Completed" },
+            { value: "upcoming", label: "Upcoming" },
+            { value: "discontinued", label: "Discontinued" },
+          ]}
+          selectedValue={statusFilter}
+          setSelectedValue={setStatusFilter}
+        />}
         </div>
 
         {/* Genre Chips */}
