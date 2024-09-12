@@ -150,7 +150,7 @@ export const fetchSearchResults = createAsyncThunk(
         ? selectedGenres.join(",")
         : undefined;
 
-      // Hit API hanya untuk 1 halaman, sesuai dengan parameter `page`
+      // Hit API hanya untuk 1 halaman, sesuai dengan parameter page
       const response = await axios.get("/anime", {
         params: {
           q: query || undefined,
@@ -161,13 +161,9 @@ export const fetchSearchResults = createAsyncThunk(
           page: page || 1,  // Pastikan hanya request untuk 1 halaman
         },
       });
-      let data = response.data.data;
-      console.log({data});
-      return {
-        data: response.data.data, 
-        pagination: response.data.pagination,  // Mengirim paginasi dari API
-        page,
-      };
+      let urlReq = response.request.responseURL;
+      console.log({urlReq});
+     return response.data;
     } catch (error: any) {
       console.error("Error fetching search results:", error);
       return rejectWithValue(
@@ -183,7 +179,11 @@ export const fetchSearchResults = createAsyncThunk(
 const animeSlice = createSlice({
   name: 'anime',
   initialState,
-  reducers:  {},
+  reducers:  {
+    clearSearchResults: (state) => {
+      state.searchResults = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAnimeData.pending, (state) => {
@@ -232,14 +232,9 @@ const animeSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSearchResults.fulfilled, (state, action) => {
-        const { data, page, pagination } = action.payload;
-        if (page === 1) {
-          state.searchResults = data; // Overwrite if it's the first page
-        } else {
-          state.searchResults = [...state.searchResults, ...data]; // Append results for pagination
-        }
+        state.searchResults = [...state.searchResults, ...action.payload.data];
         state.loading = false;
-        state.pagination = pagination;
+        state.pagination = action.payload.pagination;
       })
       .addCase(fetchSearchResults.rejected, (state, action) => {
         state.loading = false;
@@ -247,4 +242,7 @@ const animeSlice = createSlice({
       });
   },
 });
+
+// Export the action
+export const { clearSearchResults } = animeSlice.actions;
 export default animeSlice.reducer;

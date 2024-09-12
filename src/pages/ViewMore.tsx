@@ -124,7 +124,7 @@ const debounce = (func: Function, delay: number) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.3 }}
             >
-              <Card anime={anime} />
+              <Card anime={anime} type="anime" />
             </motion.div>
           ))}
       </div>
