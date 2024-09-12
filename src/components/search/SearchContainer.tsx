@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
@@ -6,6 +6,11 @@ import {
   fetchGenre,
   clearSearchResults,
 } from "../../redux/animeSlice";
+import {
+  fetchMangaSearchResults,
+  fetchMangaGenres,
+  clearMangaSearchResults,
+} from "../../redux/mangaSlice";
 import Card from "../../components/home/Card";
 import LoadingAnimation from "../../components/LoadingAnimations";
 import NewDataLoading from "../../components/NewDataLoading";
@@ -16,10 +21,14 @@ import SearchInput from "./SearchInput";
 import SearchButton from "./SearchButton";
 import { debounce } from "../../utils/debounce";
 
-const SearchContainer: React.FC<{ contentType: string }> = () => {
+interface SearchContainerProps {
+  contentType: "anime" | "manga";
+}
+
+const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { searchResults, loading, error, pagination } = useSelector(
-    (state: RootState) => state.anime
+    (state: RootState) => (contentType === "anime" ? state.anime : state.manga)
   );
 
   const [page, setPage] = useState(1);
@@ -34,11 +43,16 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
   // Fetch genres when the component mounts
   useEffect(() => {
     const loadGenres = async () => {
-      const result = await dispatch(fetchGenre()).unwrap();
-      setGenres(result);
+      if (contentType === "anime") {
+        const result = await dispatch(fetchGenre()).unwrap();
+        setGenres(result);
+      } else {
+        const result = await dispatch(fetchMangaGenres()).unwrap();
+        setGenres(result);
+      }
     };
     loadGenres();
-  }, [dispatch]);
+  }, [dispatch, contentType]);
 
   // Handle search button
   const handleSearch = async () => {
@@ -48,15 +62,28 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
     setPage(1);
     try {
       dispatch(clearSearchResults());
-      await dispatch(
-        fetchSearchResults({
-          query,
-          selectedGenres,
-          type,
-          statusFilter,
-          page: 1,
-        })
-      );
+      if (contentType === "anime") {
+        await dispatch(
+          fetchSearchResults({
+            query,
+            selectedGenres,
+            type,
+            statusFilter,
+            page: 1,
+          })
+        );
+      } else {
+        dispatch(clearMangaSearchResults());
+        await dispatch(
+          fetchMangaSearchResults({
+            query,
+            selectedGenres,
+            type,
+            statusFilter,
+            page: 1,
+          })
+        );
+      }
     } catch (error) {
       console.error("Error fetching search results:", error);
       setHasMore(false);
@@ -75,27 +102,48 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
   };
 
   // Fetch more results only when page changes due to scrolling
-  const fetchMoreResults = async () => {
+  const fetchMoreResults = useCallback(async () => {
     if (loading || !hasMore || page === 1) return;
 
     try {
       await delay(500);
-      await dispatch(
-        fetchSearchResults({
-          query,
-          selectedGenres,
-          type,
-          statusFilter,
-          page,
-        })
-      ).unwrap();
+      if (contentType === "anime") {
+        await dispatch(
+          fetchSearchResults({
+            query,
+            selectedGenres,
+            type,
+            statusFilter,
+            page,
+          })
+        ).unwrap();
+      } else {
+        await dispatch(
+          fetchMangaSearchResults({
+            query,
+            selectedGenres,
+            type,
+            statusFilter,
+            page,
+          })
+        ).unwrap();
+      }
     } catch (error) {
       console.error("Error fetching more results:", error);
     }
     setHasMore(pagination.has_next_page);
-  };
-
-
+  }, [
+    dispatch,
+    contentType,
+    query,
+    selectedGenres,
+    type,
+    statusFilter,
+    page,
+    loading,
+    hasMore,
+    pagination,
+  ]);
 
   const handleScroll = debounce(() => {
     if (
@@ -115,7 +163,7 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
   // Fetch more results when page changes
   useEffect(() => {
     fetchMoreResults();
-  }, [page]); // Now this effect only runs when page changes
+  }, [page, fetchMoreResults]);
 
   return (
     <div className="min-h-screen w-full p-3">
@@ -181,8 +229,8 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
       {!initialLoading && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-3">
           {searchResults.length > 0 &&
-            searchResults.map((anime, index) => (
-              <Card key={index} anime={anime} type="anime" />
+            searchResults.map((item, index) => (
+              <Card key={index} item={item} type={contentType} />
             ))}
         </div>
       )}

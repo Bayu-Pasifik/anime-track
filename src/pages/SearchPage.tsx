@@ -3,11 +3,11 @@ import React from "react";
 import SearchContainer from "../components/search/SearchContainer";
 import Navbar from "../components/Navbar";
 
-const SearchPage: React.FC = () => {
+const SearchPage: React.FC<{type: string}> = ({type}) => {
   return (
     <div className="bg-bg-color w-full h-full min-h-screen">
       <Navbar />
-      <SearchContainer contentType="anime" />
+      {type === "anime" ? <SearchContainer contentType="anime" /> : <SearchContainer contentType="manga" />}
     </div>
   );
 };

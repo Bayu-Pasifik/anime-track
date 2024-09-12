@@ -224,6 +224,14 @@ const animeSlice = createSlice({
       .addCase(fetchPopularAnime.rejected, (state, action) => {
         state.error = action.payload as string;
       })
+      .addCase(fetchGenre.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchGenre.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false
+      })
       .addCase(fetchGenre.fulfilled, (state, action) => {
         state.genres = action.payload;
       })

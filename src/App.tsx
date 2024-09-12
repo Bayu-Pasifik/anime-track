@@ -30,7 +30,8 @@ const App: React.FC = () => {
         <Route path="/currentlyAiring" element={<ViewMore type="currentlyAiring" />} />
         <Route path="/popular" element={<ViewMore  type="popular"/>} />
         <Route path="/upcoming" element={<ViewMore  type="upcoming"/>} />
-        <Route path="/animeSearch" element={<SearchPage />} />
+        <Route path="/anime/search" element={<SearchPage type="anime"/>} />
+        <Route path="/manga/search" element={<SearchPage type="manga"/>} />
       </Routes>
     </Router>
   );

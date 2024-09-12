@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Card from "../components/home/Card";
@@ -38,54 +38,47 @@ const ViewMore: React.FC<ViewMoreProps> = ({ type }) => {
       ? upcoming
       : popular;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (type === "currentlyAiring") {
-          await dispatch(fetchCurrentlyAiring(page)).unwrap();
-        } else if (type === "upcoming") {
-          await dispatch(fetchUpcomingAnime(page)).unwrap();
-        } else if (type === "popular") {
-          await dispatch(fetchPopularAnime(page)).unwrap();
-        }
-        setHasMore(pagination.has_next_page); // Perbarui hasMore sesuai pagination
-      } catch (error) {
-        setHasMore(false);
-      } finally {
-        setInitialLoading(false);
+  const fetchData = useCallback(async () => {
+    try {
+      if (type === "currentlyAiring") {
+        await dispatch(fetchCurrentlyAiring(page)).unwrap();
+      } else if (type === "upcoming") {
+        await dispatch(fetchUpcomingAnime(page)).unwrap();
+      } else if (type === "popular") {
+        await dispatch(fetchPopularAnime(page)).unwrap();
       }
-    };
+      setHasMore(pagination.has_next_page);
+    } catch (error) {
+      setHasMore(false);
+    } finally {
+      setInitialLoading(false);
+    }
+  }, [dispatch, page, type, pagination]);
 
+  useEffect(() => {
     if (initialLoading) {
       fetchData();
     }
-  }, [dispatch, type, page, initialLoading, pagination]);
+  }, [fetchData, initialLoading]);
+
+  const fetchMoreData = useCallback(async () => {
+    if (hasMore && !initialLoading && page > 1) {
+      await delay(1000); // Simulasi loading tambahan
+      fetchData();
+    }
+  }, [fetchData, hasMore, initialLoading, page]);
 
   useEffect(() => {
-    if (!initialLoading && hasMore && page > 1) {
-      delay(1000);
-      const fetchMoreData = async () => {
-        if (type === "currentlyAiring") {
-          await dispatch(fetchCurrentlyAiring(page)).unwrap();
-        } else if (type === "upcoming") {
-          await dispatch(fetchUpcomingAnime(page)).unwrap();
-        } else if (type === "popular") {
-          await dispatch(fetchPopularAnime(page)).unwrap();
-        }
-
-        setHasMore(pagination.has_next_page); // Perbarui hasMore sesuai pagination
-      };
-      fetchMoreData();
-    }
-  }, [dispatch, page, hasMore, initialLoading, type, pagination]);
+    fetchMoreData();
+  }, [page]);
 
   const handleScroll = debounce(() => {
     if (
       window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
-      !animeLoading &&
-      hasMore
+      hasMore &&
+      !animeLoading
     ) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => prevPage + 1); // Increase page number when scrolled to the bottom
     }
   }, 1000);
 
@@ -99,9 +92,10 @@ const ViewMore: React.FC<ViewMoreProps> = ({ type }) => {
   }
 
   return (
-    <div className="bg-gray-900 min-h-screen w-full">
+    <div className="bg-bg-color min-h-screen w-full">
       <Navbar />
-      <div className="font-roboto font-bold text-2xl text-white p-3 my-4">
+      <div className="font-roboto font-bold text-2xl text-white p-3 my-4 uppercase">
+        All {" "}
         {type === "currentlyAiring" && "Currently Airing"}
         {type === "upcoming" && "Upcoming Anime"}
         {type === "popular" && "Popular Anime"}
