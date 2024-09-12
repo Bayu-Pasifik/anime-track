@@ -5,15 +5,16 @@ import {
   fetchSearchResults,
   fetchGenre,
   clearSearchResults,
-} from "../../redux/animeSlice"; // Import fetchGenre
+} from "../../redux/animeSlice";
 import Card from "../../components/home/Card";
 import LoadingAnimation from "../../components/LoadingAnimations";
 import NewDataLoading from "../../components/NewDataLoading";
 import { delay } from "../../utils/delay";
-import GenreChips from "../search/GenreChips"; // Import GenreChips
-import DropdownFilter from "../search/DropDownFilter"; // Import DropdownFilter
+import GenreChips from "../search/GenreChips";
+import DropdownFilter from "../search/DropDownFilter";
 import SearchInput from "./SearchInput";
 import SearchButton from "./SearchButton";
+import { debounce } from "../../utils/debounce";
 
 const SearchContainer: React.FC<{ contentType: string }> = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,7 +22,6 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
     (state: RootState) => state.anime
   );
 
-  // Local state for page, query, selected genres, and filters
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
@@ -29,7 +29,7 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [hasMore, setHasMore] = useState(true);
   const [initialLoading, setInitialLoading] = useState(false);
-  const [genres, setGenres] = useState<{ mal_id: number; name: string }[]>([]); // Store genres
+  const [genres, setGenres] = useState<{ mal_id: number; name: string }[]>([]);
 
   // Fetch genres when the component mounts
   useEffect(() => {
@@ -45,6 +45,7 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
     if (initialLoading) return;
     setHasMore(true);
     setInitialLoading(true);
+    setPage(1);
     try {
       dispatch(clearSearchResults());
       await dispatch(
@@ -73,83 +74,48 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
     );
   };
 
-  // Handle infinite scroll and fetching more data
-  useEffect(() => {
-    const fetchMoreResults = async () => {
-      if (loading || !hasMore || page === 1) return;
-      if (!initialLoading && hasMore && page > 1) {
-        await delay(500);
-        await dispatch(
-          fetchSearchResults({
-            query,
-            selectedGenres,
-            type,
-            statusFilter,
-            page,
-          })
-        ).unwrap();
-        setHasMore(pagination.has_next_page);
-      }
-    };
+  // Fetch more results only when page changes due to scrolling
+  const fetchMoreResults = async () => {
+    if (loading || !hasMore || page === 1) return;
 
-    fetchMoreResults();
-  }, [
-    dispatch,
-    page,
-    query,
-    selectedGenres,
-    type,
-    statusFilter,
-    hasMore,
-    loading,
-  ]);
-
-  // Handle scroll event for infinite scroll
-  const debounce = (func: Function, delay: number) => {
-    let timeoutId: NodeJS.Timeout;
-    return (...args: any) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
+    try {
+      await delay(500);
+      await dispatch(
+        fetchSearchResults({
+          query,
+          selectedGenres,
+          type,
+          statusFilter,
+          page,
+        })
+      ).unwrap();
+    } catch (error) {
+      console.error("Error fetching more results:", error);
+    }
+    setHasMore(pagination.has_next_page);
   };
+
+
 
   const handleScroll = debounce(() => {
     if (
       window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
-      !loading &&
-      hasMore
+      hasMore &&
+      !loading
     ) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => prevPage + 1); // Increase page number when scrolled to the bottom
     }
-  }, 500);
+  }, 1000);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, hasMore, handleScroll]);
 
-  // Options for type and status dropdowns
-  const typeOptions = [
-    { value: "", label: "All Types" },
-    { value: "tv", label: "TV" },
-    { value: "movie", label: "Movie" },
-    { value: "ova", label: "OVA" },
-    { value: "special", label: "Special" },
-    { value: "ona", label: "ONA" },
-    { value: "music", label: "Music" },
-    { value: "cm", label: "Short Advertisement" },
-    { value: "pv", label: "PV" },
-    { value: "tv_special", label: "TV Special" },
-  ];
-
-  const statusOptions = [
-    { value: "", label: "All Statuses" },
-    { value: "airing", label: "Airing" },
-    { value: "complete", label: "Completed" },
-    { value: "upcoming", label: "Upcoming" },
-  ];
+  // Fetch more results when page changes
+  useEffect(() => {
+    fetchMoreResults();
+  }, [page]); // Now this effect only runs when page changes
 
   return (
     <div className="min-h-screen w-full p-3">
@@ -161,14 +127,30 @@ const SearchContainer: React.FC<{ contentType: string }> = () => {
 
           <DropdownFilter
             label="Type"
-            options={typeOptions}
+            options={[
+              { value: "", label: "All Types" },
+              { value: "tv", label: "TV" },
+              { value: "movie", label: "Movie" },
+              { value: "ova", label: "OVA" },
+              { value: "special", label: "Special" },
+              { value: "ona", label: "ONA" },
+              { value: "music", label: "Music" },
+              { value: "cm", label: "Short Advertisement" },
+              { value: "pv", label: "PV" },
+              { value: "tv_special", label: "TV Special" },
+            ]}
             selectedValue={type}
             setSelectedValue={setType}
           />
 
           <DropdownFilter
             label="Status"
-            options={statusOptions}
+            options={[
+              { value: "", label: "All Statuses" },
+              { value: "airing", label: "Airing" },
+              { value: "complete", label: "Completed" },
+              { value: "upcoming", label: "Upcoming" },
+            ]}
             selectedValue={statusFilter}
             setSelectedValue={setStatusFilter}
           />

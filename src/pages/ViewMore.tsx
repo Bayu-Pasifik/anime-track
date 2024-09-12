@@ -12,6 +12,7 @@ import {
 } from "../redux/animeSlice";
 import { delay } from "../utils/delay";
 import NewDataLoading from "../components/NewDataLoading";
+import { debounce } from "../utils/debounce";
 
 interface ViewMoreProps {
   type: "currentlyAiring" | "upcoming" | "popular";
@@ -22,16 +23,6 @@ const ViewMore: React.FC<ViewMoreProps> = ({ type }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
-// Fungsi debounce untuk handle scroll
-const debounce = (func: Function, delay: number) => {
-  let timeoutId: NodeJS.Timeout;
-  return (...args: any) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-};
   const {
     currentlyAiring,
     upcoming,
