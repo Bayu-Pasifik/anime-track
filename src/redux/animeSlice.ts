@@ -3,6 +3,7 @@ import axios from '../config/axiosConfig';
 import { Anime, Pagination } from '../config/data';
 import { delay } from '../utils/delay';  // Import delay function
 import { Genre } from '../config/genre';
+import { Season } from '../config/season';
 
 interface AnimeState {
   topAiring: Anime[];
@@ -14,6 +15,8 @@ interface AnimeState {
   pagination: Pagination;
   searchResults: Anime[];
   genres: Genre[];
+  seasons : Season[];
+  seasonalAnime : Anime[];
 }
 
 const initialState: AnimeState = {
@@ -35,6 +38,8 @@ const initialState: AnimeState = {
   },
   searchResults: [],
     genres: [],
+    seasons : [],
+    seasonalAnime : [],
     
 };
 
@@ -173,6 +178,40 @@ export const fetchSearchResults = createAsyncThunk(
   }
 );
 
+export const fetchSeason = createAsyncThunk(
+  "anime/fetchSeason",
+  async (_,{ rejectWithValue }) => {
+    try {
+      delay(1000);
+      const response = await axios.get(`/seasons`);
+      return response.data.data;
+    } catch (error: any) {
+      console.error("Error fetching season:", error);
+      return rejectWithValue(error.response?.data?.message || "Error fetching season");
+    }
+  }
+)
+
+
+export const fetchSeasonalAnime = createAsyncThunk(
+  'anime/fetchSeasonalAnime',
+  async (
+    { season='winter', year = 2024, page = 1 }: { season: string; year: number; page?: number },
+    { rejectWithValue }
+  ) => {
+    try {
+      delay(1000);
+      const response = await axios.get(`/seasons/${year}/${season}`, {
+        params: { page }
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error("Error fetching seasonal anime:", error);
+      return rejectWithValue(error.response?.data?.message || "Error fetching seasonal anime");
+    }
+  }
+);
+
 
 
 
@@ -182,6 +221,9 @@ const animeSlice = createSlice({
   reducers:  {
     clearSearchResults: (state) => {
       state.searchResults = [];
+    },
+    clearSeasonalAnime: (state) => {
+      state.seasonalAnime = [];
     },
   },
   extraReducers: (builder) => {
@@ -247,10 +289,35 @@ const animeSlice = createSlice({
       .addCase(fetchSearchResults.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchSeason.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSeason.fulfilled, (state, action) => {
+        state.seasons = action.payload;
+      })
+      .addCase(fetchSeason.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false
+      })
+      .addCase(fetchSeasonalAnime.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSeasonalAnime.fulfilled, (state, action) => {
+        state.seasonalAnime = [...state.seasonalAnime, ...action.payload.data];
+        state.loading = false;
+        state.pagination = action.payload.pagination;
+      })
+      .addCase(fetchSeasonalAnime.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
 // Export the action
 export const { clearSearchResults } = animeSlice.actions;
+export const { clearSeasonalAnime } = animeSlice.actions;
 export default animeSlice.reducer;
