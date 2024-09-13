@@ -10,7 +10,7 @@ import { AppDispatch, RootState } from "../redux/store";
 import SeasonalResult from "../components/seasonal/SeasonalResult";
 import Navbar from "../components/Navbar";
 import SeasonToggle from "../components/seasonal/SeasonToggle";
-import ViewToggle from "../components/seasonal/ViewToggle"; // Import the new ViewToggle component
+import ViewToggle from "../components/seasonal/ViewToggle";
 import NewDataLoading from "../components/NewDataLoading";
 
 const SeasonalAnime = () => {
@@ -20,10 +20,9 @@ const SeasonalAnime = () => {
   );
   const [selectedSeason, setSelectedSeason] = useState("winter");
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [viewMode, setViewMode] = useState("card"); // Manage view mode state
+  const [viewMode, setViewMode] = useState("card");
 
   useEffect(() => {
-    // Clear previous results before fetching new data
     dispatch(clearSeasonalAnime());
     dispatch(
       fetchSeasonalAnime({ season: selectedSeason, year: selectedYear })
@@ -50,13 +49,9 @@ const SeasonalAnime = () => {
     <div className="bg-bg-color min-h-screen">
       <Navbar />
       <div className="p-4">
-        {/* Main container with flexbox */}
-        <div className="flex justify-between items-center my-6">
-          {/* Left aligned ViewToggle */}
+        <div className="flex flex-col md:flex-row justify-between items-center my-6">
           <ViewToggle selectedView={viewMode} onViewChange={handleViewChange} />
-          
-          {/* Right aligned DropdownYear and SeasonToggle */}
-          <div className="flex space-x-12 items-center">
+          <div className="flex flex-col md:flex-row md:space-x-12 items-center space-y-5 md:space-y-0 mt-4 md:mt-0">
             <DropdownYear
               years={seasons.map((season) => season.year)}
               selectedYear={selectedYear}
@@ -74,7 +69,7 @@ const SeasonalAnime = () => {
             <NewDataLoading />
           </div>
         ) : error ? (
-          <p>Error: {error}</p>
+          <p className="text-center text-red-500">Error: {error}</p>
         ) : (
           <SeasonalResult data={seasonalAnime} viewMode={viewMode} />
         )}

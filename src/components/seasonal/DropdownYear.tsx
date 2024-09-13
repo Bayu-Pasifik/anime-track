@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface DropdownYearProps {
   years: number[];
@@ -10,7 +10,7 @@ const DropdownYear: React.FC<DropdownYearProps> = ({ years, selectedYear, onSele
   return (
     <div className="relative">
       <select
-        className="border border-gray-700 p-5 rounded-md bg-gray-800 text-white text-xl"
+        className="border border-gray-700 p-2 rounded-md bg-gray-800 text-white text-lg md:text-xl"
         value={selectedYear}
         onChange={(e) => onSelectYear(parseInt(e.target.value))}
       >
