@@ -1,11 +1,21 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 
 const Navbar: React.FC = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null); // Ref to hold timeout ID
+  const location = useLocation();
+
+  // Define excluded pages
+  const excludedPages = [
+    '/anime/detail/',
+    '/manga/detail/',
+    '/anime/voice-actors',
+    '/anime/staff',
+    '/manga/characters'
+  ];
 
   // Function to open dropdown on mouse enter
   const handleMouseEnter = (menu: string) => {
@@ -33,6 +43,17 @@ const Navbar: React.FC = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+
+    // Check if currentPath starts with any of the excluded paths
+    const shouldClearStorage = !excludedPages.some(excludedPath => currentPath.startsWith(excludedPath));
+    
+    if (shouldClearStorage) {
+      sessionStorage.clear();
+    }
+  }, [location]);
 
   return (
     <nav className="bg-slate-900 text-white w-full">

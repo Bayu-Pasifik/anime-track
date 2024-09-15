@@ -8,64 +8,62 @@ import {
   fetchUpcomingAnime,
 } from "../redux/animeSlice";
 import { fetchTopManga } from "../redux/mangaSlice";
-import HeaderCarousel from "../components/carousel/Carousel";
+import { delay } from "../utils/delay";
 import Navbar from "../components/Navbar";
-import { motion } from "framer-motion";
 import SkeletonCard from "../components/SkeletonCard";
+import HeaderCarousel from "../components/carousel/Carousel";
 import ListHomeCard from "../components/home/ListHomeCard";
 import TopContainer from "../components/home/TopContainer";
-import { delay } from "../utils/delay";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, setIsLoading] = useState(true); // State for loading
+  const [isLoading, setIsLoading] = useState(true);
   const {
     topAiring,
     currentlyAiring,
     upcoming,
     popular,
-    // loading: animeLoading,
     error: animeError,
   } = useSelector((state: RootState) => state.anime);
-  const {
-    topManga,
-    // loading: mangaLoading,
-    error: mangaError,
-  } = useSelector((state: RootState) => state.manga);
+  const { topManga, error: mangaError } = useSelector((state: RootState) => state.manga);
+  const error = animeError || mangaError;
 
   useEffect(() => {
+    const abortController = new AbortController(); // Create an AbortController instance
+
     const fetchData = async () => {
-      await dispatch(fetchTopAiring());
-      await delay(1000); // Add delay between requests
-      await dispatch(fetchCurrentlyAiring(1));
-      await delay(2000); // Add delay between requests
-      await dispatch(fetchUpcomingAnime(1));
-      await delay(2000); // Add delay between requests
-      await dispatch(fetchPopularAnime(1));
-      await delay(3000); // Add delay between requests
-      await dispatch(fetchTopManga());
-      setIsLoading(false); // Set loading to false when data is loaded
+      try {
+        await dispatch(fetchTopAiring()).unwrap();
+        await delay(1000);
+        await dispatch(fetchCurrentlyAiring(1)).unwrap();
+        await delay(1000);
+        await dispatch(fetchUpcomingAnime(1)).unwrap();
+        await delay(1000);
+        await dispatch(fetchPopularAnime(1)).unwrap();
+        await delay(1000);
+        await dispatch(fetchTopManga()).unwrap();
+        setIsLoading(false);
+      } catch (err) {
+        if (abortController.signal.aborted) {
+          console.log("Fetch aborted");
+        }
+      }
     };
 
     fetchData();
-  }, [dispatch]);
 
-  // const loading = animeLoading || mangaLoading;
-  const error = animeError || mangaError;
+    return () => {
+      abortController.abort(); // Abort fetch when component unmounts
+    };
+  }, [dispatch]);
 
   if (isLoading) {
     return (
       <div className="bg-bg-color h-full w-full">
         <Navbar />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="flex justify-center items-center h-40"
-        >
+        <div className="flex justify-center items-center h-40">
           <p className="text-white">Loading...</p>
-        </motion.div>
-        {/* Menampilkan SkeletonCard saat loading */}
+        </div>
         <SkeletonCard type="currently" />
         <SkeletonCard type="upcoming" />
         <SkeletonCard type="popular" />
@@ -77,16 +75,9 @@ const Home: React.FC = () => {
     return (
       <div className="bg-bg-color h-screen w-full">
         <Navbar />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="flex justify-center items-center h-40"
-        >
-          <p className="text-white text-2xl">
-            {error} {/* Display dynamic error message from server */}
-          </p>
-        </motion.div>
+        <div className="flex justify-center items-center h-40">
+          <p className="text-white text-2xl">{error}</p>
+        </div>
       </div>
     );
   }

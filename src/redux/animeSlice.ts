@@ -60,6 +60,7 @@ export const fetchTopAiring = createAsyncThunk(
   'anime/fetchTopAiring',
   async (_, { rejectWithValue }) => {
     try {
+      await delay(1000);
       const response = await axios.get('/top/anime');
       return response.data.data;  // Ensure this is an array
     } catch (error: any) {
@@ -74,6 +75,7 @@ export const fetchCurrentlyAiring = createAsyncThunk(
   'anime/fetchCurrentlyAiring',
   async (page: number = 1, { rejectWithValue }) => {
     try {
+      await delay(1000);
       const response = await axios.get('/seasons/now', {
         params: { page, sfw: true },
       });
@@ -90,6 +92,7 @@ export const fetchUpcomingAnime = createAsyncThunk(
   'anime/fetchUpcomingAnime',
   async (page: number = 1, { rejectWithValue }) => {
     try {
+      await delay(1000);
       const response = await axios.get('/seasons/upcoming', {
         params: { page, sfw: true },
       });
@@ -106,6 +109,7 @@ export const fetchPopularAnime = createAsyncThunk(
   'anime/fetchPopularAnime',
   async (page: number = 1, { rejectWithValue }) => {
     try {
+      await delay(1000);
       const response = await axios.get('/anime', {
         params: { order_by: 'popularity', type: 'tv', sfw: true, page },
       });
@@ -120,6 +124,7 @@ export const fetchPopularAnime = createAsyncThunk(
 
 export const fetchGenre = createAsyncThunk("anime/fetchGenre", async () => {
   try {
+    await delay(1000);
     const response = await axios.get("/genres/anime");
     return response.data.data;
   } catch (error: any) {
@@ -182,7 +187,7 @@ export const fetchSeason = createAsyncThunk(
   "anime/fetchSeason",
   async (_,{ rejectWithValue }) => {
     try {
-      delay(1000);
+      await delay(1000);
       const response = await axios.get(`/seasons`);
       return response.data.data;
     } catch (error: any) {
@@ -196,11 +201,11 @@ export const fetchSeason = createAsyncThunk(
 export const fetchSeasonalAnime = createAsyncThunk(
   'anime/fetchSeasonalAnime',
   async (
-    { season='winter', year = 2024, page = 1 }: { season: string; year: number; page?: number },
+    { season, year ,  page = 1 }: { season: string; year: number; page?: number },
     { rejectWithValue }
   ) => {
     try {
-      delay(1000);
+      await delay(1000);
       const response = await axios.get(`/seasons/${year}/${season}`, {
         params: { page }
       });
@@ -243,7 +248,7 @@ const animeSlice = createSlice({
         state.topAiring = action.payload;  // Ensure action.payload is an array
       })
       .addCase(fetchCurrentlyAiring.fulfilled, (state, action) => {
-        state.currentlyAiring = [...state.currentlyAiring, ...action.payload.data];  // Ensure action.payload.data is an array
+        state.currentlyAiring = action.payload.data;  // Ensure action.payload.data is an array
         state.pagination = action.payload.pagination;  // Ensure action.payload has pagination
       })
       .addCase(fetchUpcomingAnime.fulfilled, (state, action) => {
