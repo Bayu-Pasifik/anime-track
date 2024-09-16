@@ -135,7 +135,7 @@ const mangaSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchMangaSearchResults.fulfilled, (state, action) => {
-        state.searchResults = [...state.searchResults, ...action.payload.data];
+        state.searchResults = action.payload.data;
         state.loading = false;
         state.pagination = action.payload.pagination;
       })

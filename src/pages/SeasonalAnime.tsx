@@ -12,108 +12,93 @@ import Navbar from "../components/Navbar";
 import SeasonToggle from "../components/seasonal/SeasonToggle";
 import ViewToggle from "../components/seasonal/ViewToggle";
 import NewDataLoading from "../components/NewDataLoading";
-import { delay } from "../utils/delay";
-import { debounce } from "../utils/debounce";
+import PaginationButton from "../components/PaginationButton";
 
 const SeasonalAnime = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { seasonalAnime, loading, error, seasons, pagination } = useSelector(
+  const { seasonalAnime, error, seasons, pagination } = useSelector(
     (state: RootState) => state.anime
   );
-  const [selectedSeason, setSelectedSeason] = useState("winter");
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  const [selectedSeason, setSelectedSeason] = useState(() => {
+    const savedSeason = sessionStorage.getItem("selectedSeason");
+    return savedSeason ? savedSeason : "winter";
+  });
+  const [selectedYear, setSelectedYear] = useState(() => {
+    const savedYear = sessionStorage.getItem("selectedYear");
+    return savedYear ? Number(savedYear) : new Date().getFullYear();
+  });
   const [viewMode, setViewMode] = useState("card");
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [seasonFetched, setSeasonFetched] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(() => {
+    const savedPage = sessionStorage.getItem("page");
+    return savedPage ? Number(savedPage) : 1;
+  });
 
   // Fetch seasons list only once
   useEffect(() => {
-    const fetchSeasons = async () => {
-      if (!seasonFetched) {
-        await delay(1500);
-        dispatch(fetchSeason())
-          .unwrap()
-          .then(() => setSeasonFetched(true))
-          .catch((error) => console.error("Error fetching seasons:", error));
-      }
-    };
-    fetchSeasons();
+    if (!seasonFetched) {
+      const fetchSeasons = async () => {
+        try {
+          await dispatch(fetchSeason()).unwrap();
+          setSeasonFetched(true);
+        } catch (error) {
+          console.error("Error fetching seasons:", error);
+        }
+      };
+      fetchSeasons();
+    }
   }, [dispatch, seasonFetched]);
 
-  // Fetch anime based on selected season and year
+  // Fetch anime based on selected season, year, and page
   useEffect(() => {
-    const fetchData = async () => {
-      if (seasonFetched) {
+    if (seasonFetched) {
+      const fetchData = async () => {
+        setIsFetchingMore(true);
         dispatch(clearSeasonalAnime());
-        await delay(2000);
-        dispatch(
-          fetchSeasonalAnime({ season: selectedSeason, year: selectedYear })
-        )
-          .unwrap()
-          .catch((error) =>
-            console.error("Error fetching seasonal anime:", error)
-          );
-      }
-    };
-    fetchData();
-  }, [dispatch, selectedSeason, selectedYear, seasonFetched]);
-
-  // Function to fetch more pages when needed
-  const loadMoreAnime = async () => {
-    if (!isFetchingMore && pagination?.has_next_page) {
-      setIsFetchingMore(true);
-      await delay(1000);
-      dispatch(
-        fetchSeasonalAnime({
-          season: selectedSeason,
-          year: selectedYear,
-          page: pagination.current_page + 1,
-        })
-      )
-        .unwrap()
-        .then((result) => {
-          if (!result.pagination.has_next_page) {
-            setHasMore(false);
-          }
-        })
-        .finally(() => setIsFetchingMore(false));
+        try {
+          await dispatch(
+            fetchSeasonalAnime({
+              season: selectedSeason,
+              year: selectedYear,
+              page,
+            })
+          ).unwrap();
+        } catch (error) {
+          console.error("Error fetching seasonal anime:", error);
+        } finally {
+          setIsFetchingMore(false);
+        }
+      };
+      fetchData();
     }
-  };
+  }, [dispatch, selectedSeason, selectedYear, seasonFetched, page]);
+
+  // Save data to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem("selectedSeason", selectedSeason);
+    sessionStorage.setItem("selectedYear", selectedYear.toString());
+    sessionStorage.setItem("page", page.toString());
+  }, [selectedSeason, selectedYear, page]);
 
   const handleSeasonChange = (season: string) => {
     setSelectedSeason(season);
+    setPage(1); // Reset to page 1 when season changes
   };
 
   const handleYearChange = (year: number) => {
     setSelectedYear(year);
+    setPage(1); // Reset to page 1 when year changes
   };
 
   const handleViewChange = (view: string) => {
     setViewMode(view);
   };
 
-  const handleScroll = debounce(() => {
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
-      hasMore &&
-      !loading &&
-      !isFetchingMore
-    ) {
-      setPage((prevPage) => prevPage + 1); // Increase page number when scrolled to the bottom
-    }
-  }, 1000);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, hasMore, isFetchingMore]);
-
-  // Fetch more results when page changes
-  useEffect(() => {
-    loadMoreAnime();
-  }, [page]);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   return (
     <div className="bg-bg-color min-h-screen">
@@ -133,25 +118,25 @@ const SeasonalAnime = () => {
             />
           </div>
         </div>
-
-        {loading && !isFetchingMore ? (
-          <div className="flex justify-center items-center mt-72">
+        {isFetchingMore ? (
+          <div className="flex justify-center items-center mt-4">
             <NewDataLoading />
           </div>
-        ) : error ? (
-          <p className="text-center text-red-500">Error: {error}</p>
         ) : (
           <>
-            <SeasonalResult data={seasonalAnime} viewMode={viewMode} />
-            {isFetchingMore && (
-              <div className="flex justify-center items-center mt-4">
-                <NewDataLoading />
-              </div>
-            )}
-            {!loading &&hasMore === false && (
-              <div className="flex justify-center items-center mt-4">
-                <p className="text-center text-xl text-white">No more results</p>
-              </div>
+            {error ? (
+              <p className="text-center text-red-500">Error: {error}</p>
+            ) : (
+              <>
+                <SeasonalResult data={seasonalAnime} viewMode={viewMode} />
+                {pagination?.last_visible_page && (
+                  <PaginationButton
+                    currentPage={page}
+                    totalPages={pagination.last_visible_page}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
             )}
           </>
         )}
