@@ -22,13 +22,35 @@ const Information: React.FC<InformationProps> = ({
           </h1>
           <div>
             <p className="text-xl text-white">
-              {animeDetail.title_japanese ?? "Unknown Japanese Title"}{" "}
+              {animeDetail.title_japanese ?? "Unknown Japanese Title"}
               {animeDetail.title_synonyms?.length > 0 && (
                 <span className="ml-2 italic underline">
-                  / {animeDetail.title_synonyms.join(", ")}
+                {animeDetail.title_synonyms.join(", ")}
                 </span>
               )}
+              {animeDetail.title_english && (
+                <span className="ml-2 italic underline">
+                / {animeDetail.title_english ?? ""}
+                </span>
+              )}
+
             </p>
+            <div className="mt-4 font-roboto md:text-justify">
+              <p className="text-xl text-white">
+                {"Synopsis"}
+              </p>
+              <p className="text-xl text-white">
+                {animeDetail.synopsis === "" ? "Unknown synopsis" : animeDetail.synopsis}
+              </p>
+            </div>
+            <div className="mt-4 font-roboto md:text-justify">
+              <p className="text-xl text-white">
+                {"Background"}
+              </p>
+              <p className="text-xl text-white">
+                {animeDetail.background === "" ? "Unknown Background" : animeDetail.background}
+              </p>
+            </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
             <InformationText title="Type" content={animeDetail.type ?? "Unknown"} />

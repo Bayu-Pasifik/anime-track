@@ -252,11 +252,11 @@ const animeSlice = createSlice({
         state.pagination = action.payload.pagination;  // Ensure action.payload has pagination
       })
       .addCase(fetchUpcomingAnime.fulfilled, (state, action) => {
-        state.upcoming = [...state.upcoming, ...action.payload.data];  // Ensure action.payload.data is an array
+        state.upcoming = action.payload.data;  // Ensure action.payload.data is an array
         state.pagination = action.payload.pagination;  // Ensure action.payload has pagination
       })
       .addCase(fetchPopularAnime.fulfilled, (state, action) => {
-        state.popular = [...state.popular, ...action.payload.data];  // Ensure action.payload.data is an array
+        state.popular = action.payload.data;  // Ensure action.payload.data is an array
         state.pagination = action.payload.pagination;  // Ensure action.payload has pagination
       })
       .addCase(fetchTopAiring.rejected, (state, action) => {
@@ -287,7 +287,7 @@ const animeSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSearchResults.fulfilled, (state, action) => {
-        state.searchResults = [...state.searchResults, ...action.payload.data];
+        state.searchResults = action.payload.data;
         state.loading = false;
         state.pagination = action.payload.pagination;
       })
@@ -311,7 +311,7 @@ const animeSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSeasonalAnime.fulfilled, (state, action) => {
-        state.seasonalAnime = [...state.seasonalAnime, ...action.payload.data];
+        state.seasonalAnime =action.payload.data;
         state.loading = false;
         state.pagination = action.payload.pagination;
       })
