@@ -33,7 +33,7 @@ const Home: React.FC = () => {
 
     const fetchData = async () => {
       try {
-        await dispatch(fetchTopAiring()).unwrap();
+        await dispatch(fetchTopAiring(1)).unwrap();
         await delay(1000);
         await dispatch(fetchCurrentlyAiring(1)).unwrap();
         await delay(1000);
@@ -41,7 +41,7 @@ const Home: React.FC = () => {
         await delay(1000);
         await dispatch(fetchPopularAnime(1)).unwrap();
         await delay(1000);
-        await dispatch(fetchTopManga()).unwrap();
+        await dispatch(fetchTopManga(1)).unwrap();
         setIsLoading(false);
       } catch (err) {
         if (abortController.signal.aborted) {

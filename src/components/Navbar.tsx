@@ -10,11 +10,11 @@ const Navbar: React.FC = () => {
 
   // Define excluded pages
   const excludedPages = [
-    '/anime/detail/',
-    '/manga/detail/',
-    '/anime/voice-actors',
-    '/anime/staff',
-    '/manga/characters'
+    "/anime/detail/",
+    "/manga/detail/",
+    "/anime/voice-actors",
+    "/anime/staff",
+    "/manga/characters",
   ];
 
   // Function to open dropdown on mouse enter
@@ -48,8 +48,10 @@ const Navbar: React.FC = () => {
     const currentPath = location.pathname;
 
     // Check if currentPath starts with any of the excluded paths
-    const shouldClearStorage = !excludedPages.some(excludedPath => currentPath.startsWith(excludedPath));
-    
+    const shouldClearStorage = !excludedPages.some((excludedPath) =>
+      currentPath.startsWith(excludedPath)
+    );
+
     if (shouldClearStorage) {
       sessionStorage.clear();
     }

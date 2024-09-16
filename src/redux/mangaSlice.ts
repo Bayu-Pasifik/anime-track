@@ -36,14 +36,24 @@ export const fetchMangaData = createAsyncThunk(
   'anime/fetchMangaData',
   async (_, { dispatch }) => {
     await delay(400); // Add delay between requests
-    await dispatch(fetchTopManga());
+    await dispatch(fetchTopManga(1));
   }
 );
 
-export const fetchTopManga = createAsyncThunk('anime/fetchTopManga', async () => {
-  const response = await axios.get('/top/manga');
-  console.log({response});
-  return response.data.data;
+export const fetchTopManga = createAsyncThunk('anime/fetchTopManga', async (page: number,{ rejectWithValue }) => {
+  try {
+    const response = await axios.get('/top/manga', {
+      params: {
+        page,
+      },
+    });
+    console.log({response});
+    return response.data.data;
+  } catch (error: any) {
+    console.error('Error fetching top airing:', error);
+    // Return error message from server
+    return rejectWithValue(error.response?.data?.message || 'Error fetching top airing anime');
+  }
 });
 
 // Redux slice bagian fetchMangaSearchResults

@@ -46,7 +46,7 @@ const initialState: AnimeState = {
 export const fetchAnimeData = createAsyncThunk(
   'anime/fetchAnimeData',
   async (_, { dispatch }) => {
-    await dispatch(fetchTopAiring());
+    await dispatch(fetchTopAiring(1));
     await delay(400); // Add delay between requests
     await dispatch(fetchCurrentlyAiring(1));
     await delay(400); // Add delay between requests
@@ -58,10 +58,12 @@ export const fetchAnimeData = createAsyncThunk(
 
 export const fetchTopAiring = createAsyncThunk(
   'anime/fetchTopAiring',
-  async (_, { rejectWithValue }) => {
+  async (page: number = 1, { rejectWithValue }) => {
     try {
       await delay(1000);
-      const response = await axios.get('/top/anime');
+      const response = await axios.get('/top/anime', {
+        params: { page},
+      });
       return response.data.data;  // Ensure this is an array
     } catch (error: any) {
       console.error('Error fetching top airing:', error);

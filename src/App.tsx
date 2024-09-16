@@ -10,6 +10,7 @@ import DetailMangaCharacter from "./pages/DetailMangaCharacter";
 import ViewMore from "./pages/ViewMore";
 import SearchPage from "./pages/SearchPage";
 import SeasonalAnimePage from "./pages/SeasonalAnime";
+import TopPage from "./pages/TopPage";
 
 const App: React.FC = () => {
   return (
@@ -34,6 +35,8 @@ const App: React.FC = () => {
         <Route path="/anime/search" element={<SearchPage type="anime"/>} />
         <Route path="/manga/search" element={<SearchPage type="manga"/>} />
         <Route path="/anime/seasonal" element={<SeasonalAnimePage/>} />
+        <Route path="/anime/top" element={<TopPage type="anime"/>} />
+        <Route path="/manga/top" element={<TopPage type="manga"/>} />
       </Routes>
     </Router>
   );
