@@ -14,7 +14,7 @@ interface CarouselProps {
 
 const HeaderCarousel: React.FC<CarouselProps> = ({ animes }) => {
   return (
-    <div>
+    <div className="rounded-xl overflow-hidden">
       <Swiper
         modules={[Autoplay]}
         spaceBetween={30}
@@ -26,11 +26,11 @@ const HeaderCarousel: React.FC<CarouselProps> = ({ animes }) => {
       >
         {animes.slice(0, 5).map((anime) => (
           <SwiperSlide
-            className=" mx-auto w-full h-96 overflow-hidden relative"
+            className="rounded-xl mx-auto w-full h-96 overflow-hidden relative"
             key={anime.mal_id}
           >
             <Link to={`/anime/detail/${anime.mal_id}`}>
-              <div className="carousel-slide h-full relative">
+              <div className="carousel-slide h-full relative rounded-xl">
                 <img
                   src={anime.images.jpg.large_image_url}
                   alt={anime.title}

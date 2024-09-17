@@ -26,7 +26,9 @@ const Home: React.FC = () => {
     popular,
     error: animeError,
   } = useSelector((state: RootState) => state.anime);
-  const { topManga, error: mangaError } = useSelector((state: RootState) => state.manga);
+  const { topManga, error: mangaError } = useSelector(
+    (state: RootState) => state.manga
+  );
   const error = animeError || mangaError;
 
   useEffect(() => {
@@ -93,7 +95,9 @@ const Home: React.FC = () => {
   return (
     <div className="bg-bg-color h-full w-full">
       <Navbar />
-      <HeaderCarousel animes={topAiring} />
+      <div className="p-5 rounded-xl">
+        <HeaderCarousel animes={topAiring} />
+      </div>
       <ListHomeCard
         animes={currentlyAiring}
         type="currently"
