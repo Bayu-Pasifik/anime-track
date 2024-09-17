@@ -30,14 +30,22 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
   );
 
   // State for managing search parameters and pagination
-  const [page, setPage] = useState(() => Number(sessionStorage.getItem(`${contentType}-page`)) || 1);
-  const [query, setQuery] = useState(() => sessionStorage.getItem(`${contentType}-query`) || "");
+  const [page, setPage] = useState(
+    () => Number(sessionStorage.getItem(`${contentType}-page`)) || 1
+  );
+  const [query, setQuery] = useState(
+    () => sessionStorage.getItem(`${contentType}-query`) || ""
+  );
   const [selectedGenres, setSelectedGenres] = useState<number[]>(() => {
     const savedGenres = sessionStorage.getItem(`${contentType}-selectedGenres`);
     return savedGenres ? JSON.parse(savedGenres) : [];
   });
-  const [type, setType] = useState(() => sessionStorage.getItem(`${contentType}-type`) || "");
-  const [statusFilter, setStatusFilter] = useState(() => sessionStorage.getItem(`${contentType}-statusFilter`) || "");
+  const [type, setType] = useState(
+    () => sessionStorage.getItem(`${contentType}-type`) || ""
+  );
+  const [statusFilter, setStatusFilter] = useState(
+    () => sessionStorage.getItem(`${contentType}-statusFilter`) || ""
+  );
   const [initialLoading, setInitialLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [genres, setGenres] = useState<{ mal_id: number; name: string }[]>([]);
@@ -60,7 +68,10 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
   useEffect(() => {
     sessionStorage.setItem(`${contentType}-page`, page.toString());
     sessionStorage.setItem(`${contentType}-query`, query);
-    sessionStorage.setItem(`${contentType}-selectedGenres`, JSON.stringify(selectedGenres));
+    sessionStorage.setItem(
+      `${contentType}-selectedGenres`,
+      JSON.stringify(selectedGenres)
+    );
     sessionStorage.setItem(`${contentType}-type`, type);
     sessionStorage.setItem(`${contentType}-statusFilter`, statusFilter);
   }, [page, query, selectedGenres, type, statusFilter, contentType]);
@@ -72,9 +83,25 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
       try {
         if (query || selectedGenres.length > 0 || type || statusFilter) {
           if (contentType === "anime") {
-            await dispatch(fetchSearchResults({ query, selectedGenres, type, statusFilter, page })).unwrap();
+            await dispatch(
+              fetchSearchResults({
+                query,
+                selectedGenres,
+                type,
+                statusFilter,
+                page,
+              })
+            ).unwrap();
           } else {
-            await dispatch(fetchMangaSearchResults({ query, selectedGenres, type, statusFilter, page })).unwrap();
+            await dispatch(
+              fetchMangaSearchResults({
+                query,
+                selectedGenres,
+                type,
+                statusFilter,
+                page,
+              })
+            ).unwrap();
           }
         }
       } catch (error) {
@@ -94,10 +121,26 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
     try {
       if (contentType === "anime") {
         await dispatch(clearSearchResults());
-        await dispatch(fetchSearchResults({ query, selectedGenres, type, statusFilter, page: 1 })).unwrap();
+        await dispatch(
+          fetchSearchResults({
+            query,
+            selectedGenres,
+            type,
+            statusFilter,
+            page: 1,
+          })
+        ).unwrap();
       } else {
         await dispatch(clearMangaSearchResults());
-        await dispatch(fetchMangaSearchResults({ query, selectedGenres, type, statusFilter, page: 1 })).unwrap();
+        await dispatch(
+          fetchMangaSearchResults({
+            query,
+            selectedGenres,
+            type,
+            statusFilter,
+            page: 1,
+          })
+        ).unwrap();
       }
     } catch (error) {
       console.error("Error fetching search results:", error);
@@ -113,9 +156,25 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
     setIsFetching(true);
     try {
       if (contentType === "anime") {
-        await dispatch(fetchSearchResults({ query, selectedGenres, type, statusFilter, page: newPage })).unwrap();
+        await dispatch(
+          fetchSearchResults({
+            query,
+            selectedGenres,
+            type,
+            statusFilter,
+            page: newPage,
+          })
+        ).unwrap();
       } else {
-        await dispatch(fetchMangaSearchResults({ query, selectedGenres, type, statusFilter, page: newPage })).unwrap();
+        await dispatch(
+          fetchMangaSearchResults({
+            query,
+            selectedGenres,
+            type,
+            statusFilter,
+            page: newPage,
+          })
+        ).unwrap();
       }
     } catch (error) {
       console.error("Error fetching paginated results:", error);
@@ -141,7 +200,9 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
           <SearchInput query={query} setQuery={setQuery} />
           <DropdownFilter
             label="Type"
-            options={contentType === "anime" ? animeTypeOptions : mangaTypeOptions}
+            options={
+              contentType === "anime" ? animeTypeOptions : mangaTypeOptions
+            }
             selectedValue={type}
             setSelectedValue={setType}
           />
@@ -152,7 +213,11 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
             setSelectedValue={setStatusFilter}
           />
         </div>
-        <GenreChips genres={genres} selectedGenres={selectedGenres} handleGenreToggle={handleGenreToggle} />
+        <GenreChips
+          genres={genres}
+          selectedGenres={selectedGenres}
+          handleGenreToggle={handleGenreToggle}
+        />
         <SearchButton onClick={handleSearch} isSearching={initialLoading} />
       </div>
 
@@ -162,8 +227,15 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
       ) : (
         <>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 my-12">
-            {searchResults?.map((item) => (
-              <Card key={item.mal_id} type={contentType} item={item} />
+            {searchResults?.map((item,index) => (
+              <Card
+                title={item.title}
+                imageUrl={item.images.jpg.large_image_url}
+                synopsis={item.synopsis}
+                type={contentType}
+                mal_id={item.mal_id}
+                key={index}
+              />
             ))}
           </div>
 

@@ -10,11 +10,25 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   contentType,
 }) => (
   <div className="mt-6 grid grid-cols-2 md:grid-cols-6 gap-4">
-    {searchResults.map((item,index) =>
+    {searchResults.map((item, index) =>
       contentType === "anime" ? (
-        <Card key={index} anime={item} type ="anime" />
+        <Card
+          title={item.title}
+          imageUrl={item.images.jpg.large_image_url}
+          synopsis={item.synopsis}
+          type="anime"
+          mal_id={item.mal_id}
+          key={index}
+        />
       ) : (
-        <Card key={index} manga={item} type="manga" anime={item} />
+        <Card
+          title={item.title}
+          imageUrl={item.images.jpg.large_image_url}
+          synopsis={item.synopsis}
+          type="manga"
+          mal_id={item.mal_id}
+          key={index}
+        />
       )
     )}
   </div>

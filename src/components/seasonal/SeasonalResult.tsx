@@ -21,7 +21,14 @@ const SeasonalResult: React.FC<SeasonalResultProps> = ({ data, viewMode }) => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card item={anime} type="anime" />
+              <Card
+                title={anime.title}
+                imageUrl={anime.images.jpg.large_image_url}
+                synopsis={anime.synopsis}
+                type="anime"
+                mal_id={anime.mal_id}
+                key={index}
+              />
             </motion.div>
           ))}
         </div>
@@ -30,8 +37,8 @@ const SeasonalResult: React.FC<SeasonalResultProps> = ({ data, viewMode }) => {
           {data.map((anime, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, x: -50}}
-              animate={{ opacity: 1, x: 0}}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <ListCard
