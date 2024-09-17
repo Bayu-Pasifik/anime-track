@@ -16,7 +16,11 @@ const TopContainer: React.FC<TopContainerProps> = ({ title, items, type }) => {
     <div className="p-4 bg-slate-600 rounded-lg">
       <div className="flex flex-row justify-between mb-4">
         <h1 className="text-2xl text-white">{title}</h1>
-        <h1 className="text-2xl text-white cursor-pointer">View All</h1>
+        {type === "anime" ? (
+          <h1 className="text-2xl text-white cursor-pointer"><a href="/top/anime">View All</a></h1>
+        ): (
+          <h1 className="text-2xl text-white cursor-pointer"><a href="/top/manga">View All</a></h1>
+        )}
       </div>
       <div className="grid grid-cols-1 gap-4">
         {items.map((item, index) => (

@@ -11,6 +11,7 @@ import ViewMore from "./pages/ViewMore";
 import SearchPage from "./pages/SearchPage";
 import SeasonalAnimePage from "./pages/SeasonalAnime";
 import TopPage from "./pages/TopPage";
+import NotFound from "./pages/NotFound";
 
 const App: React.FC = () => {
   return (
@@ -21,22 +22,22 @@ const App: React.FC = () => {
         <Route path="/anime/detail/:id/characters" element={<Detail />} />
         <Route path="/anime/detail/:id/staff" element={<Detail />} />
         <Route path="/anime/detail/:id/pictures" element={<Detail />} />
-        <Route
-          path="/anime/:id/characters"
-          element={<DetailAnimeCharacter />}
-        />
+        <Route path="/anime/:id/characters" element={<DetailAnimeCharacter />} />
         <Route path="/anime/:id/voice-actors" element={<DetailVoiceActors />} />
         <Route path="/anime/:id/staff" element={<DetailStaff />} />
         <Route path="/manga/detail/:id" element={<DetailManga />} />
         <Route path="/manga/:id/characters" element={<DetailMangaCharacter />} />
         <Route path="/currentlyAiring" element={<ViewMore type="currentlyAiring" />} />
-        <Route path="/popular" element={<ViewMore  type="popular"/>} />
-        <Route path="/upcoming" element={<ViewMore  type="upcoming"/>} />
-        <Route path="/anime/search" element={<SearchPage type="anime"/>} />
-        <Route path="/manga/search" element={<SearchPage type="manga"/>} />
-        <Route path="/anime/seasonal" element={<SeasonalAnimePage/>} />
-        <Route path="/anime/top" element={<TopPage type="anime"/>} />
-        <Route path="/manga/top" element={<TopPage type="manga"/>} />
+        <Route path="/popular" element={<ViewMore type="popular" />} />
+        <Route path="/upcoming" element={<ViewMore type="upcoming" />} />
+        <Route path="/anime/search" element={<SearchPage type="anime" />} />
+        <Route path="/manga/search" element={<SearchPage type="manga" />} />
+        <Route path="/anime/seasonal" element={<SeasonalAnimePage />} />
+        <Route path="/anime/top" element={<TopPage type="anime" />} />
+        <Route path="/manga/top" element={<TopPage type="manga" />} />
+        
+        {/* 404 Not Found Route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

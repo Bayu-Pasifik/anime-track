@@ -4,13 +4,13 @@ const CharacterName: React.FC<{
   fontSize?: string;
 }> = ({ name, to, fontSize = "text-sm" }) => {
   const baseClasses = `hover:text-blue-700 text-white cursor-pointer ${fontSize}`;
-  const largeScreenClasses = "text-wrap";
-  const smallScreenClasses = "max-w-20 line-clamp-2";
+  // const largeScreenClasses = "text-wrap";
+  const smallScreenClasses = "max-w-32 line-clamp-2";
 
   if (name === "N/A") {
     return (
-      <div className="w-full lg:max-w-xs sm:max-w-4 md:max-w-4">
-        <p className={`${baseClasses} ${largeScreenClasses}`}>{name}</p>
+      <div className="w-full max-w-32">
+        <p className={`${baseClasses}`}>{name}</p>
       </div>
     );
   }
@@ -18,11 +18,7 @@ const CharacterName: React.FC<{
   return (
     <div className="">
       <a href={to} className={baseClasses}>
-        <p
-          className={`${baseClasses} ${smallScreenClasses} `}
-        >
-          {name}
-        </p>
+        <p className={`${baseClasses} ${smallScreenClasses} `}>{name}</p>
       </a>
     </div>
   );

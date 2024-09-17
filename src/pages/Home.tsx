@@ -10,7 +10,6 @@ import {
 import { fetchTopManga } from "../redux/mangaSlice";
 import { delay } from "../utils/delay";
 import Navbar from "../components/Navbar";
-import SkeletonCard from "../components/SkeletonCard";
 import HeaderCarousel from "../components/carousel/Carousel";
 import ListHomeCard from "../components/home/ListHomeCard";
 import TopContainer from "../components/home/TopContainer";
@@ -75,9 +74,6 @@ const Home: React.FC = () => {
       <div className="bg-bg-color h-full w-full">
         {/* Hide Navbar while loading */}
         <LoaderWithProgress progress={progress} />
-        <SkeletonCard type="currently" />
-        <SkeletonCard type="upcoming" />
-        <SkeletonCard type="popular" />
       </div>
     );
   }
@@ -107,10 +103,10 @@ const Home: React.FC = () => {
       <ListHomeCard animes={popular} type="popular" destination="/popular" />
       <div className="flex flex-wrap lg:flex-row sm:flex-col w-full">
         <div className="w-full lg:w-1/2 sm:w-full p-2">
-          <TopContainer title="Top 100 Anime" items={topAiring} type="anime" />
+          <TopContainer title="Top 25 Anime" items={topAiring} type="anime" />
         </div>
         <div className="w-full lg:w-1/2 sm:w-full p-2">
-          <TopContainer title="Top 100 Manga" items={topManga} type="manga" />
+          <TopContainer title="Top 25 Manga" items={topManga} type="manga" />
         </div>
       </div>
     </div>
