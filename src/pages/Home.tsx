@@ -14,10 +14,12 @@ import SkeletonCard from "../components/SkeletonCard";
 import HeaderCarousel from "../components/carousel/Carousel";
 import ListHomeCard from "../components/home/ListHomeCard";
 import TopContainer from "../components/home/TopContainer";
+import LoaderWithProgress from "../components/home/LoaderWithProgress"; // Animated Loader
 
 const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
+  const [progress, setProgress] = useState(0); // Progress state
   const {
     topAiring,
     currentlyAiring,
@@ -33,16 +35,26 @@ const Home: React.FC = () => {
 
     const fetchData = async () => {
       try {
+        // Fetch data and update progress incrementally
         await dispatch(fetchTopAiring(1)).unwrap();
+        setProgress(20); // Update progress to 20%
         await delay(1000);
+
         await dispatch(fetchCurrentlyAiring(1)).unwrap();
+        setProgress(40); // Update progress to 40%
         await delay(1000);
+
         await dispatch(fetchUpcomingAnime(1)).unwrap();
+        setProgress(60); // Update progress to 60%
         await delay(1000);
+
         await dispatch(fetchPopularAnime(1)).unwrap();
+        setProgress(80); // Update progress to 80%
         await delay(1000);
+
         await dispatch(fetchTopManga(1)).unwrap();
-        setIsLoading(false);
+        setProgress(100); // Update progress to 100%
+        setIsLoading(false); // Set loading to false after all data is fetched
       } catch (err) {
         if (abortController.signal.aborted) {
           console.log("Fetch aborted");
@@ -57,13 +69,12 @@ const Home: React.FC = () => {
     };
   }, [dispatch]);
 
+  // Hide Navbar and show animated loader while loading
   if (isLoading) {
     return (
       <div className="bg-bg-color h-full w-full">
-        <Navbar />
-        <div className="flex justify-center items-center h-40">
-          <p className="text-white">Loading...</p>
-        </div>
+        {/* Hide Navbar while loading */}
+        <LoaderWithProgress progress={progress} />
         <SkeletonCard type="currently" />
         <SkeletonCard type="upcoming" />
         <SkeletonCard type="popular" />
@@ -82,6 +93,7 @@ const Home: React.FC = () => {
     );
   }
 
+  // Show Navbar after data is fully loaded
   return (
     <div className="bg-bg-color h-full w-full">
       <Navbar />
