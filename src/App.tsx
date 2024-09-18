@@ -12,6 +12,7 @@ import SearchPage from "./pages/SearchPage";
 import SeasonalAnimePage from "./pages/SeasonalAnime";
 import TopPage from "./pages/TopPage";
 import NotFound from "./pages/NotFound";
+import OtherPage from "./pages/OtherPage";
 
 const App: React.FC = () => {
   return (
@@ -38,6 +39,7 @@ const App: React.FC = () => {
         
         {/* 404 Not Found Route */}
         <Route path="*" element={<NotFound />} />
+        <Route path="others/studios" element={<OtherPage type="studios" />} />
       </Routes>
     </Router>
   );

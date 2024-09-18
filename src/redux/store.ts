@@ -3,6 +3,7 @@ import animeReducer from './animeSlice';
 import mangaReducer from './mangaSlice';
 import detailAnimeSlice from './detailAnimeSlice';
 import detailMangaSlice from './detailMangaSlice';
+import otherSlice from './otherSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     manga: mangaReducer,
     detailAnime: detailAnimeSlice,
     detailManga: detailMangaSlice,
+    other: otherSlice,
   },
 });
 

@@ -145,19 +145,19 @@ const Navbar: React.FC = () => {
             {openDropdown === "others" && (
               <div className="absolute left-0 mt-2 w-48 bg-slate-800 rounded shadow-lg z-10">
                 <Link
-                  to="/genre/anime"
+                  to="/others/studios"
                   className="block px-4 py-2 hover:bg-slate-700"
                 >
                   Studios
                 </Link>
                 <Link
-                  to="/genre/manga"
+                  to="/others/persons"
                   className="block px-4 py-2 hover:bg-slate-700"
                 >
                   Persons
                 </Link>
                 <Link
-                  to="/genre/manga"
+                  to="/others/magazines"
                   className="block px-4 py-2 hover:bg-slate-700"
                 >
                   Magazines
@@ -210,16 +210,22 @@ const Navbar: React.FC = () => {
             Search Manga
           </Link>
           <Link
-            to="/genre/anime"
+            to="/others/studios"
             className="block px-4 py-2 hover:bg-slate-700"
           >
-            Anime Genres
+            Studios
           </Link>
           <Link
-            to="/genre/manga"
+            to="/others/persons"
             className="block px-4 py-2 hover:bg-slate-700"
           >
-            Manga Genres
+            Persons
+          </Link>
+          <Link
+            to="/others/magazines"
+            className="block px-4 py-2 hover:bg-slate-700"
+          >
+            Magazines
           </Link>
           <Link to="/about" className="block px-4 py-2 hover:bg-slate-700">
             About
