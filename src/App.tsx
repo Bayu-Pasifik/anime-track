@@ -40,6 +40,7 @@ const App: React.FC = () => {
         {/* 404 Not Found Route */}
         <Route path="*" element={<NotFound />} />
         <Route path="others/studios" element={<OtherPage type="studios" />} />
+        <Route path="others/persons" element={<OtherPage type="persons" />} />
       </Routes>
     </Router>
   );

@@ -21,3 +21,16 @@ export interface Title {
     type:  string;
     title: string;
 }
+export interface People {
+    mal_id:          number;
+    url:             string;
+    website_url:     null;
+    images:          Images;
+    name:            string;
+    given_name:      string;
+    family_name:     string;
+    alternate_names: string[];
+    birthday:        Date;
+    favorites:       number;
+    about:           string;
+}

@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import { AppDispatch, RootState } from "../redux/store";
-import { fetchStudios } from "../redux/otherSlice"; // Import fetchStudios action
-import Card from "../components/home/Card"; // Import Card component
-import PaginationButton from "../components/PaginationButton"; // Import PaginationButton component
+import { fetchStudios, fetchPeople } from "../redux/otherSlice"; // Import fetch actions
+import Card from "../components/home/Card";
+import PaginationButton from "../components/PaginationButton"; // Import PaginationButton
 import LoadingAnimation from "../components/LoadingAnimations";
 
 interface OtherPageProps {
-  type: "studios" | "person" | "magazine";
+  type: "studios" | "persons" | "magazines";
 }
 
 const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { studios, loading, pagination } = useSelector(
-    (state: RootState) => state.other
-  );
-
-  const [currentPage, setCurrentPage] = useState<number>(1); // State untuk halaman saat ini
+  const { studios, people, loading, pagination } = useSelector((state: RootState) => state.other);
 
   useEffect(() => {
     if (type === "studios") {
-      dispatch(fetchStudios(currentPage)); // Fetch data berdasarkan halaman saat ini
+      dispatch(fetchStudios(pagination.current_page)); // Fetch studios data
+    } else if (type === "persons") {
+      dispatch(fetchPeople(pagination.current_page)); // Fetch people data
     }
-  }, [dispatch, type, currentPage]); // Tambahkan currentPage sebagai dependency
+  }, [dispatch, type, pagination.current_page]);
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page); // Ubah halaman saat tombol paginasi diklik
+    if (type === "studios") {
+      dispatch(fetchStudios(page));
+    } else if (type === "persons") {
+      dispatch(fetchPeople(page));
+    }
   };
 
   if (loading) {
@@ -37,26 +39,35 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
     <div className="bg-bg-color w-full h-full min-h-screen">
       <Navbar />
       <div className="p-4 grid grid-cols-2 md:grid-cols-6 gap-6">
-        {studios.map((studio) => {
-          // Find the "Default" title, or fallback to the first title if none is marked as "Default"
-          const defaultTitle =
-            studio.titles.find((t: any) => t.type === "Default")?.title ||
-            studio.titles[0]?.title;
+        {type === "studios" &&
+          studios.map((studio) => {
+            const defaultTitle = studio.titles.find((t: any) => t.type === "Default")?.title || studio.titles[0]?.title;
+            return (
+              <Card
+                key={studio.mal_id}
+                imageUrl={studio.images.jpg.image_url}
+                title={defaultTitle}
+                synopsis={studio.about || "No description available"}
+                type="studios"
+                mal_id={studio.mal_id}
+              />
+            );
+          })}
 
-          return (
+        {type === "persons" &&
+          people.map((person) => (
             <Card
-              key={studio.mal_id}
-              imageUrl={studio.images.jpg.image_url}
-              title={defaultTitle}
-              synopsis={studio.about || "No description available"}
-              type="studios"
-              mal_id={studio.mal_id}
+              key={person.mal_id}
+              imageUrl={person.images.jpg.image_url}
+              title={person.name}
+              synopsis={person.about || "No description available"}
+              type="person"
+              mal_id={person.mal_id}
             />
-          );
-        })}
+          ))}
       </div>
 
-      {/* Pagination Button */}
+      {/* Pagination Button Component */}
       <PaginationButton
         currentPage={pagination.current_page}
         totalPages={pagination.last_visible_page}

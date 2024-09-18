@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Studios } from "../config/other";
+import { People, Studios } from "../config/other";
 import axios from "../config/axiosConfig";
 import { Pagination } from "../config/data";
 
 // Define the state type
 interface OtherState {
     studios: Studios[];
+    people : People[];
     loading: boolean;
     error : string | null;
     pagination: Pagination;
@@ -14,6 +15,7 @@ interface OtherState {
 // Initial state
 const initialState: OtherState = {
     studios: [],
+    people : [],
     loading: false,
     error : null,
     pagination: {
@@ -44,6 +46,21 @@ export const fetchStudios = createAsyncThunk(
       }
     }
   );
+export const fetchPeople = createAsyncThunk(
+    'other/fetchPeople',
+    async (page: number = 1, { rejectWithValue }) => {
+      try {
+        const response = await axios.get(`/people?page=${page}`);
+        return {
+          data: response.data.data,
+          pagination: response.data.pagination, // Pastikan API menyediakan informasi pagination
+        };
+      } catch (error: any) {
+        console.error('Error fetching studios:', error);
+        return rejectWithValue(error.response?.data?.message || 'Error fetching People');
+      }
+    }
+  );
   
 
 // Create the slice with a unique name
@@ -61,9 +78,23 @@ const otherSlice = createSlice({
           state.studios = action.payload.data; // Isi data studios dari API
           state.pagination = action.payload.pagination; // Isi pagination dari API
         })
-        .addCase(fetchStudios.rejected, (state) => {
+        .addCase(fetchStudios.rejected, (state,action) => {
           state.loading = false;
-        });
+          state.error = action.payload as string;
+        })
+
+        .addCase(fetchPeople.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(fetchPeople.fulfilled, (state, action) => {
+          state.loading = false;
+          state.people = action.payload.data; // Isi data studios dari API
+          state.pagination = action.payload.pagination; // Isi pagination dari API
+        })
+        .addCase(fetchPeople.rejected, (state,action) => {
+          state.loading = false;
+          state.error = action.payload as string;
+        })
     },
   });
   
