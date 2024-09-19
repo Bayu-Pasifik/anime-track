@@ -12,7 +12,7 @@ const Navbar: React.FC = () => {
   const excludedPages = [
     "/anime/detail/",
     "/manga/detail/",
-    "/anime/voice-actors",
+    "/person/detail/",
     "/anime/staff",
     "/manga/characters",
   ];

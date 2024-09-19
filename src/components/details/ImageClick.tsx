@@ -31,7 +31,7 @@ const ImageClick: React.FC<{
   } else if (type === "voiceActors") {
     return (
       <div className="group">
-        <a href={`/anime/${id}/voice-actors`}>
+        <a href={`/person/detail/${id}`}>
           <img
             src={source}
             alt={aliases}

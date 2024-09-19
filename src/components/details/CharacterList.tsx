@@ -42,7 +42,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, limit, mangaC
                 <div className="flex flex-col text-right mr-4">
                   <CharacterName
                     name={japaneseVA?.person.name}
-                    to={`/anime/${japaneseVA?.person.mal_id}/voice-actors`}
+                    to={`/person/detail/${japaneseVA?.person.mal_id}`}
                   />
                   <p className="text-sm text-white">{japaneseVA?.language}</p>
                 </div>

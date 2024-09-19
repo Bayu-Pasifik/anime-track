@@ -69,7 +69,7 @@ const DetailCharacter: React.FC = () => {
                     <div className="flex flex-col">
                       <CharacterName
                         name={voice.person.name}
-                        to={`/anime/${voice.person.mal_id}/voice-actors`}
+                        to={`/person/detail/${voice.person.mal_id}`}
                       />
                       <p className="text-sm text-white">( {voice.language} )</p>
                     </div>
@@ -162,7 +162,7 @@ const DetailCharacter: React.FC = () => {
                     <div className="flex flex-col">
                       <CharacterName
                         name={voice.person.name}
-                        to={`/anime/${voice.person.mal_id}/voice-actors`}
+                        to={`/person/detail/${voice.person.mal_id}`}
                       />
                       <p className="text-sm text-white">( {voice.language} )</p>
                     </div>

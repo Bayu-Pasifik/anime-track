@@ -24,7 +24,7 @@ const App: React.FC = () => {
         <Route path="/anime/detail/:id/staff" element={<Detail />} />
         <Route path="/anime/detail/:id/pictures" element={<Detail />} />
         <Route path="/anime/:id/characters" element={<DetailAnimeCharacter />} />
-        <Route path="/anime/:id/voice-actors" element={<DetailVoiceActors />} />
+        <Route path="/person/detail/:id" element={<DetailVoiceActors />} />
         <Route path="/anime/:id/staff" element={<DetailStaff />} />
         <Route path="/manga/detail/:id" element={<DetailManga />} />
         <Route path="/manga/:id/characters" element={<DetailMangaCharacter />} />
