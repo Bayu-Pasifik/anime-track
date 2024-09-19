@@ -41,6 +41,7 @@ const App: React.FC = () => {
         <Route path="*" element={<NotFound />} />
         <Route path="others/studios" element={<OtherPage type="studios" />} />
         <Route path="others/persons" element={<OtherPage type="persons" />} />
+        <Route path="others/magazines" element={<OtherPage type="magazines" />} />
       </Routes>
     </Router>
   );

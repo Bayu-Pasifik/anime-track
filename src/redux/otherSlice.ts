@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { People, Studios } from "../config/other";
+import { Magazine, People, Studios } from "../config/other";
 import axios from "../config/axiosConfig";
 import { Pagination } from "../config/data";
 
@@ -7,15 +7,18 @@ import { Pagination } from "../config/data";
 interface OtherState {
     studios: Studios[];
     people : People[];
+    magazines: Magazine[];
     loading: boolean;
     error : string | null;
     pagination: Pagination;
+
 }
 
 // Initial state
 const initialState: OtherState = {
     studios: [],
     people : [],
+    magazines: [],
     loading: false,
     error : null,
     pagination: {
@@ -61,6 +64,21 @@ export const fetchPeople = createAsyncThunk(
       }
     }
   );
+export const fetchMagazine = createAsyncThunk(
+    'other/fetchMagazine',
+    async (page: number = 1, { rejectWithValue }) => {
+      try {
+        const response = await axios.get(`/magazines?page=${page}`);
+        return {
+          data: response.data.data,
+          pagination: response.data.pagination, // Pastikan API menyediakan informasi pagination
+        };
+      } catch (error: any) {
+        console.error('Error fetching studios:', error);
+        return rejectWithValue(error.response?.data?.message || 'Error fetching People');
+      }
+    }
+  );
   
 
 // Create the slice with a unique name
@@ -92,6 +110,19 @@ const otherSlice = createSlice({
           state.pagination = action.payload.pagination; // Isi pagination dari API
         })
         .addCase(fetchPeople.rejected, (state,action) => {
+          state.loading = false;
+          state.error = action.payload as string;
+        })
+
+        .addCase(fetchMagazine.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(fetchMagazine.fulfilled, (state, action) => {
+          state.loading = false;
+          state.magazines = action.payload.data; // Isi data studios dari API
+          state.pagination = action.payload.pagination; // Isi pagination dari API
+        })
+        .addCase(fetchMagazine.rejected, (state,action) => {
           state.loading = false;
           state.error = action.payload as string;
         })

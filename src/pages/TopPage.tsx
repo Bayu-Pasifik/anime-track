@@ -108,17 +108,31 @@ const TopPage: React.FC<TopPageProps> = ({ type }) => {
                       index={index}
                       type="card"
                     >
-                      <Card key={anime.mal_id} item={anime} type="anime" />
+                      <Card
+                        title={anime.title}
+                        imageUrl={anime.images.jpg.large_image_url}
+                        synopsis={anime.synopsis}
+                        type="anime"
+                        mal_id={anime.mal_id}
+                        key={index}
+                      />
                     </AnimatedWrapper>
                   ))}
                 {type === "manga" &&
-                  topManga.map((manga,index) => (
+                  topManga.map((manga, index) => (
                     <AnimatedWrapper
                       key={manga.mal_id}
                       index={index}
                       type="card"
                     >
-                      <Card key={manga.mal_id} item={manga} type="anime" />
+                      <Card
+                        title={manga.title}
+                        imageUrl={manga.images.jpg.large_image_url}
+                        synopsis={manga.synopsis}
+                        type="manga"
+                        mal_id={manga.mal_id}
+                        key={index}
+                      />
                     </AnimatedWrapper>
                   ))}
               </div>
@@ -128,24 +142,32 @@ const TopPage: React.FC<TopPageProps> = ({ type }) => {
             {viewMode === "list" && (
               <div className="flex flex-col space-y-4 p-3">
                 {type === "anime" &&
-                  topAiring.map((anime,index) => (
-                    <AnimatedWrapper key={anime.mal_id} index={index} type="list">
-                    <ListCard
-                      genres={anime.genres.map((genre) => genre.name)}
-                      synopsis={anime.synopsis}
-                      imageUrl={anime.images.jpg.large_image_url}
-                    />
-                  </AnimatedWrapper>
+                  topAiring.map((anime, index) => (
+                    <AnimatedWrapper
+                      key={anime.mal_id}
+                      index={index}
+                      type="list"
+                    >
+                      <ListCard
+                        genres={anime.genres.map((genre) => genre.name)}
+                        synopsis={anime.synopsis}
+                        imageUrl={anime.images.jpg.large_image_url}
+                      />
+                    </AnimatedWrapper>
                   ))}
                 {type === "manga" &&
-                  topManga.map((manga,index) => (
-                    <AnimatedWrapper key={manga.mal_id} index={index} type="list">
-                    <ListCard
-                      genres={manga.genres.map((genre) => genre.name)}
-                      synopsis={manga.synopsis}
-                      imageUrl={manga.images.jpg.large_image_url}
-                    />
-                  </AnimatedWrapper>
+                  topManga.map((manga, index) => (
+                    <AnimatedWrapper
+                      key={manga.mal_id}
+                      index={index}
+                      type="list"
+                    >
+                      <ListCard
+                        genres={manga.genres.map((genre) => genre.name)}
+                        synopsis={manga.synopsis}
+                        imageUrl={manga.images.jpg.large_image_url}
+                      />
+                    </AnimatedWrapper>
                   ))}
               </div>
             )}
