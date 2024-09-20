@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../redux/store";
 import { fetchDetailAnimeStaff } from "../redux/detailAnimeSlice";
 import LoadingAnimation from "../components/LoadingAnimations";
 import ImageClick from "../components/details/ImageClick";
+import Footer from "../components/Footer";
 
 const DetailStaff: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,16 +24,16 @@ const DetailStaff: React.FC = () => {
 
   useEffect(() => {
     const fetchStaffAnime = async () => {
-      if(id){
+      if (id) {
         await dispatch(fetchDetailAnimeStaff(id));
       }
-    }
+    };
 
     fetchStaffAnime();
-  },[id, dispatch]);
+  }, [id, dispatch]);
 
-  if(isLoading){
-    return <LoadingAnimation/>
+  if (isLoading) {
+    return <LoadingAnimation />;
   }
 
   if (!animeStaff) {
@@ -56,13 +57,13 @@ const DetailStaff: React.FC = () => {
               <ListTile
                 key={index}
                 leading={
-                 <ImageClick
+                  <ImageClick
                     source={anime.anime.images.jpg.image_url}
                     aliases={anime.anime.title}
                     id={anime.anime.mal_id.toString()}
                     type="anime"
                     // className="rounded-md object-cover h-auto w-auto"
-                    />
+                  />
                 }
                 title={
                   <div className="flex flex-col">
@@ -100,7 +101,7 @@ const DetailStaff: React.FC = () => {
                           aliases={anime.anime.title}
                           id={anime.anime.mal_id.toString()}
                           type="anime"
-                          />
+                        />
                       }
                       title={
                         <div className="flex flex-col">
@@ -166,7 +167,9 @@ const DetailStaff: React.FC = () => {
                 ( {age} years old )
               </p>
             </span>
-            <p className="text-gray-300 mt-4 text-justify">{animeStaff.about}</p>
+            <p className="text-gray-300 mt-4 text-justify">
+              {animeStaff.about}
+            </p>
 
             {/* Tab Bar */}
             <div className="w-full flex flex-row mt-4 justify-evenly border-t border-gray-600 pt-4">
@@ -201,6 +204,7 @@ const DetailStaff: React.FC = () => {
         {/* Content Based on Tab Selection */}
         {renderContent()}
       </div>
+      <Footer />
     </div>
   );
 };

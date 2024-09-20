@@ -12,6 +12,7 @@ import {
 } from "../redux/animeSlice";
 import NewDataLoading from "../components/NewDataLoading";
 import PaginationButton from "../components/PaginationButton";
+import Footer from "../components/Footer";
 
 interface ViewMoreProps {
   type: "currentlyAiring" | "upcoming" | "popular";
@@ -25,13 +26,20 @@ const ViewMore: React.FC<ViewMoreProps> = ({ type }) => {
   });
   const [initialLoading, setInitialLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
-  const { currentlyAiring, upcoming, popular, loading: animeLoading, pagination } = useSelector((state: RootState) => state.anime);
+  const {
+    currentlyAiring,
+    upcoming,
+    popular,
+    loading: animeLoading,
+    pagination,
+  } = useSelector((state: RootState) => state.anime);
 
-  const animeList = type === "currentlyAiring"
-    ? currentlyAiring
-    : type === "upcoming"
-    ? upcoming
-    : popular;
+  const animeList =
+    type === "currentlyAiring"
+      ? currentlyAiring
+      : type === "upcoming"
+      ? upcoming
+      : popular;
 
   // Fetch data based on page and type
   const fetchData = async () => {
@@ -79,26 +87,40 @@ const ViewMore: React.FC<ViewMoreProps> = ({ type }) => {
         {type === "upcoming" && "Upcoming Anime"}
         {type === "popular" && "Popular Anime"}
       </div>
-      {isFetching === true ? <LoadingAnimation /> : <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-3">
-        {animeList &&
-          animeList.map((anime, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card item={anime} type="anime" />
-            </motion.div>
-          ))}
-      </div>}
-      {animeLoading || isFetching ? <NewDataLoading /> : 
+      {isFetching === true ? (
+        <LoadingAnimation />
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-3">
+          {animeList &&
+            animeList.map((anime, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card
+                  imageUrl={anime.images.jpg.large_image_url}
+                  mal_id={anime.mal_id}
+                  synopsis={anime.synopsis}
+                  title={anime.title}
+                  type="anime"
+                  key={index}
+                />
+              </motion.div>
+            ))}
+        </div>
+      )}
+      {animeLoading || isFetching ? (
+        <NewDataLoading />
+      ) : (
         <PaginationButton
           currentPage={page}
           totalPages={pagination?.last_visible_page || 1}
           onPageChange={handlePageChange}
         />
-      }
+      )}
+      <Footer />
     </div>
   );
 };

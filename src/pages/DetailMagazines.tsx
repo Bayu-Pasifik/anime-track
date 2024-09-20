@@ -10,6 +10,7 @@ import Navbar from "../components/Navbar";
 import AnimatedWrapper from "../components/AnimatedWrapper";
 import ViewToggle from "../components/seasonal/ViewToggle";
 import ListCard from "../components/ListCard";
+import Footer from "../components/Footer";
 
 const DetailMagazines: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -99,6 +100,7 @@ const DetailMagazines: React.FC = () => {
           />
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

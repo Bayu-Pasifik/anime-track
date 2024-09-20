@@ -7,6 +7,7 @@ import Card from "../components/home/Card";
 import PaginationButton from "../components/PaginationButton";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const DetailStudios: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -120,6 +121,7 @@ const DetailStudios: React.FC = () => {
           </div>
         )}
       </div>
+      <Footer/>
     </div>
   );
 };

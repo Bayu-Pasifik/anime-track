@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingAnimation from "../components/LoadingAnimations";
 import ImageClick from "../components/details/ImageClick";
+import Footer from "../components/Footer";
 
 const DetailCharacter: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -230,7 +231,7 @@ const DetailCharacter: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen w-full">
+    <div className="bg-bg-color min-h-screen w-full">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
         <div className="bg-gray-800 rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center">
@@ -311,6 +312,7 @@ const DetailCharacter: React.FC = () => {
         {/* Content Based on Tab Selection */}
         {renderContent()}
       </div>
+        <Footer />
     </div>
   );
 };

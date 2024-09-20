@@ -6,6 +6,7 @@ import { fetchStudios, fetchPeople, fetchMagazine } from "../redux/otherSlice"; 
 import Card from "../components/home/Card";
 import PaginationButton from "../components/PaginationButton"; // Import PaginationButton
 import LoadingAnimation from "../components/LoadingAnimations";
+import Footer from "../components/Footer";
 
 interface OtherPageProps {
   type: "studios" | "persons" | "magazines";
@@ -120,6 +121,8 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
         totalPages={pagination.last_visible_page}
         onPageChange={handlePageChange}
       />
+
+      <Footer />
     </div>
   );
 };

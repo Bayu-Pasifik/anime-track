@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingAnimation from "../components/LoadingAnimations";
 import ImageClick from "../components/details/ImageClick";
+import Footer from "../components/Footer";
 
 const DetailMangaCharacter: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -252,6 +253,7 @@ const DetailMangaCharacter: React.FC = () => {
         {/* Content Based on Tab Selection */}
         {renderContent()}
       </div>
+      <Footer />
     </div>
   );
 };

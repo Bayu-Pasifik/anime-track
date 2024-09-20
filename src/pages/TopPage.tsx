@@ -10,6 +10,7 @@ import LoadingAnimation from "../components/LoadingAnimations";
 import ViewToggle from "../components/seasonal/ViewToggle";
 import ListCard from "../components/ListCard";
 import AnimatedWrapper from "../components/AnimatedWrapper";
+import Footer from "../components/Footer";
 
 interface TopPageProps {
   type: "anime" | "manga";
@@ -187,6 +188,7 @@ const TopPage: React.FC<TopPageProps> = ({ type }) => {
       )}
 
       {error && <p className="text-center text-red-500">Error: {error}</p>}
+      <Footer />
     </div>
   );
 };

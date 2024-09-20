@@ -13,6 +13,7 @@ import SeasonToggle from "../components/seasonal/SeasonToggle";
 import ViewToggle from "../components/seasonal/ViewToggle";
 import NewDataLoading from "../components/NewDataLoading";
 import PaginationButton from "../components/PaginationButton";
+import Footer from "../components/Footer";
 
 const SeasonalAnime = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -141,6 +142,7 @@ const SeasonalAnime = () => {
           </>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

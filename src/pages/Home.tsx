@@ -14,6 +14,7 @@ import HeaderCarousel from "../components/carousel/Carousel";
 import ListHomeCard from "../components/home/ListHomeCard";
 import TopContainer from "../components/home/TopContainer";
 import LoaderWithProgress from "../components/home/LoaderWithProgress"; // Animated Loader
+import Footer from "../components/Footer";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -113,6 +114,7 @@ const Home: React.FC = () => {
           <TopContainer title="Top 25 Manga" items={topManga} type="manga" />
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

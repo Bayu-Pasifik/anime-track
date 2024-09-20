@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Lottie from "lottie-react"; // Make sure to install this package
 import aboutAnimation from "../assets/aboutAnimation.json";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const AboutPage: React.FC = () => {
   const fadeIn = {
@@ -47,9 +48,15 @@ const AboutPage: React.FC = () => {
         >
           AnimeTrack is your ultimate destination for discovering anime and
           manga! Built with modern web technologies including{" "}
-          <strong>React.js</strong>, <strong>TypeScript</strong>, and{" "}
-          <strong>Redux</strong>, this application leverages the{" "}
-          <strong>Jikan API</strong> to provide a seamless experience for anime
+          <strong>
+            <a href="https://react.dev/">React.js</a>
+          </strong>
+          ,{" "}
+          <strong>
+            <a href="https://www.typescriptlang.org/">Typescript</a>
+          </strong>
+          , and <strong><a href="https://redux.js.org/">Redux</a></strong>, this application leverages the{" "}
+          <strong><a href="https://jikan.moe/">JIKAN API</a></strong> to provide a seamless experience for anime
           and manga enthusiasts.
         </motion.p>
 
@@ -88,9 +95,10 @@ const AboutPage: React.FC = () => {
           transition={{ duration: 1.5 }}
         >
           Thank you for visiting AnimeTrack! We hope you enjoy your journey
-          through the vibrant world of anime and manga. Happy watching!
+          through the vibrant world of anime and manga. Happy Searching!
         </motion.p>
       </div>
+      <Footer />
     </div>
   );
 };

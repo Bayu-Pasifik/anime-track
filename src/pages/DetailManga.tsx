@@ -13,6 +13,7 @@ import { delay } from "../utils/delay";
 import LoadingAnimation from "../components/LoadingAnimations";
 import Information from "../components/details/InformationContainer";
 import Tabbar from "../components/details/TabBar";
+import Footer from "../components/Footer";
 
 const DetailManga: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -75,6 +76,7 @@ const DetailManga: React.FC = () => {
         </div>
         <Tabbar type="manga"/>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -15,6 +15,7 @@ import LoadingAnimation from "../components/LoadingAnimations";
 import Information from "../components/details/InformationContainer";
 import Tabbar from "../components/details/TabBar";
 import { delay } from "../utils/delay";
+import Footer from "../components/Footer";
 
 const Detail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -115,6 +116,7 @@ const Detail: React.FC = () => {
         </div>
         <Tabbar type="anime" />
       </div>
+      <Footer />
     </div>
   );
 };
