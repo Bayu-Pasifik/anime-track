@@ -64,7 +64,7 @@ export const fetchTopAiring = createAsyncThunk(
       const response = await axios.get('/top/anime', {
         params: { page},
       });
-      return response.data.data;  // Ensure this is an array
+      return response.data;  // Ensure this is an array
     } catch (error: any) {
       console.error('Error fetching top airing:', error);
       // Return error message from server
@@ -247,7 +247,8 @@ const animeSlice = createSlice({
         state.error = action.payload as string; // Set error message from payload
       })
       .addCase(fetchTopAiring.fulfilled, (state, action) => {
-        state.topAiring = action.payload;  // Ensure action.payload is an array
+        state.topAiring = action.payload.data;
+        state.pagination = action.payload.pagination;  // Ensure action.payload is an array
       })
       .addCase(fetchCurrentlyAiring.fulfilled, (state, action) => {
         state.currentlyAiring = action.payload.data;  // Ensure action.payload.data is an array

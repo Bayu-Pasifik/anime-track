@@ -9,6 +9,16 @@ export interface Studios {
     count:       number;
 }
 
+export interface DetailStudios extends Studios {
+    external: External[];
+
+}
+
+export interface External {
+    name: string;
+    url:  string;
+}
+
 export interface Images {
     jpg: Jpg;
 }

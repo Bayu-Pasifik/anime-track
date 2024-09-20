@@ -13,6 +13,7 @@ import SeasonalAnimePage from "./pages/SeasonalAnime";
 import TopPage from "./pages/TopPage";
 import NotFound from "./pages/NotFound";
 import OtherPage from "./pages/OtherPage";
+import DetailStudios from "./pages/DetailStudios";
 
 const App: React.FC = () => {
   return (
@@ -42,6 +43,7 @@ const App: React.FC = () => {
         <Route path="others/studios" element={<OtherPage type="studios" />} />
         <Route path="others/persons" element={<OtherPage type="persons" />} />
         <Route path="others/magazines" element={<OtherPage type="magazines" />} />
+        <Route path="/studios/detail/:id" element={<DetailStudios />} />
       </Routes>
     </Router>
   );
