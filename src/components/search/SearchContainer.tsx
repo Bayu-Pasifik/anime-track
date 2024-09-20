@@ -226,12 +226,13 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ contentType }) => {
         <LoadingAnimation />
       ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 my-12">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 my-12">
             {searchResults?.map((item,index) => (
               <Card
                 title={item.title}
                 imageUrl={item.images.jpg.large_image_url}
                 synopsis={item.synopsis}
+                rating={item.score}
                 type={contentType}
                 mal_id={item.mal_id}
                 key={index}

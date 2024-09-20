@@ -100,6 +100,7 @@ const DetailStudios: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {animeByStudios.map((anime) => (
               <Card
+              rating={anime.score}
                 key={anime.mal_id}
                 imageUrl={anime.images.jpg.image_url}
                 title={anime.title}

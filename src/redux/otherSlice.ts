@@ -60,7 +60,7 @@ export const fetchPeople = createAsyncThunk(
     'other/fetchPeople',
     async (page: number = 1, { rejectWithValue }) => {
       try {
-        const response = await axios.get(`/people?page=${page}`);
+        const response = await axios.get(`/people?page=${page}&order_by=favorites&sort=desc`);
         return {
           data: response.data.data,
           pagination: response.data.pagination, // Pastikan API menyediakan informasi pagination

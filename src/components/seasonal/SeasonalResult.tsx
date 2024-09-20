@@ -26,6 +26,7 @@ const SeasonalResult: React.FC<SeasonalResultProps> = ({ data, viewMode }) => {
                 imageUrl={anime.images.jpg.large_image_url}
                 synopsis={anime.synopsis}
                 type="anime"
+                rating={anime.score}
                 mal_id={anime.mal_id}
                 key={index}
               />
@@ -42,6 +43,7 @@ const SeasonalResult: React.FC<SeasonalResultProps> = ({ data, viewMode }) => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <ListCard
+                title={anime.title}
                 genres={anime.genres.map((genre) => genre.name)}
                 synopsis={anime.synopsis}
                 imageUrl={anime.images.jpg.large_image_url}

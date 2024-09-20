@@ -28,15 +28,24 @@ const ListHomeCard: React.FC<ListHomeCardProps> = ({
             : "Popular Anime"}
         </h3>
         {type === "currently" ? (
-          <a href={destination} className="text-2xl font-bold text-white cursor-pointer">
+          <a
+            href={destination}
+            className="text-2xl font-bold text-white cursor-pointer"
+          >
             View More
           </a>
         ) : type === "upcoming" ? (
-          <a href={destination} className="text-2xl font-bold text-white cursor-pointer">
+          <a
+            href={destination}
+            className="text-2xl font-bold text-white cursor-pointer"
+          >
             View More
           </a>
         ) : (
-          <a href={destination} className="text-2xl font-bold text-white cursor-pointer">
+          <a
+            href={destination}
+            className="text-2xl font-bold text-white cursor-pointer"
+          >
             View More
           </a>
         )}
@@ -69,15 +78,17 @@ const ListHomeCard: React.FC<ListHomeCardProps> = ({
           }}
           className="mySwiper"
         >
-          {animelist.map((anime,index) => (
+          {animelist.map((anime, index) => (
             <SwiperSlide key={anime.mal_id} className="flex-shrink-0">
-              <Card 
-              title={anime.title}
-              imageUrl={anime.images.jpg.large_image_url}
-              synopsis={anime.synopsis}
-              type="anime"
-              mal_id={anime.mal_id}
-              key={index}/>
+              <Card
+                title={anime.title}
+                imageUrl={anime.images.jpg.large_image_url}
+                synopsis={anime.synopsis}
+                type="anime"
+                mal_id={anime.mal_id}
+                rating={anime.score}
+                key={index}
+              />
             </SwiperSlide>
           ))}
         </Swiper>

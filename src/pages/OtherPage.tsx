@@ -56,6 +56,7 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
                 studio.titles[0]?.title;
               return (
                 <Card
+                  rating={studio.count}
                   key={studio.mal_id}
                   imageUrl={studio.images.jpg.image_url}
                   title={defaultTitle}
@@ -72,6 +73,7 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
           <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
             {people.map((person) => (
               <Card
+                rating={person.favorites}
                 key={person.mal_id}
                 imageUrl={person.images.jpg.image_url}
                 title={person.name}
@@ -92,7 +94,9 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
               >
                 <h3 className="text-xl font-semibold mb-2 text-gray-800">
                   <a
-                     href={`/magazines/detail/${magazine.mal_id}?name=${encodeURIComponent(magazine.name)}`}
+                    href={`/magazines/detail/${
+                      magazine.mal_id
+                    }?name=${encodeURIComponent(magazine.name)}`}
                     className="text-white hover:underline hover:text-blue-500"
                   >
                     {magazine.name}
@@ -103,7 +107,9 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
                 </p>
                 <div className="mt-4">
                   <a
-                     href={`/magazines/detail/${magazine.mal_id}?name=${encodeURIComponent(magazine.name)}`}
+                    href={`/magazines/detail/${
+                      magazine.mal_id
+                    }?name=${encodeURIComponent(magazine.name)}`}
                     className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-3 py-2 text-sm transition-colors duration-300"
                   >
                     View Magazine

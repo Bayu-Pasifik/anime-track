@@ -63,6 +63,7 @@ const DetailMagazines: React.FC = () => {
             {mangaByMagazines.map((manga, index) => (
               <AnimatedWrapper key={manga.mal_id} type="card" index={index}>
                 <Card
+                  rating={manga.score}
                   key={manga.mal_id}
                   imageUrl={manga.images.jpg.image_url}
                   title={manga.title}

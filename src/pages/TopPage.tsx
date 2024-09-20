@@ -110,6 +110,7 @@ const TopPage: React.FC<TopPageProps> = ({ type }) => {
                       type="card"
                     >
                       <Card
+                        rating={anime.score}
                         title={anime.title}
                         imageUrl={anime.images.jpg.large_image_url}
                         synopsis={anime.synopsis}
@@ -127,6 +128,7 @@ const TopPage: React.FC<TopPageProps> = ({ type }) => {
                       type="card"
                     >
                       <Card
+                        rating={manga.score}
                         title={manga.title}
                         imageUrl={manga.images.jpg.large_image_url}
                         synopsis={manga.synopsis}

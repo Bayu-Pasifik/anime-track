@@ -17,6 +17,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
           imageUrl={item.images.jpg.large_image_url}
           synopsis={item.synopsis}
           type="anime"
+          rating={item.score}
           mal_id={item.mal_id}
           key={index}
         />
@@ -26,6 +27,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
           imageUrl={item.images.jpg.large_image_url}
           synopsis={item.synopsis}
           type="manga"
+          rating={item.score}
           mal_id={item.mal_id}
           key={index}
         />

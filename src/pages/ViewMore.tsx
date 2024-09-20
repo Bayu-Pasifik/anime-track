@@ -100,6 +100,7 @@ const ViewMore: React.FC<ViewMoreProps> = ({ type }) => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <Card
+                  rating={anime.score}
                   imageUrl={anime.images.jpg.large_image_url}
                   mal_id={anime.mal_id}
                   synopsis={anime.synopsis}
