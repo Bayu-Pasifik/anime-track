@@ -14,7 +14,7 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, synopsis, type, mal_id, ra
   // Function to format rating conditionally
   const formattedRating = () => {
     if (rating === null || rating === undefined) return null;
-    return rating % 1 === 0 ? rating : rating.toFixed(1); // No decimal if it's an integer
+    return rating % 1 === 0 ? rating : rating.toFixed(1);
   };
 
   return (

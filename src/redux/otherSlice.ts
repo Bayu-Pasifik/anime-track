@@ -56,21 +56,23 @@ export const fetchStudios = createAsyncThunk(
       }
     }
   );
-export const fetchPeople = createAsyncThunk(
+  export const fetchPeople = createAsyncThunk(
     'other/fetchPeople',
-    async (page: number = 1, { rejectWithValue }) => {
+    async ({ page = 1, query = "" }: { page: number; query: string }, { rejectWithValue }) => {
       try {
-        const response = await axios.get(`/people?page=${page}&order_by=favorites&sort=desc`);
+        const queryParam = query ? `&q=${query}` : "";
+        const response = await axios.get(`/people?page=${page}&order_by=favorites&sort=desc${queryParam}`);
         return {
           data: response.data.data,
-          pagination: response.data.pagination, // Pastikan API menyediakan informasi pagination
+          pagination: response.data.pagination, // Ensure API provides pagination information
         };
       } catch (error: any) {
-        console.error('Error fetching studios:', error);
+        console.error('Error fetching people:', error);
         return rejectWithValue(error.response?.data?.message || 'Error fetching People');
       }
     }
   );
+  
 export const fetchMagazine = createAsyncThunk(
     'other/fetchMagazine',
     async (page: number = 1, { rejectWithValue }) => {

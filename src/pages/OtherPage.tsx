@@ -18,19 +18,24 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
     (state: RootState) => state.other
   );
 
-  // Local state to control the current page
+  // Local state for pagination and search query
   const [localPage, setLocalPage] = useState(1);
+  const [query, setQuery] = useState<string>(""); // State for the search query
+  const [searchTriggered, setSearchTriggered] = useState(false); // To track if search button is pressed
 
   useEffect(() => {
-    // Reset page to 1 when type changes
+    // Reset page to 1 and clear query when type changes
     setLocalPage(1);
+    setQuery(""); // Clear the search query
+    setSearchTriggered(false); // Reset search trigger state
   }, [type]);
 
   useEffect(() => {
+    // Fetch data based on the type and query
     if (type === "studios") {
       dispatch(fetchStudios(localPage)); // Fetch studios data
     } else if (type === "persons") {
-      dispatch(fetchPeople(localPage)); // Fetch people data
+      dispatch(fetchPeople({ page: localPage, query })); // Fetch people data with query
     } else if (type === "magazines") {
       dispatch(fetchMagazine(localPage)); // Fetch magazines data
     }
@@ -38,6 +43,16 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
 
   const handlePageChange = (page: number) => {
     setLocalPage(page); // Update the local page state
+    // Re-fetch data if a search query is active
+    if (type === "persons" && searchTriggered) {
+      dispatch(fetchPeople({ page, query }));
+    }
+  };
+
+  const handleSearch = () => {
+    setLocalPage(1); // Reset to first page on search
+    setSearchTriggered(true); // Mark search as triggered
+    dispatch(fetchPeople({ page: 1, query })); // Fetch people with search query
   };
 
   if (loading) {
@@ -48,6 +63,25 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
     <div className="bg-bg-color w-full h-full min-h-screen">
       <Navbar />
       <div className="p-4">
+        {/* Display search bar and button when type is 'persons' */}
+        {type === "persons" && (
+          <div className="mb-4 flex items-center gap-2">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)} // Update search query
+              placeholder="Search for people..."
+              className="p-2 border border-gray-400 rounded-md w-full"
+            />
+            <button
+              onClick={handleSearch} // Trigger search on button click
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            >
+              Search
+            </button>
+          </div>
+        )}
+
         {type === "studios" && (
           <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
             {studios.map((studio) => {
