@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { DetailStudios, Magazine, People, Studios } from "../config/other";
 import axios from "../config/axiosConfig";
 import { Anime, Pagination } from "../config/data";
+import { Manga } from "../config/manga";
 
 // Define the state type
 interface OtherState {
@@ -13,6 +14,7 @@ interface OtherState {
     error : string | null;
     pagination: Pagination;
     detailStudios : DetailStudios | null;
+    mangaByMagazines : Manga[];
 
 }
 
@@ -22,6 +24,7 @@ const initialState: OtherState = {
     people : [],
     magazines: [],
     animeByStudios: [],
+    mangaByMagazines: [],
     detailStudios: null,
     loading: false,
     error : null,
@@ -113,6 +116,22 @@ export const fetchMagazine = createAsyncThunk(
       }
     }
   );
+
+  export const fetchMangaByMagazines = createAsyncThunk(
+    'other/fetchMangaByMagneys',
+    async ({ page = 1, magazines }: { page?: number; magazines: number }, { rejectWithValue }) => {
+      try {
+        const response = await axios.get(`/manga?magazines=${magazines}&page=${page}`);
+        return {
+          data: response.data.data,
+          pagination: response.data.pagination, // Pastikan API menyediakan informasi pagination
+        };
+      } catch (error: any) {
+        console.error('Error fetching manga by magneys:', error);
+        return rejectWithValue(error.response?.data?.message || 'Error fetching manga by magneys');
+      }
+    }
+  );
   
   
 
@@ -182,6 +201,19 @@ const otherSlice = createSlice({
           state.detailStudios = action.payload; // Isi data studios dari API
         })
         .addCase(fetchStudioDetails.rejected, (state,action) => {
+          state.loading = false;
+          state.error = action.payload as string;
+        })
+
+        .addCase(fetchMangaByMagazines.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(fetchMangaByMagazines.fulfilled, (state, action) => {
+          state.loading = false;
+          state.mangaByMagazines = action.payload.data; // Isi data studios dari API
+          state.pagination = action.payload.pagination; // Isi pagination dari API
+        })
+        .addCase(fetchMangaByMagazines.rejected, (state,action) => {
           state.loading = false;
           state.error = action.payload as string;
         })

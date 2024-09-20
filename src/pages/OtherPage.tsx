@@ -91,9 +91,7 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
               >
                 <h3 className="text-xl font-semibold mb-2 text-gray-800">
                   <a
-                    href={magazine.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                     href={`/magazines/detail/${magazine.mal_id}?name=${encodeURIComponent(magazine.name)}`}
                     className="text-white hover:underline hover:text-blue-500"
                   >
                     {magazine.name}
@@ -104,9 +102,7 @@ const OtherPage: React.FC<OtherPageProps> = ({ type }) => {
                 </p>
                 <div className="mt-4">
                   <a
-                    href={magazine.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                     href={`/magazines/detail/${magazine.mal_id}?name=${encodeURIComponent(magazine.name)}`}
                     className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-3 py-2 text-sm transition-colors duration-300"
                   >
                     View Magazine
