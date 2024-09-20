@@ -149,6 +149,7 @@ const TopPage: React.FC<TopPageProps> = ({ type }) => {
                       type="list"
                     >
                       <ListCard
+                        title={anime.title}
                         genres={anime.genres.map((genre) => genre.name)}
                         synopsis={anime.synopsis}
                         imageUrl={anime.images.jpg.large_image_url}
@@ -163,6 +164,7 @@ const TopPage: React.FC<TopPageProps> = ({ type }) => {
                       type="list"
                     >
                       <ListCard
+                        title={manga.title}
                         genres={manga.genres.map((genre) => genre.name)}
                         synopsis={manga.synopsis}
                         imageUrl={manga.images.jpg.large_image_url}

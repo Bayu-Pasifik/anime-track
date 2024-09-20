@@ -4,9 +4,10 @@ interface ListCardProps {
   genres: string[]; // Array of genre names
   synopsis: string;
   imageUrl: string;
+  title: string;
 }
 
-const ListCard: React.FC<ListCardProps> = ({ genres, synopsis, imageUrl }) => {
+const ListCard: React.FC<ListCardProps> = ({ genres, synopsis, imageUrl, title }) => {
   return (
     <div className="flex flex-row sm:flex-row bg-gray-100 rounded-lg overflow-hidden lg:flex-row lg:max-w-full">
       {/* Genre section (hidden on small screens) */}
@@ -27,6 +28,7 @@ const ListCard: React.FC<ListCardProps> = ({ genres, synopsis, imageUrl }) => {
       <div className="w-full sm:w-3/4 p-4 bg-yellow-100 flex flex-col justify-center">
         {/* Synopsis section */}
         <div>
+          <h1 className="text-2xl font-bold mb-2 sm:text-3xl">{title}</h1>
           <h2 className="text-lg font-semibold mb-2 sm:text-xl">Synopsis</h2>
           <p className="text-gray-700 text-sm sm:text-base line-clamp-3">{synopsis}</p>
         </div>
