@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import OtherPage from "./pages/OtherPage";
 import DetailStudios from "./pages/DetailStudios";
 import DetailMagazines from "./pages/DetailMagazines";
+import AboutPage from "./pages/about";
 
 const App: React.FC = () => {
   return (
@@ -46,6 +47,7 @@ const App: React.FC = () => {
         <Route path="others/magazines" element={<OtherPage type="magazines" />} />
         <Route path="/studios/detail/:id" element={<DetailStudios />} />
         <Route path="/magazines/detail/:id" element={<DetailMagazines/>} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Router>
   );
