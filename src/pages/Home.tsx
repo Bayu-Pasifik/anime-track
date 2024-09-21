@@ -40,19 +40,19 @@ const Home: React.FC = () => {
         // Fetch data and update progress incrementally
         await dispatch(fetchTopAiring(1)).unwrap();
         setProgress(20); // Update progress to 20%
-        await delay(1000);
+        await delay(500);
 
         await dispatch(fetchCurrentlyAiring(1)).unwrap();
         setProgress(40); // Update progress to 40%
-        await delay(1000);
+        await delay(500);
 
         await dispatch(fetchUpcomingAnime(1)).unwrap();
         setProgress(60); // Update progress to 60%
-        await delay(1000);
+        await delay(500);
 
         await dispatch(fetchPopularAnime(1)).unwrap();
         setProgress(80); // Update progress to 80%
-        await delay(1000);
+        await delay(500);
 
         await dispatch(fetchTopManga(1)).unwrap();
         setProgress(100); // Update progress to 100%

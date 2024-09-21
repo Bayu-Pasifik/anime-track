@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 interface CardProps {
   imageUrl: string; 
   title: string;    
-  synopsis: string;
+  synopsis?: string;
   type: string;
   mal_id: number; 
   rating?: number | null; // Optional rating prop that could be an integer or a float
@@ -13,7 +13,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ imageUrl, title, synopsis, type, mal_id, rating }) => {
   // Function to format rating conditionally
   const formattedRating = () => {
-    if (rating === null || rating === undefined) return null;
+    if (rating === null || rating === undefined) return "n/a";
     return rating % 1 === 0 ? rating : rating.toFixed(1);
   };
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Recommendation } from "../config/animeRecomendation";
+import Card from "./home/Card";
 
 interface AnimeRecomendationProps {
   animeRecomendation: Recommendation[];
@@ -32,37 +33,23 @@ const AnimeRecomendation: React.FC<AnimeRecomendationProps> = ({
         <p className="text-white text-center text-xl font-bold">No recommendations found.</p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
-        {displayedRecommendations.map((recommendation) =>
+        {displayedRecommendations.map((recommendation,index) =>
           type === "anime" ? (
-            <a
-              href={`/anime/detail/${recommendation.entry.mal_id}`}
-              key={recommendation.entry.mal_id}
-              className="w-full h-auto rounded-md mb-2"
-            >
-              <img
-                src={recommendation.entry.images.jpg.image_url}
-                alt={recommendation.entry.title}
-                className="w-full h-52 object-cover rounded-md mb-2"
-              />
-              <h4 className="text-lg font-bold truncate text-white">
-                {recommendation.entry.title}
-              </h4>
-            </a>
+            <Card
+              title={recommendation.entry.title}
+              imageUrl={recommendation.entry.images.jpg.image_url}
+              type="anime"
+              mal_id={recommendation.entry.mal_id}
+              key={index}
+            />
           ) : (
-            <a
-              href={`/manga/detail/${recommendation.entry.mal_id}`}
-              key={recommendation.entry.mal_id}
-              className="w-full h-auto rounded-md mb-2"
-            >
-              <img
-                src={recommendation.entry.images.jpg.image_url}
-                alt={recommendation.entry.title}
-                className="w-full h-52 object-cover rounded-md mb-2"
-              />
-              <h4 className="text-lg font-bold truncate text-white">
-                {recommendation.entry.title}
-              </h4>
-            </a>
+            <Card
+            imageUrl={recommendation.entry.images.jpg.image_url}
+            title={recommendation.entry.title}
+            type="manga"
+            mal_id={recommendation.entry.mal_id}
+            key={index}
+            />
           )
         )}
       </div>
